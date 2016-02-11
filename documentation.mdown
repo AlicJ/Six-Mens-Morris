@@ -1,0 +1,163 @@
+The application is decomposed into 3 modules:
+
+1. Model: handles data representation, data logic, e.g.:
+    1. Classes to represent the game board, pieces, and nodes on the game board
+    2. a function to assign a piece to a node on the board
+2. View: displays the graphical user interface, e.g.:
+    1. display an empty game board at the start of a new game
+    2. display pieces on the board
+3. Controller: handles user input, and accesses both view and model, e.g.:
+    1. listeners are assigned to view to receive mouse click
+    2. buttons with listener to clear the board
+
+Highest level of Uses Relationship:
+
+
+#Model
+Under Model module, there are several classes we created to fully represent the data structures and logics.
+
+##MainModel.java
+MainModel is the top level class in Model. It acts like a parent class for all the other classes in Model. MainModel will access all other classes under Model. This is the only class that can be accessed by Controller. If there were changes made to Model, we only need to review the parts in Controller where only MainModel is used. Therefore the program is easy to adapt for change.
+
+###*Interface (MIS)*
+**MainModel(): MainModel**  
+Constructs a new MainModel object. Will call newGame().
+
+**getBoard(): GameBoard**  
+Returns the GameBoard object of current MainModel.
+
+**getCurrentPlayer(): Player**  
+Returns the current Player object of current MainModel.
+
+**newGame(): void**  
+Initialize the MainModel objects. Will be called in the constructor.
+
+###*Implementation (MID)*
+####*Uses*
+None
+####*Variables*
+**currentPlayer: int**  
+Stores an integer, 0 or 1, that indicates the current player.
+
+**gameBoard: GameBoard**  
+Stores the GameBoard object for the current game board.
+
+**players: Player[]**  
+An array that holds the two players of the game.
+
+**MainModel(): MainModel**  
+Constructs a new MainModel object. Will call newGame().
+
+**getBoard(): GameBoard**  
+Returns the GameBoard object, gameBoard, of the MainModel object.
+
+**getCurrentPlayer(): Player**  
+Returns the current Player object, Player[currentPlayer], of the MainModel object.
+
+**setNode(node: int): void**  
+
+**newGame(): void**  
+Initialize the MainModel objects. It will create and initialize a new GameBoard object, gameBoard and two new Player objects.
+
+
+##DIRECTION.java
+It is a class of Enum type. It is used in Node.java to represent the relationship between nodes on a game board (see Node.java).
+
+###*Interface (MIS)*
+None
+
+###*Implementation (MID)*
+**UP**  
+Represent the up direction.
+
+**DOWN**  
+Represent the down direction.
+
+**LEFT**  
+Represent the left direction.
+
+**RIGHT**  
+Represent the right direction.
+
+
+##Player.java
+The Player class represent one player of the game. It has a bench and a variable to represent the number pieces the player has. The bench is a stack used to store the pieces that has not been placed on the game board. Everytime a piece is placed, it will be first be popped out of the bench stack. When the length of the bench is 0, it indicates the end of Phase I. The variable that represents the number of pieces the player has will help to check the winning state.
+
+###*Interface (MIS)*
+**getPiece(): Piece**  
+Get an unplaced piece form the player to be placed on the game board.
+
+###*Implementation (MID)*
+**bench: Piece[]**  
+This is a stack used to store the pieces that have not been placed on the board.
+
+**numOfPieces:int**  
+This is a variable 
+
+**getPiece(): Piece**
+
+**getNumOfPieces(): int**  
+
+
+##Piece
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+
+
+##GameBoard
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+
+
+##Node
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+
+
+#View
+
+##MainView
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+
+
+##NodeView
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+
+
+##BoardView
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+
+
+
+#Controller
+
+##MainController.java
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+
+
+
