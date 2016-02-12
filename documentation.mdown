@@ -1,3 +1,5 @@
+Search for `[need to fill in this part]` for parts that are not finished.
+
 The application is decomposed into 3 modules:
 
 1. Model: handles data representation, data logic, e.g.:
@@ -19,49 +21,49 @@ Under Model module, there are several classes we created to fully represent the 
 ##MainModel.java
 MainModel is the top level class in Model. It acts like a parent class for all the other classes in Model. MainModel will access all other classes under Model. This is the only class that can be accessed by Controller. If there were changes made to Model, we only need to review the parts in Controller where only MainModel is used. Therefore the program is easy to adapt for change.
 
+###*Uses*
+- **GameBoard.java**
+- **Player.java**
+
 ###*Interface (MIS)*
-**MainModel(): MainModel**  
+- **MainModel(): MainModel**  
 Constructs a new MainModel object. Will call newGame().
-
-**getBoard(): GameBoard**  
+- **getBoard(): GameBoard**  
 Returns the GameBoard object of current MainModel.
-
-**getCurrentPlayer(): Player**  
+- **getCurrentPlayer(): Player**  
 Returns the current Player object of current MainModel.
-
-**newGame(): void**  
+- **newGame(): void**  
 Initialize the MainModel objects. Will be called in the constructor.
 
 ###*Implementation (MID)*
 ####*Uses*
 None
+
 ####*Variables*
-**currentPlayer: int**  
+- **currentPlayer: int**  
 Stores an integer, 0 or 1, that indicates the current player.
-
-**gameBoard: GameBoard**  
+- **gameBoard: GameBoard**  
 Stores the GameBoard object for the current game board.
-
-**players: Player[]**  
+- **players: Player[]**  
 An array that holds the two players of the game.
 
-**MainModel(): MainModel**  
+####*Access Programs*
+- **MainModel(): MainModel**  
 Constructs a new MainModel object. Will call newGame().
-
-**getBoard(): GameBoard**  
+- **getBoard(): GameBoard**  
 Returns the GameBoard object, gameBoard, of the MainModel object.
-
-**getCurrentPlayer(): Player**  
+- **getCurrentPlayer(): Player**  
 Returns the current Player object, Player[currentPlayer], of the MainModel object.
-
-**setNode(node: int): void**  
-
-**newGame(): void**  
+- **newGame(): void**  
 Initialize the MainModel objects. It will create and initialize a new GameBoard object, gameBoard and two new Player objects.
 
 
 ##DIRECTION.java
 It is a class of Enum type. It is used in Node.java to represent the relationship between nodes on a game board (see Node.java).
+
+###*Uses*
+None
+
 
 ###*Interface (MIS)*
 None
@@ -83,44 +85,147 @@ Represent the right direction.
 ##Player.java
 The Player class represent one player of the game. It has a bench and a variable to represent the number pieces the player has. The bench is a stack used to store the pieces that has not been placed on the game board. Everytime a piece is placed, it will be first be popped out of the bench stack. When the length of the bench is 0, it indicates the end of Phase I. The variable that represents the number of pieces the player has will help to check the winning state.
 
+###*Uses*
+- **Piece.java**
+
 ###*Interface (MIS)*
+**Player(): Player**  
+Creates a new Player object.
+
 **getPiece(): Piece**  
 Get an unplaced piece form the player to be placed on the game board.
 
 ###*Implementation (MID)*
-**bench: Piece[]**  
+####*Variables*
+- **bench: Piece[]**  
 This is a stack used to store the pieces that have not been placed on the board.
+- **numOfPieces:int**  
+This is a variable that represent 
 
-**numOfPieces:int**  
-This is a variable 
-
-**getPiece(): Piece**
+####*Assess programes*
+- **Player(ID: int): Player**  
+It will create sixes pieces
+- **getPiece(): Piece**
 
 **getNumOfPieces(): int**  
 
 
-##Piece
-[description]
+##Piece.java
+This class represent the pieces that each player has in the game.
+
+###*Uses*
+None
 
 ###*Interface (MIS)*
+- **Piece(player: Player): Piece**
+  Construct a new Piece object, and sets its onwer
+- **getOnwer(): Player**
+  Returns a Player object, the owner of the piece.
 
 ###*Implementation (MID)*
+####*Variables*
+- belongsTo: Player  
+  It represent the owner of the Piece. It is set by the constructer.
+
+####*Assess programes*
+- **Piece(player: Player): Piece**  
+  Construct a new Piece object, and sets its onwer
+- **getOnwer(): Player**  
+  Returns the value of `belongsTo`, a Player object, the owner of the piece.
 
 
 ##GameBoard
-[description]
+This class contains information about the game board. It contains information about all the nodes on the board, and provides interface to manipulate each nodes on the board. It stores `Node` objects in an array, and each `Node` is represented by their index in the array.
+
+###*Uses*
+- **Node.java**
 
 ###*Interface (MIS)*
+- **setPiece(piece: Piece,node: Node)**  
+  Sets a Piece object on a given Node object
+- **movePiece(origin: Node,dest: Node)**  
+  move a Piece from one Node object, `origin`, to the another one, `dest`
+- **removePiece(piece: Piece)**  
+  remove a Piece object, `piece`, from the game board.  
+- **checkLegalMove(): Error**  
+  Check if the game board contained any illegal move. Returns an Error object.
+- **checkWin(player: Player): boolean**  
+  Check if the given player, `player`, had won
+   
 
 ###*Implementation (MID)*
+####*Variables*
+- **nodes: Node[]**
+  An array of Node objects that contains all the nodes on the game board.
+
+####*Assess programes*
+- **setPiece(piece: Piece,node: Node)**  
+  Sets a Piece object on a given Node object. Use Node's method `setPiece` to achieve this.
+- **movePiece(origin: Node,dest: Node)**  
+  Move a Piece from one Node object, `origin`, to the another one, `dest`. First, get the piece from `origin` using `getPiece`, then set the piece to `dest` using `setPiece`. After that, remove the piece from `origin` node using `removePiece` 
+- **removePiece(node: Node)**  
+  Remove the piece placed `node` from the game board. Use the `removePiece` method from `Node`
+- **checkLegalMove(): int**  
+  Check if the game board contained any illegal move. Returns an Error object. Loop through all the nodes of the game board, *[need to fill in this part]*
+- **checkWin(): void**  
+  Check if one player had won. Loop though all nodes on the game board, and chall `checkV()` and `checkH()` on each node.
+- **checkV(node: Node): boolean**  
+  Check the vertical connections of `node`. Use `Node`'s methode, `getNeighbor`, to check the `UP` and `DOWN` directions of the node recursively, i.e. check the `UP` and `DOWN` directions of it's neighbor's, and neighboor's neighbor, if it had any. Return true if all nodes on the vertical direction of the `node` is occupied with the same player's piece.
+- **checkH(node: Node): boolean**  
+  Check the horizontal connections of `node`. Use `Node`'s methode, `getNeighbor`, to check the `LEFT` and `RIGHT` directions of the node recursively, i.e. check the `LEFT` and `RIGHT ` directions of it's neighbor's, and neighboor's neighbor, if it had any. Return true if all nodes on the vertical direction of the `node` is occupied with the same player's piece.
 
 
-##Node
-[description]
+##Node.java
+This class represent each nodes on the game board. It contains information about the piece that may be placed on it. The nodes will be connected by each other. The neighers of the cell are being represented by an EnumMap of DIRECTION and Node. We have implemented Node in such way, instead of having a 2D array, is that, the game board of Six Men's Morris has different number of nodes on each row. It would be hard to use a 2D array to store the nodes, as there would be fake nodes created to take up spaces, and detecting 3 pieces in a row would be hard, too.
 
 ###*Interface (MIS)*
+- **getPiece(): Piece**  
+  Return the `Piece` object that's being placed on the node. It returns `null` if the node has no piece.
+- **removePiece(): void**  
+  Remove the `Piece` object that's being placed on the node.
+- **setPiece(piece: Piece): void**  
+  Set the given piece, `piece`, on the node.
+- **getNeighbor(dir: DIRECTION): Node**  
+  Return the neighbor of the node on the given direction, `dir`. It returns `null` if there is no neighbor on that direction.
+- **setNeighbors(neighbors: EnumMap<DIRECTION,Node>): void**  
+  Set the neighbors of the node to `neighbors`
 
 ###*Implementation (MID)*
+####*Variables*
+- piece: Piece  
+  Contains the piece that's being placed on the node. It's `null` if there's no piece.
+- neighbors: EnumMap<DIRECTION, Node>  
+  Contains the information about it's neighbors on all four directions.
+
+####*Assess programes*
+- **getPiece(): Piece**  
+  Return the field `piece`.
+- **removePiece(): void**  
+  Set the field `piece` to `null`.
+- **setPiece(piece: Piece): void**  
+  Set the field `this.piece` to `piece`.
+- **getNeighbor(dir: DIRECTION): Node**  
+  Use `neighbors.get(dir)` to get the node on given direction.
+- **setNeighbors(EnumMap<DIRECTION,Node>): void**  
+  Set field `this.neighbors` to `neighbors`
+
+
+##Error.java
+A class that contains error messages. Mostly the error messages are for illegal moves on the game board.
+
+###*Interface (MIS)*
+- **getMsg(ID: int): string**  
+  Get the string message of a given message ID, `ID`.
+  
+###*Implementation (MID)*
+####*Variables*
+- **messages: string[]**  
+  Contains all the error messages that may appear in the game.
+  
+####*Assess programes*
+- **getMsg(ID: int): string**  
+  Return the `ID`th element of the `message` array
+
 
 
 #View
@@ -131,6 +236,8 @@ This is a variable
 ###*Interface (MIS)*
 
 ###*Implementation (MID)*
+####*Variables*
+####*Assess programes*
 
 
 ##NodeView
@@ -139,6 +246,8 @@ This is a variable
 ###*Interface (MIS)*
 
 ###*Implementation (MID)*
+####*Variables*
+####*Assess programes*
 
 
 ##BoardView
@@ -147,6 +256,18 @@ This is a variable
 ###*Interface (MIS)*
 
 ###*Implementation (MID)*
+####*Variables*
+####*Assess programes*
+
+
+##PieceView
+[description]
+
+###*Interface (MIS)*
+
+###*Implementation (MID)*
+####*Variables*
+####*Assess programes*
 
 
 
@@ -158,6 +279,8 @@ This is a variable
 ###*Interface (MIS)*
 
 ###*Implementation (MID)*
+####*Variables*
+####*Assess programes*
 
 
 
