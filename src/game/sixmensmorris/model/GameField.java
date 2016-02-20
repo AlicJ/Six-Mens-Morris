@@ -25,7 +25,7 @@ public class GameField {
 	public boolean move(char c1, char r1, char c2, char r2) {
 		try {
 			if (!(node(c1, r1).isEmpty()) && node(c2, r2).isEmpty()) {
-				Piece token = node(c1, r1).getToken();
+				Piece token = node(c1, r1).getPiece();
 				assign(c2, r2, token);
 				assign(c1, r1, null);
 				promptMove(c1, r1, c2, r2, true);
@@ -38,6 +38,25 @@ public class GameField {
 		return false;
 	}
 	
+	public boolean assign(char column, char row, Piece token) {
+	// The following method assigns a token to a particular node given a column 
+	// and row and returns true if the assignment was successful.
+		for (Node n : field) {
+			if (n.getColumn() == column && n.getRow() == row) {
+				if (token == null && n.isEmpty() == false) {
+					n.setPiece(null);
+					return true;
+				} 
+				else if (token != null && n.isEmpty() == true) {
+					n.setPiece(token);
+					return true;
+				}
+			}
+		}
+		promptNodeNotFound(column, row, "assign():boolean");
+		return false;
+	}
+	
 	public Node node(char column, char row) {
 		for (Node n : field) {
 			if (n.getColumn() == column && n.getRow() == row) {
@@ -46,25 +65,6 @@ public class GameField {
 		}
 		promptNodeNotFound(column, row, "node():Node");
 		return null;
-	}
-	
-	public boolean assign(char column, char row, Piece token) {
-	// The following method assigns a token to a particular node given a column 
-	// and row and returns true if the assignment was successful.
-		for (Node n : field) {
-			if (n.getColumn() == column && n.getRow() == row) {
-				if (token == null && n.isEmpty() == false) {
-					n.setToken(null);
-					return true;
-				} 
-				else if (token != null && n.isEmpty() == true) {
-					n.setToken(token);
-					return true;
-				}
-			}
-		}
-		promptNodeNotFound(column, row, "assign():boolean");
-		return false;
 	}
 	
 	public ArrayList<Node> field(int n) {
@@ -88,7 +88,7 @@ public class GameField {
 			
 			if(DEBUG_MODE) print("i=" + i + "\t"); // debug
 			
-			column = (char) (i + 65);
+			column = (char) (i + 'A');
 			radius = Math.abs(middle - i);
 			
 			if (i != middle) {
@@ -148,6 +148,11 @@ public class GameField {
 		return this.field;
 	}
 	
+	public Node getNode(int i) {
+	// Returns node at i index in ArrayList
+		return this.field.get(i);
+	}
+	
 	public String toString() {
 	// Returns a string representation of the GameField Abstract Data Type.
 		String board = "\n"+field.get(0).toString();
@@ -191,30 +196,30 @@ public class GameField {
 		System.out.print(s);
 	}
 	
-	public static void main (String[] args) {
-		GameField field = new GameField(9);
-		Piece p1 = new Piece(0);
-		Piece p2 = new Piece(0);
-		Piece p3 = new Piece(0);
-		Piece c1 = new Piece(1);
-		field.assign('A', (char)0, p1);
-		field.assign('B', (char)1, p2);
-		field.assign('C', (char)2, p3);
-		field.assign('D', (char)3, p1); // Error
-		field.assign('E', (char)4, c1);
-		field.assign('F', (char)5, c1);
-		field.assign('G', (char)6, c1);
-		field.assign('G', (char)9, c1); // Error
-		field.move('B', (char)1, 'E', (char) 22);
-		System.out.println(field);
-		System.out.println(field);
-		field.move('A', (char)0, 'D', (char) 6);
-		System.out.println(field);
-		field.move('A', (char)0, 'D', (char) 6);
-		System.out.println(field);
-		field.move('A', (char)0, 'D', (char) 6);
-		System.out.println(field);
-		field.move('D', (char)0, 'E', (char) 2);
-		System.out.println(field);
-	}
+//	public static void main (String[] args) {
+//		GameField field = new GameField(9);
+//		Piece p1 = new Piece(0);
+//		Piece p2 = new Piece(0);
+//		Piece p3 = new Piece(0);
+//		Piece c1 = new Piece(1);
+//		field.assign('A', (char)0, p1);
+//		field.assign('B', (char)1, p2);
+//		field.assign('C', (char)2, p3);
+//		field.assign('D', (char)3, p1); // Error
+//		field.assign('E', (char)4, c1);
+//		field.assign('F', (char)5, c1);
+//		field.assign('G', (char)6, c1);
+//		field.assign('G', (char)9, c1); // Error
+//		field.move('B', (char)1, 'E', (char) 22);
+//		System.out.println(field);
+//		System.out.println(field);
+//		field.move('A', (char)0, 'D', (char) 6);
+//		System.out.println(field);
+//		field.move('A', (char)0, 'D', (char) 6);
+//		System.out.println(field);
+//		field.move('A', (char)0, 'D', (char) 6);
+//		System.out.println(field);
+//		field.move('D', (char)0, 'E', (char) 2);
+//		System.out.println(field);
+//	}
 }

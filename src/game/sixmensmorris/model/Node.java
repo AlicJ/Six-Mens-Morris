@@ -8,7 +8,7 @@ public class Node {
 	private int row;
 	private int column;
 	private int radius;
-	private Piece token;
+	private Piece piece;
 
 	public Node(char column, char row, int radius) {
 		this.column = column;
@@ -19,27 +19,27 @@ public class Node {
 	public int getRow() 		{ return row; 	 }
 	public int getColumn() 		{ return column; }
 	public int getRadius()		{ return radius; }
-	public Piece getToken() 	{ return token;  }
-	public boolean isEmpty()	{ return token == null; }
-	public boolean remove() 	{ if (token == null) return false; 
-								  token = null; return true; }
+	public Piece getPiece() 	{ return piece;  }
+	public boolean isEmpty()	{ return piece == null; }
+	public boolean remove() 	{ if (piece == null) return false; 
+								  piece = null; return true; }
 	
 
-	public void setToken(Piece t) {
-		if (token != null && t != null) { token = t; tokenOverFlow(t, this); }
-		else if (token == null && t == null) nullTokenDelete(this);
-		else token = t;
+	public void setPiece(Piece t) {
+		if (piece != null && t != null) { piece = t; pieceOverFlow(t, this); }
+		else if (piece == null && t == null) nullPieceDelete(this);
+		else piece = t;
 	}
 	
 	public String toString() { 
-		if (token == null) return (char)column + "" + (int)row + "[ ]"; 
-		return (char)column + "" + (int)row + "[" + token.toString() + "]"; }
+		if (piece == null) return (char)column + "" + (int)row + "[ ]"; 
+		return (char)column + "" + (int)row + "[" + piece.toString() + "]"; }
 	
-	private static void tokenOverFlow(Piece t, Node n) {
+	private static void pieceOverFlow(Piece t, Node n) {
 		System.out.println(INVALID_SET + " At: " + n.toString());
 	}
 	
-	private static void nullTokenDelete(Node n) {
+	private static void nullPieceDelete(Node n) {
 		System.out.println(INVALID_TOSS + " At: " + n.toString());
 	}
 }

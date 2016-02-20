@@ -40,12 +40,18 @@ public class Game {
 	public int checkPiece(char column, char row) {
 		if (field.node(column, row) == null) 
 			return -1;
-		return field.node(column, row).getToken().id();
+		return field.node(column, row).getPiece().id();
 	}
 	
 	// Use this to draw all nodes.
 	public ArrayList<Node> state() {
 		return field.nodes();
+	}
+	
+	// Returns node at index i
+	public Node getNode(int i)
+	{
+		return field.getNode(i);
 	}
 	
 	public String toString() {
