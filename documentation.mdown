@@ -1,4 +1,4 @@
-Search for `[need to fill in this part]` for parts that are not finished.
+Search for `[blank]` for parts that are not finished.
 
 The application is decomposed into 3 modules:
 
@@ -89,11 +89,11 @@ The Player class represent one player of the game. It has a bench and a variable
 - **Piece.java**
 
 ###*Interface (MIS)*
-**Player(): Player**  
-Creates a new Player object.
+- **Player(): Player**  
+  Creates a new Player object.
 
-**getPiece(): Piece**  
-Get an unplaced piece form the player to be placed on the game board.
+- **getPiece(): Piece**  
+  Get an unplaced piece form the player to be placed on the game board.
 
 ###*Implementation (MID)*
 ####*Variables*
@@ -141,6 +141,8 @@ This class contains information about the game board. It contains information ab
 - **Node.java**
 
 ###*Interface (MIS)*
+- **GameBoard(): GameBoard**  
+  [blank]
 - **setPiece(piece: Piece,node: Node)**  
   Sets a Piece object on a given Node object
 - **movePiece(origin: Node,dest: Node)**  
@@ -159,6 +161,8 @@ This class contains information about the game board. It contains information ab
   An array of Node objects that contains all the nodes on the game board.
 
 ####*Assess programes*
+- **GameBoard(): GameBoard**  
+  [blank]
 - **setPiece(piece: Piece,node: Node)**  
   Sets a Piece object on a given Node object. Use Node's method `setPiece` to achieve this.
 - **movePiece(origin: Node,dest: Node)**  
@@ -166,7 +170,7 @@ This class contains information about the game board. It contains information ab
 - **removePiece(node: Node)**  
   Remove the piece placed `node` from the game board. Use the `removePiece` method from `Node`
 - **checkLegalMove(): int**  
-  Check if the game board contained any illegal move. Returns an Error object. Loop through all the nodes of the game board, *[need to fill in this part]*
+  Check if the game board contained any illegal move. Returns an Error object. Loop through all the nodes of the game board, *[blank]*
 - **checkWin(): void**  
   Check if one player had won. Loop though all nodes on the game board, and chall `checkV()` and `checkH()` on each node.
 - **checkV(node: Node): boolean**  
@@ -179,6 +183,8 @@ This class contains information about the game board. It contains information ab
 This class represent each nodes on the game board. It contains information about the piece that may be placed on it. The nodes will be connected by each other. The neighers of the cell are being represented by an EnumMap of DIRECTION and Node. We have implemented Node in such way, instead of having a 2D array, is that, the game board of Six Men's Morris has different number of nodes on each row. It would be hard to use a 2D array to store the nodes, as there would be fake nodes created to take up spaces, and detecting 3 pieces in a row would be hard, too.
 
 ###*Interface (MIS)*
+- **Node(): Node**  
+  [blank]
 - **getPiece(): Piece**  
   Return the `Piece` object that's being placed on the node. It returns `null` if the node has no piece.
 - **removePiece(): void**  
@@ -198,6 +204,8 @@ This class represent each nodes on the game board. It contains information about
   Contains the information about it's neighbors on all four directions.
 
 ####*Assess programes*
+- **GameBoard(): GameBoard**  
+  [blank]
 - **getPiece(): Piece**  
   Return the field `piece`.
 - **removePiece(): void**  
@@ -213,7 +221,12 @@ This class represent each nodes on the game board. It contains information about
 ##Error.java
 A class that contains error messages. Mostly the error messages are for illegal moves on the game board.
 
+###*Uses*
+None
+
 ###*Interface (MIS)*
+- **Error(): Error**  
+  [blank]
 - **getMsg(ID: int): string**  
   Get the string message of a given message ID, `ID`.
   
@@ -223,64 +236,104 @@ A class that contains error messages. Mostly the error messages are for illegal 
   Contains all the error messages that may appear in the game.
   
 ####*Assess programes*
+- **GameBoard(): GameBoard**  
+  [blank]
 - **getMsg(ID: int): string**  
-  Return the `ID`th element of the `message` array
+  Return the `ID`'th element of the `message` array
 
 
 
 #View
+[blank] [I'm not sure what to write for view]
 
-##MainView
-[description]
+##MainView.java
+[description][blank]
 
 ###*Interface (MIS)*
+- **MainView(): MainView**  
+  [blank]
+  
+  
+###*Implementation (MID)*
+####*Variables*
+- controller: MainController  
+  It contains the controller, `MainController`.
+- colors: Color[]  
 
+
+####*Assess programes*
+- **MainView(): MainView**  
+  [blank]
+- getNode(x: int,y: int):int  
+
+- draw(gameboard: GameBoard): void  
+
+
+
+##NodeView.java
+[description][blank]
+
+###*Interface (MIS)*
+- **NodeView(): NodeView**  
+  [blank]
+  
 ###*Implementation (MID)*
 ####*Variables*
 ####*Assess programes*
+- **NodeView(): NodeView**  
+  [blank]
 
-
-##NodeView
-[description]
+##BoardView.java
+[description][blank]
 
 ###*Interface (MIS)*
-
+- **BoardView(): BoardView**  
+  [blank]
+  
 ###*Implementation (MID)*
 ####*Variables*
 ####*Assess programes*
+- **BoardView(): BoardView**  
+  [blank]
 
-
-##BoardView
-[description]
+##PieceView.java
+[description][blank]
 
 ###*Interface (MIS)*
-
+- **PieceView(): PieceView**  
+  [blank]
+  
 ###*Implementation (MID)*
 ####*Variables*
 ####*Assess programes*
-
-
-##PieceView
-[description]
-
-###*Interface (MIS)*
-
-###*Implementation (MID)*
-####*Variables*
-####*Assess programes*
-
+- **PieceView(): PieceView**  
+  [blank]
 
 
 #Controller
 
 ##MainController.java
-[description]
+[description][blank]
 
 ###*Interface (MIS)*
-
+- **MainController(): MainController**  
+  [blank]
+  
 ###*Implementation (MID)*
 ####*Variables*
+- **model:MainModel**  
+  
+
 ####*Assess programes*
-
-
-
+- **MainController(): MainController**  
+  [blank]
+- **setNode(node:int): void**  
+  
+- **onNewGame(): void**  
+  
+- **getModel(): MainModel**  
+  
+- **checkLegalMove(): int**  
+  
+- **checkWin(): void**  
+  
