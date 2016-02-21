@@ -17,7 +17,7 @@ public class NodeView extends Ellipse2D.Double
 	public NodeView(int x, int y, Node node)
 	{
 		super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);
-		this.node = node;
+		this.node = node;		
 	}
 	
 	public boolean contains(Point click)
@@ -26,6 +26,11 @@ public class NodeView extends Ellipse2D.Double
 			(click.getX() < getCenterX() + CLICKRADIUS) &&
 			(click.getY() > getCenterY() - CLICKRADIUS) &&
 			(click.getY() < getCenterY() + CLICKRADIUS);
+	}
+	
+	public void addPiece()
+	{
+		
 	}
 	
 	public Node getNode()

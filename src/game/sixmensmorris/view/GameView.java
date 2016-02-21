@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import game.sixmensmorris.model.Game;
 import game.sixmensmorris.model.Node;
 import game.sixmensmorris.model.Piece;
+import game.sixmensmorris.model.Player;
+import game.sixmensmorris.view.NodeView;
 
 public class GameView extends JPanel
 {
@@ -19,18 +21,9 @@ public class GameView extends JPanel
 	private static final int END = 650;
 	private static final int GRIDSIZE = (END - START) / 4;
 	
-	private Game currentGame;
 	private NodeView[] nodes;
 	
-	public GameView()
-	{
-		currentGame = new Game(6);
-		initNodes();
-		
-		addMouseListener(new BoardController());
-	}
-	
-	private void initNodes()
+	public GameView(Game currentGame)
 	{
 		nodes = new NodeView[N_NODES];
 		Node currentNode;
@@ -45,6 +38,11 @@ public class GameView extends JPanel
 			
 			nodes[i] = new NodeView(x, y, currentNode);
 		}
+	}
+	
+	public NodeView[] getNodes()
+	{
+		return nodes;
 	}
 	
 	protected void paintComponent(Graphics g)
@@ -65,33 +63,6 @@ public class GameView extends JPanel
 		for (NodeView node : nodes)
 		{			
 			g2d.fill(node);
-		}
-	}
-	
-	
-	private class BoardController extends MouseAdapter
-	{
-		public void mouseClicked (MouseEvent e)
-		{
-			Piece currentPiece;
-			
-			for (NodeView node : nodes)
-			{
-				if (node.contains(e.getPoint()))
-				{
-					currentPiece = node.getPiece();
-					
-					if (currentPiece == null)
-					{
-						System.out.println((char)node.getNode().getColumn()
-								+ ", " + (int)node.getNode().getRow());
-					}
-					else
-					{
-						
-					}
-				}
-			}
 		}
 	}
 }

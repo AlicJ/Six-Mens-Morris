@@ -24,6 +24,10 @@ public class Game {
 		return field.assign(column, row, player.takePawn());
 	}
 	
+	public boolean setPiece(Node node, Player player) {
+		return field.assign(node, player.takePawn());
+	}
+	
 	public boolean removePiece(char column, char row) {
 		return field.assign(column, row, null);
 	}

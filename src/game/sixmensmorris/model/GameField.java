@@ -38,22 +38,35 @@ public class GameField {
 		return false;
 	}
 	
-	public boolean assign(char column, char row, Piece token) {
+	public boolean assign(char column, char row, Piece piece) {
 	// The following method assigns a token to a particular node given a column 
 	// and row and returns true if the assignment was successful.
 		for (Node n : field) {
 			if (n.getColumn() == column && n.getRow() == row) {
-				if (token == null && n.isEmpty() == false) {
+				if (piece == null && n.isEmpty() == false) {
 					n.setPiece(null);
 					return true;
 				} 
-				else if (token != null && n.isEmpty() == true) {
-					n.setPiece(token);
+				else if (piece != null && n.isEmpty() == true) {
+					n.setPiece(piece);
 					return true;
 				}
 			}
 		}
 		promptNodeNotFound(column, row, "assign():boolean");
+		return false;
+	}
+	
+	public boolean assign(Node node, Piece piece) {
+	// The following method assigns a token to a given node
+	//  and returns true if the assignment was successful.
+		if (piece != null && node.isEmpty() == true) {
+			node.setPiece(piece);
+			return true;
+		}
+		
+		// Change error prompt?
+		promptNodeNotFound((char)node.getColumn(), (char)node.getRow(), "assign():boolean");
 		return false;
 	}
 	

@@ -33,6 +33,16 @@ public class Player {
 		return null;
 	}
 	
+	public Piece pawnAt(int i) {
+		if (pawns.get(i) != null) {
+			return pawns.get(0); 
+		}
+		else {
+			stackUnderFlowWarning(this);
+		}
+		return null;
+	}
+	
 	private static void stackUnderFlowWarning(Player p) {
 		System.out.println(STACK_UNDERFLOW + " Player: " + p.ID() );
 		System.out.println("   >> stack returns a null Token" );
