@@ -4,13 +4,12 @@ import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 
 import game.sixmensmorris.model.Node;
-import game.sixmensmorris.model.Piece;
 
 public class NodeView extends Ellipse2D.Double
 {
 	private static final long serialVersionUID = -162314867417625047L;
 	private static final int RADIUS = 10;
-	private static final int CLICKRADIUS = 20;
+	private static final int CLICKRADIUS = 30;
 	
 	private Node node;
 	
@@ -28,18 +27,8 @@ public class NodeView extends Ellipse2D.Double
 			(click.getY() < getCenterY() + CLICKRADIUS);
 	}
 	
-	public void addPiece()
-	{
-		
-	}
-	
 	public Node getNode()
 	{
 		return node;
-	}
-	
-	public Piece getPiece()
-	{
-		return node.getPiece();
 	}
 }

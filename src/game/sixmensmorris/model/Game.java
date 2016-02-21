@@ -20,6 +20,17 @@ public class Game {
 		return field.move(c1, r1, c2, r2);
 	}
 	
+	public boolean movePiece(Node node1, Node node2) {
+		char c1, r1, c2, r2;
+		
+		c1 = (char)node1.getColumn();
+		r1 = (char)node1.getRow();
+		c2 = (char)node2.getColumn();
+		r2 = (char)node2.getRow();
+		
+		return field.move(c1, r1, c2, r2);
+	}
+	
 	public boolean setPiece(char column, char row, Player player) {
 		return field.assign(column, row, player.takePawn());
 	}
@@ -32,12 +43,11 @@ public class Game {
 		return field.assign(column, row, null);
 	}
 	
-	public Player player() {
-		return this.player;
-	}
-	
-	public Player computer() {
-		return this.computer;
+	public Player player(int id)	{
+		if (id == 0)
+			return this.player;
+		else
+			return this.computer;
 	}
 	
 	// Abrogated. Though, still functional, use if necessary.

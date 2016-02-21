@@ -46,7 +46,7 @@ public class MainController extends JFrame
 	private void initUI()
 	{
 		setTitle("Simple example");
-		setSize(800, 750);
+		setSize(920, 800);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -60,10 +60,10 @@ public class MainController extends JFrame
 				JFrame gameWindow = new MainController();
 				gameWindow.setVisible(true);
 
-//				currentGame.setPiece('A', (char)0, currentGame.player());
-//				currentGame.setPiece('A', (char)2, currentGame.computer());
-//				currentGame.setPiece('B', (char)3, currentGame.player());
-//				currentGame.setPiece('B', (char)3, currentGame.player()); // returns false
+//				currentGame.setPiece('A', (char)0, currentGame.player(0));
+//				currentGame.setPiece('A', (char)2, currentGame.player(1));
+//				currentGame.setPiece('B', (char)3, currentGame.player(0));
+//				currentGame.setPiece('B', (char)3, currentGame.player(0)); // returns false
 //
 //				print(currentGame.toString());
 //
