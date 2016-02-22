@@ -61,29 +61,6 @@ public class GameController extends JPanel
 		repaint();
 	}
 	
-	// Switch between turn-based game and setting up board state
-	public int switchMode()
-	{
-		if (currentPlayer == -1)
-			currentPlayer = (int)(Math.random() * 2);
-		else
-			currentPlayer = -1;
-		
-		return currentPlayer;
-	}
-	
-	// Move selected PieceView to chosen NodeView and end turn
-	private void finalizeMove(NodeView node)
-	{
-		// Move PieceView in display
-		selectedPiece.moveToNode(node);
-		selectedPiece = null;
-		
-		// If in turn-based mode, end turn
-		if (currentPlayer != -1)
-			currentPlayer = 1 - currentPlayer;
-	}
-	
 	// Calculate NodeView coordinates on board and initialize NodeViews
 	private void initNodes()
 	{
@@ -122,8 +99,8 @@ public class GameController extends JPanel
 			y = BOARDSTART_Y + i * (BOARDSIZE / 5);
 			
 			// Initialize red and blue PieceView
-			redPieces[i] = new PieceView(REDBENCH_X, y, currentGame.player(0).piece(i));
-			bluePieces[i] = new PieceView(BLUEBENCH_X, y, currentGame.player(1).piece(i));
+			redPieces[i] = new PieceView(REDBENCH_X, y, 0);
+			bluePieces[i] = new PieceView(BLUEBENCH_X, y, 1);
 		}
 	}
 	
@@ -184,6 +161,29 @@ public class GameController extends JPanel
 		
 		g2d.fillRect(BOARDCENTER_X - GRIDSIZE / 4, BOARDCENTER_Y - GRIDSIZE / 4,
 				GRIDSIZE / 2, GRIDSIZE / 2);
+	}
+	
+	// Switch between turn-based game and setting up board state
+	public int switchMode()
+	{
+		if (currentPlayer == -1)
+			currentPlayer = (int)(Math.random() * 2);
+		else
+			currentPlayer = -1;
+		
+		return currentPlayer;
+	}
+	
+	// Move selected PieceView to chosen NodeView and end turn
+	private void finalizeMove(NodeView node)
+	{
+		// Move PieceView in display
+		selectedPiece.moveToNode(node);
+		selectedPiece = null;
+		
+		// If in turn-based mode, end turn
+		if (currentPlayer != -1)
+			currentPlayer = 1 - currentPlayer;
 	}
 	
 	// Manages all mouse input

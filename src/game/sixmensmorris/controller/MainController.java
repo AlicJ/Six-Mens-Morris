@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class MainController extends JFrame
@@ -52,9 +53,14 @@ public class MainController extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				
 				if (board.switchMode() == -1)
+				{
 					gameModeButton.setText("Turn-Based Mode");
+					
+				}
 				else
+				{
 					gameModeButton.setText("Set Board State");
+				}
 				
 				board.repaint();
 			}

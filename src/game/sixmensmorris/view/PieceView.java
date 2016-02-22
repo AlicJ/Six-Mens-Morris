@@ -12,13 +12,13 @@ public class PieceView extends Ellipse2D.Double
 	private static final int RADIUS = 30;
 	private static final int CLICKRADIUS = 30;
 	
-	private Piece piece;
 	private NodeView currentNode;
+	private int id;
 	
-	public PieceView(int x, int y, Piece piece)
+	public PieceView(int x, int y, int id)
 	{
 		super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);
-		this.piece = piece;
+		this.id = id;
 	}
 	
 	public void moveToNode(NodeView node)
@@ -42,13 +42,8 @@ public class PieceView extends Ellipse2D.Double
 		return currentNode;
 	}
 	
-	public Piece getPiece()
-	{
-		return piece;
-	}
-	
 	public int getId()
 	{
-		return piece.id();
+		return id;
 	}
 }
