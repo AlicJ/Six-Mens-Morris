@@ -102,7 +102,6 @@ public class GameController extends JPanel
 	{
 		int size = Math.min(getHeight() + 140, getWidth());
 		
-		// Change these three variables to adjust size
 		redBenchX = 60;
 		blueBenchX = size - 60;
 		boardStartX = 120;
