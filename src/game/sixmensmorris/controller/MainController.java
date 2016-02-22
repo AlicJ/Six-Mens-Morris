@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class MainController extends JFrame
@@ -40,27 +39,25 @@ public class MainController extends JFrame
 		gameModeButton = new JButton("Set Board State");
 		
 		// Function for New Game button
-		newGameButton.addActionListener(new ActionListener() {
+		newGameButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 				board.newGame();
 			}
 		});
 		
 		// Function for Game Mode button
-		gameModeButton.addActionListener(new ActionListener() {
+		gameModeButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e)
+			{				
 				if (board.switchMode() == -1)
-				{
 					gameModeButton.setText("Turn-Based Mode");
-					
-				}
 				else
-				{
 					gameModeButton.setText("Set Board State");
-				}
 				
 				board.repaint();
 			}

@@ -5,12 +5,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JPanel;
 
 import game.sixmensmorris.model.Game;
 import game.sixmensmorris.model.Node;
-import game.sixmensmorris.model.Piece;
 import game.sixmensmorris.model.Player;
 import game.sixmensmorris.view.NodeView;
 import game.sixmensmorris.view.PieceView;
@@ -38,6 +38,7 @@ public class GameController extends JPanel
 	private NodeView[] nodes;
 	private PieceView[] redPieces, bluePieces;
 	private PieceView selectedPiece;
+	private NodeView hoveredNode;
 	private int currentPlayer;
 	
 	public GameController()
@@ -46,6 +47,21 @@ public class GameController extends JPanel
 		
 		// Add mouse listener subclass BoardController, found at end of current class
 		addMouseListener(new BoardController());
+		
+
+		addMouseMotionListener(new MouseMotionAdapter()
+		{
+			@Override
+			public void mouseMoved(MouseEvent e) 
+			{
+				for (NodeView node : nodes)
+					if (node.contains(e.getPoint()))
+						hoveredNode = node;
+					
+				repaint();
+			}
+		});
+
 	}
 	
 	public void newGame()
@@ -100,12 +116,12 @@ public class GameController extends JPanel
 	// Calculates board dimensions and coordinates
 	private void calcBoard()
 	{
-		int size = Math.min(getHeight() + 140, getWidth());
+		int size = Math.min(getHeight() + 180, getWidth());
 		
 		redBenchX = 60;
 		blueBenchX = size - 60;
-		boardStartX = 120;
-		boardEndX = size - 120;
+		boardStartX = 140;
+		boardEndX = size - 140;
 		boardStartY = 50;
 		
 		boardSize = boardEndX - boardStartX;
@@ -160,6 +176,7 @@ public class GameController extends JPanel
 	}
 	
 	// Paints current state of board
+	@Override
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -217,6 +234,14 @@ public class GameController extends JPanel
 			g2d.setPaint(Color.BLACK);
 		
 		g2d.fillRect(boardCenterX - gridSize / 4, boardCenterY - gridSize / 4, gridSize / 2, gridSize / 2);
+		
+		// Draw circle over hovered node
+		if (hoveredNode != null)
+		{
+			g2d.drawOval((int)hoveredNode.getCenterX() - 30, (int)hoveredNode.getCenterY() - 30, 60, 60);
+		}
+		
+		
 	}
 	
 	// Switch between turn-based game and setting up board state
@@ -246,6 +271,7 @@ public class GameController extends JPanel
 	public class BoardController extends MouseAdapter
 	{	
 		// When mouse is pressed
+		@Override
 		public void mousePressed (MouseEvent e)
 		{
 			boolean pieceClicked = false;

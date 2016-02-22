@@ -3,9 +3,6 @@ package game.sixmensmorris.view;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 
-import game.sixmensmorris.model.Node;
-import game.sixmensmorris.model.Piece;
-
 public class PieceView extends Ellipse2D.Double
 {
 	private static final long serialVersionUID = -162314867417625047L;
