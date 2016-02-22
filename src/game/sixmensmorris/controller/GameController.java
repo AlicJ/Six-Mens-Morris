@@ -36,16 +36,15 @@ public class GameController extends JPanel
 	
 	private Game currentGame;
 	private NodeView[] nodes;
-	private PieceView[] redPieces;
-	private PieceView[] bluePieces;
+	private PieceView[] redPieces, bluePieces;
 	private PieceView selectedPiece;
-	private Player currentPlayer;
+	private int currentPlayer;
 	
 	public GameController()
 	{
-		// Starts new game and sets current player to Red
+		// Starts new game and sets current player randomly
 		currentGame = new Game(N_PIECES);
-		currentPlayer = currentGame.player(0);
+		currentPlayer = (int)(Math.random() * 2);
 		
 		// Initialize Node View and Piece View objects
 		initNodes();
@@ -53,6 +52,29 @@ public class GameController extends JPanel
 		
 		// Add mouse listener subclass BoardController, found at end of current class
 		addMouseListener(new BoardController());
+	}
+	
+	// Switch between turn-based game and setting up board state
+	public int switchMode()
+	{
+		if (currentPlayer == -1)
+			currentPlayer = (int)(Math.random() * 2);
+		else
+			currentPlayer = -1;
+		
+		return currentPlayer;
+	}
+	
+	// Move selected PieceView to chosen NodeView and end turn
+	private void finalizeMove(NodeView node)
+	{
+		// Move PieceView in display
+		selectedPiece.moveToNode(node);
+		selectedPiece = null;
+		
+		// If in turn-based mode, end turn
+		if (currentPlayer != -1)
+			currentPlayer = 1 - currentPlayer;
 	}
 	
 	// Calculate NodeView coordinates on board and initialize NodeViews
@@ -93,8 +115,8 @@ public class GameController extends JPanel
 			y = BOARDSTART_Y + i * (BOARDSIZE / 5);
 			
 			// Initialize red and blue PieceView
-			redPieces[i] = new PieceView(REDBENCH_X, y, currentGame.player(0).pawnAt(i));
-			bluePieces[i] = new PieceView(BLUEBENCH_X, y, currentGame.player(1).pawnAt(i));
+			redPieces[i] = new PieceView(REDBENCH_X, y, currentGame.player(0).piece(i));
+			bluePieces[i] = new PieceView(BLUEBENCH_X, y, currentGame.player(1).piece(i));
 		}
 	}
 	
@@ -144,6 +166,17 @@ public class GameController extends JPanel
 			g2d.setPaint(Color.BLACK);
 			g2d.fill(selectedPiece);
 		}
+		
+		// Draw square representing whose turn it is
+		if (currentPlayer == 0)
+			g2d.setPaint(Color.RED);
+		else if (currentPlayer == 1)
+			g2d.setPaint(Color.BLUE);
+		else
+			g2d.setPaint(Color.BLACK);
+		
+		g2d.fillRect(BOARDCENTER_X - GRIDSIZE / 4, BOARDCENTER_Y - GRIDSIZE / 4,
+				GRIDSIZE / 2, GRIDSIZE / 2);
 	}
 	
 	// Manages all mouse input
@@ -152,14 +185,46 @@ public class GameController extends JPanel
 		// When mouse is pressed
 		public void mousePressed (MouseEvent e)
 		{
+			boolean pieceClicked = false;
+			
 			// If piece was clicked, select piece
 			for (int i = 0; i < N_PIECES; i++)
 			{
-				if (redPieces[i].contains(e.getPoint()))
+				if (redPieces[i].contains(e.getPoint()) && currentPlayer != 1)
+				{
 					selectedPiece = redPieces[i];
+					pieceClicked = true;
+				}
 				
-				if (bluePieces[i].contains(e.getPoint()))
+				if (bluePieces[i].contains(e.getPoint()) && currentPlayer != 0)
+				{
 					selectedPiece = bluePieces[i];
+					pieceClicked = true;
+				}
+			}
+			
+			// If piece was selected, check validity of piece selection
+			if (pieceClicked)
+			{
+				// Check if piece belongs to wrong player
+				boolean invalidPlayer = currentPlayer != selectedPiece.getId();
+				
+				// Check if piece is on board while player still has bench pieces
+				boolean invalidPiece = selectedPiece.currentNode() != null
+						&& currentGame.player(currentPlayer).hasPiece();
+				
+				// If in turn-based mode and one of the above rules have been violated
+				if (currentPlayer != -1 && (invalidPlayer || invalidPiece))
+					
+//				if (currentPlayer != -1 && invalidPlayer)
+				{
+					selectedPiece = null;	// Piece selection is invalid: deselect piece
+				}
+				else	// Otherwise piece selection is valid: end function
+				{
+					repaint();
+					return;
+				}
 			}
 			
 			// If node was clicked
@@ -176,12 +241,11 @@ public class GameController extends JPanel
 							// Get player of selected piece
 							Player selectedPlayer = currentGame.player(selectedPiece.getId());
 
-							// Attempt placement of piece on to selected
+							// Attempt placement of piece on to selected node
 							if (currentGame.setPiece(node.getNode(), selectedPlayer))
 							{
-								// If successful, move corresponding PieceView in display
-								selectedPiece.moveToNode(node);
-								selectedPiece = null;
+								// If successful in model, finalize move in controller
+								finalizeMove(node);
 							}
 						}
 						else
@@ -193,9 +257,8 @@ public class GameController extends JPanel
 							// Attempt move from previous node to clicked node
 							if (currentGame.movePiece(origin, destination))
 							{
-								// If successful, move corresponding PieceView in display
-								selectedPiece.moveToNode(node);
-								selectedPiece = null;
+								// If successful in model, finalize move in controller
+								finalizeMove(node);
 							}
 						}
 					}

@@ -15,7 +15,7 @@ public class MainController extends JFrame
 	// Declare main game controller and UI
 	private GameController board;
 	private JPanel controls;
-	private JButton newGameButton;
+	private JButton newGameButton, gameModeButton;
 
 	public MainController()
 	{
@@ -36,6 +36,7 @@ public class MainController extends JFrame
 		// Initialize button controls
 		controls = new JPanel(new FlowLayout());
 		newGameButton = new JButton("New Game");
+		gameModeButton = new JButton("Set Board State");
 		
 		// Function for New Game button
 		newGameButton.addActionListener(new ActionListener() {
@@ -45,8 +46,23 @@ public class MainController extends JFrame
 			}
 		});
 		
+		// Function for Game Mode button
+		gameModeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if (board.switchMode() == -1)
+					gameModeButton.setText("Turn-Based Mode");
+				else
+					gameModeButton.setText("Set Board State");
+				
+				board.repaint();
+			}
+		});
+		
 		// Add buttons to control panel
 		controls.add(newGameButton);
+		controls.add(gameModeButton);
 		
 		// Add control panel and game board to main window
 		add(board, BorderLayout.CENTER);
@@ -65,23 +81,6 @@ public class MainController extends JFrame
 			{
 				JFrame gameWindow = new MainController();
 				gameWindow.setVisible(true);
-
-				
-				// Danish's test code for model below, put in MainController?
-				
-//				currentGame.setPiece('A', (char)0, currentGame.player(0));
-//				currentGame.setPiece('A', (char)2, currentGame.player(1));
-//				currentGame.setPiece('B', (char)3, currentGame.player(0));
-//				currentGame.setPiece('B', (char)3, currentGame.player(0)); // returns false
-//
-//				print(currentGame.toString());
-//
-//				currentGame.movePiece('A', (char)0, 'E', (char)4);
-//				print(currentGame.toString());
-//				currentGame.movePiece('E', (char)4, 'A', (char)0);
-//				print(currentGame.toString());
-//				currentGame.movePiece('E', (char)2, 'E', (char)4); // error, although no indication...
-//				print(currentGame.toString());
 			}
 		});
 	}

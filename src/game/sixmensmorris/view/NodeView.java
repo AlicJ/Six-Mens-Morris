@@ -13,12 +13,14 @@ public class NodeView extends Ellipse2D.Double
 	
 	private Node node;
 	
+	// Sets corresponding node and calls parent Ellipse constructor
 	public NodeView(int x, int y, Node node)
 	{
 		super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);
 		this.node = node;		
 	}
 	
+	// Checks if click is within a square of CLICKRADIUS distance of Node
 	public boolean contains(Point click)
 	{
 		return (click.getX() > getCenterX() - CLICKRADIUS) &&

@@ -33,12 +33,12 @@ public class Game {
 	}
 	
 	public boolean setPiece(char column, char row, Player player) {
-		return field.assign(column, row, player.takePawn());
+		return field.assign(column, row, player.takePiece());
 	}
 
 	// Added setPiece() method that takes a Node instead of coordinates
 	public boolean setPiece(Node node, Player player) {
-		return field.assign(node, player.takePawn());
+		return field.assign(node, player.takePiece());
 	}
 	
 	public boolean removePiece(char column, char row) {
