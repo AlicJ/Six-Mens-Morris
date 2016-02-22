@@ -7,19 +7,20 @@ public class Game {
 	private final int PLAYER_PIECES = 6;
 	
 	private GameField field;
-	private Player player;
-	private Player computer;
+	private Player redPlayer;
+	private Player bluePlayer;
 	
 	public Game(int n) {
 		field = new GameField(n);
-		player = new Player(PLAYER_PIECES, 0);
-		computer = new Player(PLAYER_PIECES, 1);
+		redPlayer = new Player(PLAYER_PIECES, 0);
+		bluePlayer = new Player(PLAYER_PIECES, 1);
 	}
 	
 	public boolean movePiece(char c1, char r1, char c2, char r2) {
 		return field.move(c1, r1, c2, r2);
 	}
 	
+	// Added movePiece() method that takes Nodes instead of coordinates
 	public boolean movePiece(Node node1, Node node2) {
 		char c1, r1, c2, r2;
 		
@@ -34,7 +35,8 @@ public class Game {
 	public boolean setPiece(char column, char row, Player player) {
 		return field.assign(column, row, player.takePawn());
 	}
-	
+
+	// Added setPiece() method that takes a Node instead of coordinates
 	public boolean setPiece(Node node, Player player) {
 		return field.assign(node, player.takePawn());
 	}
@@ -45,9 +47,9 @@ public class Game {
 	
 	public Player player(int id)	{
 		if (id == 0)
-			return this.player;
+			return this.redPlayer;
 		else
-			return this.computer;
+			return this.bluePlayer;
 	}
 	
 	// Abrogated. Though, still functional, use if necessary.

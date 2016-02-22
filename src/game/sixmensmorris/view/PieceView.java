@@ -14,7 +14,6 @@ public class PieceView extends Ellipse2D.Double
 	
 	private Piece piece;
 	private NodeView currentNode;
-	private boolean placed;
 	
 	public PieceView(int x, int y, Piece piece)
 	{

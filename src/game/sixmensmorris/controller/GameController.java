@@ -43,41 +43,56 @@ public class GameController extends JPanel
 	
 	public GameController()
 	{
+		// Starts new game and sets current player to Red
 		currentGame = new Game(N_PIECES);
 		currentPlayer = currentGame.player(0);
+		
+		// Initialize Node View and Piece View objects
 		initNodes();
 		initPieces();
 		
+		// Add mouse listener subclass BoardController, found at end of current class
 		addMouseListener(new BoardController());
 	}
 	
+	// Calculate NodeView coordinates on board and initialize NodeViews
 	private void initNodes()
 	{
+		// Initialize array
 		nodes = new NodeView[N_NODES];
 		Node currentNode;
 		int x, y;
 		
+		// For each NodeView array element
 		for (int i = 0; i < N_NODES; i++)
 		{
+			// Get Node from current Game object
 			currentNode = currentGame.getNode(i);
 			
+			// Calculate NodeView (x,y) coordinates from Node column and row
 			x = BOARDSTART_X + GRIDSIZE * (currentNode.getColumn() - 'A');
 			y = BOARDSTART_Y + GRIDSIZE * currentNode.getRow();
 			
+			// Initialize NodeView
 			nodes[i] = new NodeView(x, y, currentNode);
 		}
 	}
-	
+
+	// Calculate PieceView coordinates on sides of board and initialize PieceViews
 	private void initPieces()
 	{
+		// Initialize piece arrays
 		redPieces = new PieceView[N_PIECES];
 		bluePieces = new PieceView[N_PIECES];
 		int y;
 		
+		// For each red and blue piece
 		for (int i = 0; i < N_PIECES; i++)
 		{
-			y = 50 + i * BOARDSIZE / 5;
+			// Calculate current piece's y value
+			y = BOARDSTART_Y + i * (BOARDSIZE / 5);
 			
+			// Initialize red and blue PieceView
 			redPieces[i] = new PieceView(REDBENCH_X, y, currentGame.player(0).pawnAt(i));
 			bluePieces[i] = new PieceView(BLUEBENCH_X, y, currentGame.player(1).pawnAt(i));
 		}
@@ -88,6 +103,7 @@ public class GameController extends JPanel
 	{
 		super.paintComponent(g);
 		
+		// Cast Graphics to Graphics2D
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// Draw outer and inner squares
@@ -102,23 +118,27 @@ public class GameController extends JPanel
 		g2d.drawLine(BOARDSTART_X, BOARDCENTER_Y, BOARDSTART_X + GRIDSIZE, BOARDCENTER_Y);
 		g2d.drawLine(BOARDEND_X, BOARDCENTER_Y, BOARDEND_X - GRIDSIZE, BOARDCENTER_Y);
 		
+		// Draw nodes
 		for (NodeView node : nodes)
 		{			
 			g2d.fill(node);
 		}
 		
+		// Draw red pieces
 		for (PieceView piece : redPieces)
 		{
 			g2d.setPaint(Color.RED);
 			g2d.fill(piece);
 		}
 		
+		// Draw blue pieces
 		for (PieceView piece : bluePieces)
 		{
 			g2d.setPaint(Color.BLUE);
 			g2d.fill(piece);
 		}
 		
+		// Change color of selected piece
 		if (selectedPiece != null)
 		{
 			g2d.setPaint(Color.BLACK);
@@ -129,61 +149,60 @@ public class GameController extends JPanel
 	// Manages all mouse input
 	public class BoardController extends MouseAdapter
 	{	
-		public void mouseClicked (MouseEvent e)
+		// When mouse is pressed
+		public void mousePressed (MouseEvent e)
 		{
+			// If piece was clicked, select piece
 			for (int i = 0; i < N_PIECES; i++)
 			{
 				if (redPieces[i].contains(e.getPoint()))
-				{
 					selectedPiece = redPieces[i];
-				}
 				
 				if (bluePieces[i].contains(e.getPoint()))
-				{
 					selectedPiece = bluePieces[i];
-				}
 			}
 			
+			// If node was clicked
 			for (NodeView node : nodes)
 			{
 				if (node.contains(e.getPoint()))
 				{
-					System.out.println((char)node.getNode().getColumn()
-							+ ", " + node.getNode().getRow());
-					
+					// If a piece is currently selected
 					if (selectedPiece != null)
 					{
 						// If piece hasn't been placed yet
 						if (selectedPiece.currentNode() == null)
 						{
+							// Get player of selected piece
 							Player selectedPlayer = currentGame.player(selectedPiece.getId());
 
+							// Attempt placement of piece on to selected
 							if (currentGame.setPiece(node.getNode(), selectedPlayer))
 							{
+								// If successful, move corresponding PieceView in display
 								selectedPiece.moveToNode(node);
 								selectedPiece = null;
 							}
 						}
 						else
 						{
+							// Get clicked node and node of selected piece
 							Node origin = selectedPiece.currentNode().getNode();
 							Node destination = node.getNode();
 							
+							// Attempt move from previous node to clicked node
 							if (currentGame.movePiece(origin, destination))
 							{
+								// If successful, move corresponding PieceView in display
 								selectedPiece.moveToNode(node);
 								selectedPiece = null;
 							}
 						}
 					}
 				}
-				else
-				{
-
-				}
-				
 			}
 			
+			// Display changes made by mouse click
 			repaint();
 		}
 	}

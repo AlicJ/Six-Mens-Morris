@@ -12,21 +12,32 @@ public class MainController extends JFrame
 {
 	private static final long serialVersionUID = -1265967824330879837L;
 	
+	// Declare main game controller and UI
 	private GameController board;
 	private JPanel controls;
 	private JButton newGameButton;
-	private JButton changePlayerButton;
 
 	public MainController()
 	{
 		initUI();
-		
+	}
+
+	// Initialize User Interface
+	private void initUI()
+	{
+		setTitle("Six Men's Morris");
+		setSize(920, 800);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		// Initialize game board
 		board = new GameController();
 		
+		// Initialize button controls
 		controls = new JPanel(new FlowLayout());
 		newGameButton = new JButton("New Game");
-		changePlayerButton = new JButton("Change Colour");
 		
+		// Function for New Game button
 		newGameButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -34,23 +45,18 @@ public class MainController extends JFrame
 			}
 		});
 		
+		// Add buttons to control panel
 		controls.add(newGameButton);
-		controls.add(changePlayerButton);
 		
+		// Add control panel and game board to main window
 		add(board, BorderLayout.CENTER);
 		add(controls, BorderLayout.SOUTH);
 		
+		// Display game board
 		board.setVisible(true);
 	}
 
-	private void initUI()
-	{
-		setTitle("Simple example");
-		setSize(920, 800);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-
+	// Create new game window and start game
 	public static void main (String[] args)
 	{
 		EventQueue.invokeLater(new Runnable()
@@ -60,6 +66,9 @@ public class MainController extends JFrame
 				JFrame gameWindow = new MainController();
 				gameWindow.setVisible(true);
 
+				
+				// Danish's test code for model below, put in MainController?
+				
 //				currentGame.setPiece('A', (char)0, currentGame.player(0));
 //				currentGame.setPiece('A', (char)2, currentGame.player(1));
 //				currentGame.setPiece('B', (char)3, currentGame.player(0));
