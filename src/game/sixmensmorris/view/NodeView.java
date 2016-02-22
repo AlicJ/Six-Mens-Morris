@@ -20,6 +20,12 @@ public class NodeView extends Ellipse2D.Double
 		this.node = node;		
 	}
 	
+	public void moveTo(int x, int y)
+	{
+		this.x = x - RADIUS;
+		this.y = y - RADIUS;
+	}
+	
 	// Checks if click is within a square of CLICKRADIUS distance of Node
 	public boolean contains(Point click)
 	{

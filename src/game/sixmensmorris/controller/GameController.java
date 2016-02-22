@@ -22,17 +22,17 @@ public class GameController extends JPanel
 	private static final int N_PIECES = 6;
 	
 	// Change these three constants to adjust size
-	private static final int BOARDSTART_X = 150;
-	private static final int BOARDSTART_Y = 50;
-	private static final int BOARDSIZE = 600;
-	
-	private static final int BOARDEND_X = BOARDSTART_X + BOARDSIZE;
-	private static final int BOARDEND_Y = BOARDSTART_Y + BOARDSIZE;
-	private static final int BOARDCENTER_X = (BOARDSTART_X + BOARDEND_X) / 2;
-	private static final int BOARDCENTER_Y = (BOARDSTART_Y + BOARDEND_Y) / 2;
-	private static final int REDBENCH_X = BOARDSTART_X - BOARDSIZE / 6;
-	private static final int BLUEBENCH_X = BOARDEND_X + BOARDSIZE / 6;
-	private static final int GRIDSIZE = BOARDSIZE / 4;
+	private int boardStartX = 150;
+	private int boardStartY = 50;
+	private int boardSize = 600;
+	        
+	private int boardEndX = boardStartX + boardSize;
+	private int boardEndY = boardStartY + boardSize;
+	private int boardCenterX = (boardStartX + boardEndX) / 2;
+	private int boardCenterY = (boardStartY + boardEndY) / 2;
+	private int redBenchX = boardStartX - boardSize / 6;
+	private int blueBenchX = boardEndX + boardSize / 6;
+	private int gridSize = boardSize / 4;
 	
 	private Game currentGame;
 	private NodeView[] nodes;
@@ -58,6 +58,8 @@ public class GameController extends JPanel
 		initNodes();
 		initPieces();
 		
+		calcCoordinates();
+		
 		repaint();
 	}
 	
@@ -67,7 +69,6 @@ public class GameController extends JPanel
 		// Initialize array
 		nodes = new NodeView[N_NODES];
 		Node currentNode;
-		int x, y;
 		
 		// For each NodeView array element
 		for (int i = 0; i < N_NODES; i++)
@@ -75,12 +76,8 @@ public class GameController extends JPanel
 			// Get Node from current Game object
 			currentNode = currentGame.getNode(i);
 			
-			// Calculate NodeView (x,y) coordinates from Node column and row
-			x = BOARDSTART_X + GRIDSIZE * (currentNode.getColumn() - 'A');
-			y = BOARDSTART_Y + GRIDSIZE * currentNode.getRow();
-			
 			// Initialize NodeView
-			nodes[i] = new NodeView(x, y, currentNode);
+			nodes[i] = new NodeView(0, 0, currentNode);
 		}
 	}
 
@@ -90,17 +87,76 @@ public class GameController extends JPanel
 		// Initialize piece arrays
 		redPieces = new PieceView[N_PIECES];
 		bluePieces = new PieceView[N_PIECES];
-		int y;
 		
 		// For each red and blue piece
 		for (int i = 0; i < N_PIECES; i++)
 		{
-			// Calculate current piece's y value
-			y = BOARDSTART_Y + i * (BOARDSIZE / 5);
-			
 			// Initialize red and blue PieceView
-			redPieces[i] = new PieceView(REDBENCH_X, y, 0);
-			bluePieces[i] = new PieceView(BLUEBENCH_X, y, 1);
+			redPieces[i] = new PieceView(0, 0, 0);
+			bluePieces[i] = new PieceView(0, 0, 1);
+		}
+	}
+	
+	// Calculates board dimensions and coordinates
+	private void calcBoard()
+	{
+		int size = Math.min(getHeight() + 140, getWidth());
+		
+		// Change these three variables to adjust size
+		redBenchX = 60;
+		blueBenchX = size - 60;
+		boardStartX = 120;
+		boardEndX = size - 120;
+		boardStartY = 50;
+		
+		boardSize = boardEndX - boardStartX;
+		boardEndY = boardStartY + boardSize;
+		boardCenterX = (boardStartX + boardEndX) / 2;
+		boardCenterY = (boardStartY + boardEndY) / 2;
+		gridSize = boardSize / 4;
+	}
+	
+	// Recalculates board dimensions and
+	private void calcCoordinates()
+	{
+		calcBoard();
+		
+		// Declare Node, x, y values
+		Node currentNode;
+		int x, y;
+
+		// For each NodeView array element
+		for (int i = 0; i < N_NODES; i++)
+		{
+			// Get Node from current NodeView
+			currentNode = nodes[i].getNode();
+			
+			// Calculate NodeView (x,y) coordinates from Node column and row
+			x = boardStartX + gridSize * (currentNode.getColumn() - 'A');
+			y = boardStartY + gridSize * currentNode.getRow();
+
+			// Move to new coordinates
+			nodes[i].moveTo(x, y);
+		}
+
+		
+		// For each red and blue piece
+		for (int i = 0; i < N_PIECES; i++)
+		{
+			// Calculate current piece's bench y value
+			y = boardStartY + i * (boardSize / 5);
+
+			// If on board, move to corresponding node, otherwise move to bench
+			if (redPieces[i].currentNode() != null)
+				redPieces[i].moveToNode(redPieces[i].currentNode());
+			else
+				redPieces[i].moveTo(redBenchX, y);
+
+			// If on board, move to corresponding node, otherwise move to bench
+			if (bluePieces[i].currentNode() != null)
+				bluePieces[i].moveToNode(bluePieces[i].currentNode());
+			else
+				bluePieces[i].moveTo(blueBenchX, y);		
 		}
 	}
 	
@@ -112,17 +168,19 @@ public class GameController extends JPanel
 		// Cast Graphics to Graphics2D
 		Graphics2D g2d = (Graphics2D) g;
 		
+		calcCoordinates();
+		
 		// Draw outer and inner squares
-		g2d.drawRect(BOARDSTART_X, BOARDSTART_Y, BOARDSIZE, BOARDSIZE);
-		g2d.drawRect(BOARDSTART_X + GRIDSIZE, BOARDSTART_Y + GRIDSIZE, 2 * GRIDSIZE, 2 * GRIDSIZE);
+		g2d.drawRect(boardStartX, boardStartY, boardSize, boardSize);
+		g2d.drawRect(boardStartX + gridSize, boardStartY + gridSize, 2 * gridSize, 2 * gridSize);
 		
 		// Draw vertical center lines
-		g2d.drawLine(BOARDCENTER_X, BOARDSTART_Y, BOARDCENTER_X, BOARDSTART_Y + GRIDSIZE);
-		g2d.drawLine(BOARDCENTER_X, BOARDEND_Y, BOARDCENTER_X, BOARDEND_Y - GRIDSIZE);
+		g2d.drawLine(boardCenterX, boardStartY, boardCenterX, boardStartY + gridSize);
+		g2d.drawLine(boardCenterX, boardEndY, boardCenterX, boardEndY - gridSize);
 		
 		// Draw horizontal center lines
-		g2d.drawLine(BOARDSTART_X, BOARDCENTER_Y, BOARDSTART_X + GRIDSIZE, BOARDCENTER_Y);
-		g2d.drawLine(BOARDEND_X, BOARDCENTER_Y, BOARDEND_X - GRIDSIZE, BOARDCENTER_Y);
+		g2d.drawLine(boardStartX, boardCenterY, boardStartX + gridSize, boardCenterY);
+		g2d.drawLine(boardEndX, boardCenterY, boardEndX - gridSize, boardCenterY);
 		
 		// Draw nodes
 		for (NodeView node : nodes)
@@ -159,8 +217,7 @@ public class GameController extends JPanel
 		else
 			g2d.setPaint(Color.BLACK);
 		
-		g2d.fillRect(BOARDCENTER_X - GRIDSIZE / 4, BOARDCENTER_Y - GRIDSIZE / 4,
-				GRIDSIZE / 2, GRIDSIZE / 2);
+		g2d.fillRect(boardCenterX - gridSize / 4, boardCenterY - gridSize / 4, gridSize / 2, gridSize / 2);
 	}
 	
 	// Switch between turn-based game and setting up board state

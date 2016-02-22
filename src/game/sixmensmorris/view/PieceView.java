@@ -21,6 +21,12 @@ public class PieceView extends Ellipse2D.Double
 		this.id = id;
 	}
 	
+	public void moveTo(int x, int y)
+	{
+		this.x = x - RADIUS;
+		this.y = y - RADIUS;
+	}
+	
 	public void moveToNode(NodeView node)
 	{		
 		this.x = node.getCenterX() - RADIUS;
