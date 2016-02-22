@@ -42,7 +42,7 @@ public class MainController extends JFrame
 		newGameButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				board = new GameController();
+				board.newGame();
 			}
 		});
 		

@@ -30,8 +30,8 @@ public class GameController extends JPanel
 	private static final int BOARDEND_Y = BOARDSTART_Y + BOARDSIZE;
 	private static final int BOARDCENTER_X = (BOARDSTART_X + BOARDEND_X) / 2;
 	private static final int BOARDCENTER_Y = (BOARDSTART_Y + BOARDEND_Y) / 2;
-	private static final int REDBENCH_X = BOARDSTART_X - 100;
-	private static final int BLUEBENCH_X = BOARDEND_X + 100;
+	private static final int REDBENCH_X = BOARDSTART_X - BOARDSIZE / 6;
+	private static final int BLUEBENCH_X = BOARDEND_X + BOARDSIZE / 6;
 	private static final int GRIDSIZE = BOARDSIZE / 4;
 	
 	private Game currentGame;
@@ -42,16 +42,23 @@ public class GameController extends JPanel
 	
 	public GameController()
 	{
+		newGame();
+		
+		// Add mouse listener subclass BoardController, found at end of current class
+		addMouseListener(new BoardController());
+	}
+	
+	public void newGame()
+	{
 		// Starts new game and sets current player randomly
 		currentGame = new Game(N_PIECES);
 		currentPlayer = (int)(Math.random() * 2);
-		
+
 		// Initialize Node View and Piece View objects
 		initNodes();
 		initPieces();
 		
-		// Add mouse listener subclass BoardController, found at end of current class
-		addMouseListener(new BoardController());
+		repaint();
 	}
 	
 	// Switch between turn-based game and setting up board state
@@ -215,8 +222,6 @@ public class GameController extends JPanel
 				
 				// If in turn-based mode and one of the above rules have been violated
 				if (currentPlayer != -1 && (invalidPlayer || invalidPiece))
-					
-//				if (currentPlayer != -1 && invalidPlayer)
 				{
 					selectedPiece = null;	// Piece selection is invalid: deselect piece
 				}
