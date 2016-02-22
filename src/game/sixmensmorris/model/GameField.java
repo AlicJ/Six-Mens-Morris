@@ -23,8 +23,24 @@ public class GameField {
 	}
 	
 	public boolean move(char c1, char r1, char c2, char r2) {
+	// Checks validity of move and performs it if valid, prints error if invalid
+		
+		// Calculate distance of given move, added by Hasan
+		int moveDistance = Math.abs(c2 - c1) + Math.abs(r2 - r1);
+		int validDistance = 1;
+		
+		// Calculate last column/row number
+		int last = 2*n / 3;
+		
+		// If origin and destination are both on outer square, valid move distance is 2.
+		if ((c1 == 'A' && c2 == 'A') || (c1 == 'A' + last && c2 == 'A' + last) ||
+				(r1 == 0 && r2 == 0) || (r1 == last && r2 == last))
+		{
+			validDistance = 2;
+		}
+		
 		try {
-			if (!(node(c1, r1).isEmpty()) && node(c2, r2).isEmpty()) {
+			if (!(node(c1, r1).isEmpty()) && node(c2, r2).isEmpty() && (moveDistance == validDistance)) {
 				Piece token = node(c1, r1).getPiece();
 				assign(c2, r2, token);
 				assign(c1, r1, null);
@@ -33,8 +49,9 @@ public class GameField {
 			}
 		} catch (NullPointerException e) {
 			//e.printStackTrace();
-			promptMove(c1, r1, c2, r2, false); // custom error message.
 		}
+		
+		promptMove(c1, r1, c2, r2, false); // custom error message.
 		return false;
 	}
 	
@@ -188,7 +205,7 @@ public class GameField {
 	}
 	
 	private void promptMove(char c1, char r1, char c2, char r2, boolean valid) {
-		if (valid) print("Moved: " + c1 + (int) r1 + " to " + c2 + (int) r2);
+		if (valid) print("Moved: " + c1 + (int) r1 + " to " + c2 + (int) r2 + "\n");
 		else {
 			print(INVALID_MOVE + "\n");
 			print("   >> tried: " +c1 + (int)r1 + " to " + c2 + (int)r2 + "\n");
@@ -208,31 +225,4 @@ public class GameField {
 	// Esthetic and coding optimization function. Does not affect program.
 		System.out.print(s);
 	}
-	
-//	public static void main (String[] args) {
-//		GameField field = new GameField(9);
-//		Piece p1 = new Piece(0);
-//		Piece p2 = new Piece(0);
-//		Piece p3 = new Piece(0);
-//		Piece c1 = new Piece(1);
-//		field.assign('A', (char)0, p1);
-//		field.assign('B', (char)1, p2);
-//		field.assign('C', (char)2, p3);
-//		field.assign('D', (char)3, p1); // Error
-//		field.assign('E', (char)4, c1);
-//		field.assign('F', (char)5, c1);
-//		field.assign('G', (char)6, c1);
-//		field.assign('G', (char)9, c1); // Error
-//		field.move('B', (char)1, 'E', (char) 22);
-//		System.out.println(field);
-//		System.out.println(field);
-//		field.move('A', (char)0, 'D', (char) 6);
-//		System.out.println(field);
-//		field.move('A', (char)0, 'D', (char) 6);
-//		System.out.println(field);
-//		field.move('A', (char)0, 'D', (char) 6);
-//		System.out.println(field);
-//		field.move('D', (char)0, 'E', (char) 2);
-//		System.out.println(field);
-//	}
 }
