@@ -7,6 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import game.sixmensmorris.model.Game;
@@ -230,8 +232,6 @@ public class GameController extends JPanel
 		{
 			g2d.drawOval((int)hoveredNode.getCenterX() - 30, (int)hoveredNode.getCenterY() - 30, 60, 60);
 		}
-		
-		
 	}
 	
 	// Switch between turn-based game and setting up board state
@@ -257,6 +257,30 @@ public class GameController extends JPanel
 			currentPlayer = 1 - currentPlayer;
 	}
 	
+	// Attempt selection of given piece and return whether it was successful
+	private void selectPiece(PieceView piece, int pieceID)
+	{
+		if (selectedPiece != null)
+		{
+			JOptionPane.showMessageDialog(null, "A piece cannot be placed on another piece.",
+					"Incorrect Placement",	JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if (currentPlayer == 1 - pieceID)
+		{
+			JOptionPane.showMessageDialog(null, "This piece belongs to the wrong player.",
+					"Incorrect Selection",	JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if (currentPlayer != -1 && piece.currentNode() != null && currentGame.player(pieceID).hasPiece())
+		{
+			JOptionPane.showMessageDialog(null, "You must place all pieces before making moves on the board.",
+					"Incorrect Selection",	JOptionPane.INFORMATION_MESSAGE);
+		}
+		else
+		{
+			selectedPiece = piece;
+		}
+	}
+	
 	// Manages all mouse input
 	public class BoardController extends MouseAdapter
 	{	
@@ -264,45 +288,22 @@ public class GameController extends JPanel
 		@Override
 		public void mousePressed (MouseEvent e)
 		{
-			boolean pieceClicked = false;
-			
 			// If piece was clicked, select piece
 			for (int i = 0; i < N_PIECES; i++)
 			{
-				if (redPieces[i].contains(e.getPoint()) && currentPlayer != 1)
+				if (redPieces[i].contains(e.getPoint()))
 				{
-					selectedPiece = redPieces[i];
-					pieceClicked = true;
+					selectPiece(redPieces[i], 0);
+					return;
 				}
 				
-				if (bluePieces[i].contains(e.getPoint()) && currentPlayer != 0)
+				if (bluePieces[i].contains(e.getPoint()))
 				{
-					selectedPiece = bluePieces[i];
-					pieceClicked = true;
-				}
-			}
-			
-			// If piece was selected, check validity of piece selection
-			if (pieceClicked)
-			{
-				// Check if piece belongs to wrong player
-				boolean invalidPlayer = currentPlayer != selectedPiece.getId();
-				
-				// Check if piece is on board while player still has bench pieces
-				boolean invalidPiece = selectedPiece.currentNode() != null
-						&& currentGame.player(currentPlayer).hasPiece();
-				
-				// If in turn-based mode and one of the above rules have been violated
-				if (currentPlayer != -1 && (invalidPlayer || invalidPiece))
-				{
-					selectedPiece = null;	// Piece selection is invalid: deselect piece
-				}
-				else	// Otherwise piece selection is valid: end function
-				{
-					repaint();
+					selectPiece(bluePieces[i], 1);
 					return;
 				}
 			}
+			
 			
 			// If node was clicked
 			for (NodeView node : nodes)
@@ -338,6 +339,11 @@ public class GameController extends JPanel
 								finalizeMove(node);
 							}
 						}
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "You need to select a piece first.", "Wait",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			}
