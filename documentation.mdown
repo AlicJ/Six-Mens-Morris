@@ -1,6 +1,10 @@
 Search for `[blank]` for parts that are not finished.
 
-The application is decomposed into 3 modules:
+
+#Design Overview
+
+##Modules
+The application is decomposed into 3 components:
 
 1. Model: handles data representation, data logic, e.g.:
     1. Classes to represent the game board, pieces, and nodes on the game board
@@ -14,6 +18,15 @@ The application is decomposed into 3 modules:
 
 Highest level of Uses Relationship:
 
+##Justifications for MVC
+Model-View-Controler (MVC) is a very popular design pattern used for computer applications implementing user interfaces. The advantages of MVC design paradigm are many:
+
+1. Separation of Concerns
+    - It providesan isolation of the application's presentation layer that displays the data in the user interface, from the way the data is actually processed. For example, in our project, if there needs to be a change for the underlying logic on the board, only Model part needs to be modified while the Controller and View can be left untouched.
+3. Modularity
+    - The way in which a system's components can be separated and recombined. Meaning that for a software, different components can be maintained separately without breaking the entire system. This allows separation of concerns to be implemented with little effort.
+4. Expectancy for Change
+    - This suggests that software should be able to support upgrades or changes on a small part without causing the entire system to break. Modules should communicate with each other on a very abstract level. They only deal with each other's inputs and outputs. With the MVC ideology, View will be updated by Model, and Model will be maintained by Controller. The internal logic within any of the modules can be changed without breaking other modules.
 
 #Model
 Under Model module, there are several classes we created to fully represent the data structures and logics.
@@ -64,21 +77,17 @@ It is a class of Enum type. It is used in Node.java to represent the relationshi
 ###*Uses*
 None
 
-
 ###*Interface (MIS)*
 None
 
 ###*Implementation (MID)*
-**UP**  
+- **UP**  
 Represent the up direction.
-
-**DOWN**  
+- **DOWN**  
 Represent the down direction.
-
-**LEFT**  
+- **LEFT**  
 Represent the left direction.
-
-**RIGHT**  
+- **RIGHT**  
 Represent the right direction.
 
 
@@ -336,4 +345,76 @@ None
 - **checkLegalMove(): int**  
   
 - **checkWin(): void**  
-  
+
+
+ 
+#Traceback
+*[blank]
+
+|Requirement | Module|
+|---|---|
+|Set up a game board | GameField.java, Model.java
+|Game board include two different kind of discs | GameField.java, Player.java, Piece.java
+|Discs are placed on the side of board | GameField.java, Model.java
+|User is able to start a new game | GameView.java*
+|User is able to choose a colour of disc | GameView.java
+|User is able to place disc on the board | GameView.java, Model.java, GameField.java
+|User is able to indicate the end of phase | GameView.java*
+|System can analyze whether the current state is possible or not | GameField.java, Node.java
+|Errors will be highlighted on the screen | GameView.java, Model.java
+
+
+#Internal Review
+The DIRECTION enum class was abrogated during the implementation of the Model in favour of accomodating N-Men's Morris where N is any valid morris number. A valid morris number N is any integer N such that N >= 6 and N mod 3 = 0. The following classes were affected;
+- GameField.java
+- Game.java
+
+
+#Design Decisions
+The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
+
+#Internal Review
+The DIRECTION enum class was abrogated during the implementation of the Model in favour of accomodating N-Men's Morris where N is any valid morris number. A valid morris number N is any integer N such that N >= 6 and N mod 3 = 0.  
+
+
+#Design Decisions
+The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
+
+#Test Report
+
+Test Cases:
+
+**Symbol Definition**
+- N = Valid Node
+- FN = Full Valid Node 
+- EN = Empty Valid Node (i.e. the node is not assigned a player piece)
+- IEN = Inalid Empty Node (i.e. the node exists and is not assigned a player piece)
+- IFN = Invalid Full Node (i.e. will not exists) 
+
+**Test Cases Rule Implementation for Morris Number 6.**
+
+1. set piece to NE : true : passed
+2. set piece to NF : true : passed
+3. set piece to INE : false : passed
+4. set piece to INF : false : passed
+5. move piece from NF to NE : true : passed
+6. move piece from NE to NF : false : passed
+7. move piece from NF to NF : false : passed
+8. move piece from NF to INE : false : passed
+9. move piece from NF to INE : false : passed
+10. move piece from NE to INF : false : passed
+11. move piece from NF to INF : false : passed
+12. move piece from INF to NE : false : passed
+13. move piece from INF to INE : false : passed
+14. move piece from INE to INF : false : passed
+15. move piece from INF to INF : false : passed
+
+**Test Cases for Board Logistics.**
+
+1. remove piece from full player stack : returns Piece : passed
+1. remove piece from stack with 1 Piece: returns Piece : passed
+1. remove piece from empty stack : returns null : passed
+
+**View Functionality**
+
+The user-view interaction was tested informally through various trails.
