@@ -111,7 +111,7 @@ This is a stack used to store the pieces that have not been placed on the board.
 - **numOfPieces:int**  
 This is a variable that represent 
 
-####*Assess programes*
+####*Access Programs*
 - **Player(ID: int): Player**  
 It will create sixes pieces
 - **getPiece(): Piece**
@@ -136,7 +136,7 @@ None
 - belongsTo: Player  
   It represent the owner of the Piece. It is set by the constructer.
 
-####*Assess programes*
+####*Access Programs*
 - **Piece(player: Player): Piece**  
   Construct a new Piece object, and sets its onwer
 - **getOnwer(): Player**  
@@ -148,10 +148,11 @@ This class contains information about the game board. It contains information ab
 
 ###*Uses*
 - **Node.java**
+- **Error.java**
 
 ###*Interface (MIS)*
 - **GameBoard(): GameBoard**  
-  [blank]
+  Creates a new `GameBoard` object, with all nodes on it initialized.
 - **setPiece(piece: Piece,node: Node)**  
   Sets a Piece object on a given Node object
 - **movePiece(origin: Node,dest: Node)**  
@@ -159,19 +160,18 @@ This class contains information about the game board. It contains information ab
 - **removePiece(piece: Piece)**  
   remove a Piece object, `piece`, from the game board.  
 - **checkLegalMove(): Error**  
-  Check if the game board contained any illegal move. Returns an Error object.
+  Check if the game board contained any illegal move. Returns an `Error` object.
 - **checkWin(player: Player): boolean**  
   Check if the given player, `player`, had won
-   
 
 ###*Implementation (MID)*
 ####*Variables*
 - **nodes: Node[]**
   An array of Node objects that contains all the nodes on the game board.
 
-####*Assess programes*
+####*Access Programs*
 - **GameBoard(): GameBoard**  
-  [blank]
+  Creates a new `GameBoard` object, and creates all the nodes on it. It will use two nested for loops to create the nodes on the outter square, and another one to create the inner square. It will also uses `Node`'s methode, `setNeighbours` to build up the relationships between the nodes.
 - **setPiece(piece: Piece,node: Node)**  
   Sets a Piece object on a given Node object. Use Node's method `setPiece` to achieve this.
 - **movePiece(origin: Node,dest: Node)**  
@@ -179,7 +179,7 @@ This class contains information about the game board. It contains information ab
 - **removePiece(node: Node)**  
   Remove the piece placed `node` from the game board. Use the `removePiece` method from `Node`
 - **checkLegalMove(): int**  
-  Check if the game board contained any illegal move. Returns an Error object. Loop through all the nodes of the game board, *[blank]*
+  Check if the game board contained any illegal move. Returns an `Error` object. Loop through all the nodes of the game board, it will check if the user is attempting to put one piece above another piece, or trying to click on an empty node without picking up a node.
 - **checkWin(): void**  
   Check if one player had won. Loop though all nodes on the game board, and chall `checkV()` and `checkH()` on each node.
 - **checkV(node: Node): boolean**  
@@ -193,7 +193,7 @@ This class represent each nodes on the game board. It contains information about
 
 ###*Interface (MIS)*
 - **Node(): Node**  
-  [blank]
+  Returns a new `Node` object
 - **getPiece(): Piece**  
   Return the `Piece` object that's being placed on the node. It returns `null` if the node has no piece.
 - **removePiece(): void**  
@@ -212,8 +212,8 @@ This class represent each nodes on the game board. It contains information about
 - neighbors: EnumMap<DIRECTION, Node>  
   Contains the information about it's neighbors on all four directions.
 
-####*Assess programes*
-- **GameBoard(): GameBoard**  
+####*Access Programs*
+- **Node(): Node**  
   [blank]
 - **getPiece(): Piece**  
   Return the field `piece`.
@@ -235,7 +235,7 @@ None
 
 ###*Interface (MIS)*
 - **Error(): Error**  
-  [blank]
+  Create a new `Error` object.
 - **getMsg(ID: int): string**  
   Get the string message of a given message ID, `ID`.
   
@@ -244,85 +244,97 @@ None
 - **messages: string[]**  
   Contains all the error messages that may appear in the game.
   
-####*Assess programes*
-- **GameBoard(): GameBoard**  
-  [blank]
+####*Access Programs*
+- **Error(): Error**  
+  Return a new `Error` object.
 - **getMsg(ID: int): string**  
-  Return the `ID`'th element of the `message` array
-
+  Return the `ID`'th element of the `message` array.
 
 
 #View
-[blank] [I'm not sure what to write for view]
-
-##MainView.java
-[description][blank]
-
-###*Interface (MIS)*
-- **MainView(): MainView**  
-  [blank]
-  
-  
-###*Implementation (MID)*
-####*Variables*
-- controller: MainController  
-  It contains the controller, `MainController`.
-- colors: Color[]  
-
-
-####*Assess programes*
-- **MainView(): MainView**  
-  [blank]
-- getNode(x: int,y: int):int  
-
-- draw(gameboard: GameBoard): void  
-
-
+The view is implemented using `Swing`. The main view of the application is a `JPanel`, and the nodes and pieces are `Ellipse2D.Double`'s. We decided to use Swing to implement the GUI because it is time-efficient to cerate, and is effortless to maintain or upgrade.
 
 ##NodeView.java
-[description][blank]
+This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defined by a framing rectangle. It will display a filled ellipse with defined radius on the game board to represent a node.
 
 ###*Interface (MIS)*
-- **NodeView(): NodeView**  
-  [blank]
-  
+- **NodeView(x: int, y: int, node: Node): NodeView**  
+  It will create a new `NodeView` object centered at given coordinates, `x` and `y`. It will set the node object from Model to one of its field to identify itself.
+- **moveTo(x: int, y: int): void**  
+  It will modifties the `NodeView`'s coordinates, and make it center at `x`, `y`.
+- **contains(Point click): boolean**  
+  It overrides the default contains function inherit from `Ellipse2D.Double`. It takes a point on the screen and tells if the point is inside the shape `NodeView`.
+- **getNode(): Node**  
+  It will return the `Node` object that the `NodeView` object is representing.
+
 ###*Implementation (MID)*
 ####*Variables*
-####*Assess programes*
-- **NodeView(): NodeView**  
-  [blank]
+- **serialVersionUID: long**  
+  It's generated by eclipse to uniquely identify the `Ellipse2D.Double` subclass.
+- **RADIUS: int**  
+  Determines the display radius of one node. It is `static` and `final`.
+- **CLICKRADIUS: int**  
+  Determines the clickable radius of one node. It is `static` and `final`.
 
-##BoardView.java
-[description][blank]
+####*Access Programs*
+- **NodeView(x: int, y: int, node: Node): NodeView**  
+  First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding cooordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `NodeView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
+- **moveTo(x: int, y: int): void**  
+  It will modifties the `NodeView`'s coordinates to `x - RADIUS` and `y - RADIUS`. As explained above, the coordinates of the object represent the top left corner of the object, so we need to subtract `RADIUS` from it to make the `NodeView`  centered at the given coordinates `x` and `y`.
+- **contains(Point click): boolean**  
+  It overrides the default contains function inherit from `Ellipse2D.Double`. It will take the x and y coordinates of the clicked point on screen, and make sure that x is within the range between `this.getCenterX() - CLICKRADIUS` and `getCenterX() + CLICKRADIUS`, and that y is within the range between `getCenterY() - CLICKRADIUS` and `getCenterY() + CLICKRADIUS`.
+- **getNode(): NodeView**  
+  It will return the field `node`.
 
-###*Interface (MIS)*
-- **BoardView(): BoardView**  
-  [blank]
-  
-###*Implementation (MID)*
-####*Variables*
-####*Assess programes*
-- **BoardView(): BoardView**  
-  [blank]
 
 ##PieceView.java
-[description][blank]
+This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defined by a framing rectangle. It will display a filled ellipse with defined radius on the game board, on top of a node, to represent a piece.
 
 ###*Interface (MIS)*
-- **PieceView(): PieceView**  
-  [blank]
-  
+- **PieceView(x: int, y: int, i: intd): PieceView**  
+  It will create a new `PieceView` object centered at given coordinates, `x` and `y`. It will also have the id indicated by the parameter `id`.
+- **moveTo(x: int, y: int): void**  
+  It will modifties the `NodeView`'s coordinates, and make it center at `x`, `y`.
+- **moveToNode(node: NodeView)" void**  
+  It will move the current `PieceView` to the position of the given `NodeView`, `node`.
+- **contains(Point click): boolean**  
+  It overrides the default contains function inherit from `Ellipse2D.Double`. It takes a point on the screen and tells if the point is inside the shape `PieceView`
+- **currentNode(): NodeView**  
+  It will return the `NodeView` the piece is currently on. Will return null if not on placed on any `NodeView`
+- **getId(): int**  
+  It returns the `id` field of the `PieceView`.
+
 ###*Implementation (MID)*
 ####*Variables*
-####*Assess programes*
-- **PieceView(): PieceView**  
-  [blank]
+- **serialVersionUID: long**  
+   It's generated by eclipse to uniquely identify the `Ellipse2D.Double` subclass.
+- **RADIUS: int**  
+  Determines the display radius of one piece. It is `static` and `final`.
+- **CLICKRADIUS: int**  
+  Determines the clickable radius of one piece. It is `static` and `final`.
+
+####*Access Programs*
+- **PieceView(x: int, y: int, i: intd): PieceView**  
+  First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding cooordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `PieceView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
+- **moveTo(x: int, y: int): void**  
+  It will modifties the `PieceView`'s coordinates to `x - RADIUS` and `y - RADIUS`. As explained above, the coordinates of the object represent the top left corner of the object, so we need to subtract `RADIUS` from it to make the `PieceView`  centered at the given coordinates `x` and `y`.
+- **moveToNode(node: NodeView)" void**  
+  It will modifies the `x` and `y` values of `PieceView` to `node.getCenterX() - RADIUS` and `node.getCenterY() - RADIUS` respectively. The reason for subtracting `RADIUS` is discussed previously.
+- **contains(Point click): boolean**  
+  It overrides the default contains function inherit from `Ellipse2D.Double`. It will take the x and y coordinates of the clicked point on screen, and make sure that x is within the range between `this.getCenterX() - CLICKRADIUS` and `getCenterX() + CLICKRADIUS`, and that y is within the range between `getCenterY() - CLICKRADIUS` and `getCenterY() + CLICKRADIUS`.
+- **currentNode(): NodeView**  
+  Returns the `currentNode` field.
+- **getId(): int**  
+  Returns the `id` field.
 
 
 #Controller
 
 ##MainController.java
 [description][blank]
+
+###*Uses*###
+- 
 
 ###*Interface (MIS)*
 - **MainController(): MainController**  
@@ -333,7 +345,7 @@ None
 - **model:MainModel**  
   
 
-####*Assess programes*
+####*Access Programs*
 - **MainController(): MainController**  
   [blank]
 - **setNode(node:int): void**  
@@ -347,7 +359,27 @@ None
 - **checkWin(): void**  
 
 
- 
+##GameController.java
+[description][blank]
+
+###*Uses*###
+- 
+
+###*Interface (MIS)*
+- **GameController(): GameController**  
+  [blank]
+  
+###*Implementation (MID)*
+####*Variables*
+- **model:MainModel**  
+  
+
+####*Access Programs*
+- **GameController(): GameController**  
+  [blank]
+
+
+
 #Traceback
 *[blank]
 
@@ -369,16 +401,11 @@ The DIRECTION enum class was abrogated during the implementation of the Model in
 - GameField.java
 - Game.java
 
-
 #Design Decisions
 The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
 
-#Internal Review
-The DIRECTION enum class was abrogated during the implementation of the Model in favour of accomodating N-Men's Morris where N is any valid morris number. A valid morris number N is any integer N such that N >= 6 and N mod 3 = 0.  
+[ insert linked node diagram ]
 
-
-#Design Decisions
-The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.  The new board architecture implements the structure shown in Figure 1 below:
 
 #Test Report
 
