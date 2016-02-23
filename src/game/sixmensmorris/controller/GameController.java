@@ -21,19 +21,9 @@ public class GameController extends JPanel
 	private static final int N_NODES = 16;
 	private static final int N_PIECES = 6;
 	
-	// Change these three constants to adjust size
-	private int boardStartX = 150;
-	private int boardStartY = 50;
-	private int boardSize = 600;
-	        
-	private int boardEndX = boardStartX + boardSize;
-	private int boardEndY = boardStartY + boardSize;
-	private int boardCenterX = (boardStartX + boardEndX) / 2;
-	private int boardCenterY = (boardStartY + boardEndY) / 2;
-	private int redBenchX = boardStartX - boardSize / 6;
-	private int blueBenchX = boardEndX + boardSize / 6;
-	private int gridSize = boardSize / 4;
-	
+	private int boardStartX, boardStartY, boardCenterX, boardCenterY, boardEndX, boardEndY,
+				boardSize, gridSize, redBenchX, blueBenchX;
+
 	private Game currentGame;
 	private NodeView[] nodes;
 	private PieceView[] redPieces, bluePieces;
@@ -131,7 +121,7 @@ public class GameController extends JPanel
 		gridSize = boardSize / 4;
 	}
 	
-	// Recalculates board dimensions and
+	// Calculates coordinates of nodes and pieces
 	private void calcCoordinates()
 	{
 		calcBoard();
