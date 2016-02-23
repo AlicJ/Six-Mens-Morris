@@ -378,7 +378,7 @@ The DIRECTION enum class was abrogated during the implementation of the Model in
 
 
 #Design Decisions
-The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
+The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.  The new board architecture implements the structure shown in Figure 1 below:
 
 #Test Report
 
