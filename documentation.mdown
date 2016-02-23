@@ -901,7 +901,7 @@ Test Cases:
 - IEN = Inalid Empty Node (i.e. the node exists and is not assigned a player piece)
 - IFN = Invalid Full Node (i.e. will not exists) 
 
-**Test Cases Rule Implementation for Morris Number 6.**
+**Test Cases for Rule Implementation for Morris Number 6.**
 
 1. set piece to NE : true : passed
 2. set piece to NF : true : passed
