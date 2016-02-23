@@ -254,59 +254,6 @@ None
 #View
 The view is implemented using `Swing`. The main view of the application is a `JPanel`, and the nodes and pieces are `Ellipse2D.Double`'s. We decided to use Swing to implement the GUI because it is time-efficient to cerate, and is effortless to maintain or upgrade.
 
-##MainView.java
-This is the view for the game board, as well as the main view of the application. It will contains everything that users will see in the application. It is a subclass of `JPanel`. The GUI is implemented with `Swing`.
-
-###*Uses*
-- **NodeView.java**
-
-###*Interface (MIS)*
-- **MainView(): MainView**  
-  [blank]
-- **getNodes(): NodeView[]**  
-  
-
-###*Implementation (MID)*
-####*Variables*
-All the variables are `private`, `static`, and `final`, unless specified.
-
-- **serialVersionUID: long**
-  
-- **N_NODES: int**
-  
-- **N_PIECES: int**
-  
-- **BOARDSTART_X: int**
-  
-- **BOARDSTART_Y: int**
-  
-- **BOARDSIZE: int**
-  
-- **BOARDEND_X: int**
-  
-- **BOARDEND_Y: int**
-  
-- **BOARDCENTER_X: int**
-  
-- **BOARDCENTER_Y: int**
-  
-- **REDBENCH_X: int**
-  
-- **BLUEBENCH_X: int**
-  
-- **GRIDSIZE: int**
-  
-- **nodes: NodeView[]**
-  This variable only has the `private` attribute.
-
-####*Access Programs*
-- **MainView(): MainView**  
-  [blank]
-- getNode(x: int,y: int):int  
-
-- draw(gameboard: GameBoard): void  
-
-
 ##NodeView.java
 This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defined by a framing rectangle. It will display a filled ellipse with defined radius on the game board to represent a node.
 
