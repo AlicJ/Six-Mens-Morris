@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -40,7 +39,6 @@ public class GameController extends JPanel
 		// Add mouse listener subclass BoardController, found at end of current class
 		addMouseListener(new BoardController());
 		
-
 		addMouseMotionListener(new MouseMotionAdapter()
 		{
 			@Override
@@ -53,7 +51,6 @@ public class GameController extends JPanel
 				repaint();
 			}
 		});
-
 	}
 	
 	public void newGame()
@@ -66,12 +63,23 @@ public class GameController extends JPanel
 		initNodes();
 		initPieces();
 		
-		calcCoordinates();
+		selectedPiece = null;
 		
 		repaint();
 	}
 	
-	// Calculate NodeView coordinates on board and initialize NodeViews
+	// Switch between turn-based game and setting up board state, and return current mode
+	public int switchMode()
+	{
+		if (currentPlayer == -1)
+			currentPlayer = (int)(Math.random() * 2);
+		else
+			currentPlayer = -1;
+		
+		return currentPlayer;
+	}
+	
+	// Initialize NodeViews
 	private void initNodes()
 	{
 		// Initialize array
@@ -89,7 +97,7 @@ public class GameController extends JPanel
 		}
 	}
 
-	// Calculate PieceView coordinates on sides of board and initialize PieceViews
+	// Initialize PieceViews
 	private void initPieces()
 	{
 		// Initialize piece arrays
@@ -232,17 +240,6 @@ public class GameController extends JPanel
 		{
 			g2d.drawOval((int)hoveredNode.getCenterX() - 30, (int)hoveredNode.getCenterY() - 30, 60, 60);
 		}
-	}
-	
-	// Switch between turn-based game and setting up board state
-	public int switchMode()
-	{
-		if (currentPlayer == -1)
-			currentPlayer = (int)(Math.random() * 2);
-		else
-			currentPlayer = -1;
-		
-		return currentPlayer;
 	}
 	
 	// Move selected PieceView to chosen NodeView and end turn
