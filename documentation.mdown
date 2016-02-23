@@ -849,6 +849,16 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 
 #Internal Review
 
+The final product was well recieved due to a thorough design process. During the implementation, when deviation from original design erupted, arguments made for the deviation were analyzed and discussed with all members of the group and implemented only on agreement. This ensured that all group members were aware of changes and bottlenecks did not appear in the development.
+
+Were it the case that this project was given another iteration of development, it is noted that the view implementation would then instead use picture elements instead of the g library to appeal to a broader user baser for the Morris game.
+
+
+#Design Decisions
+The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
+
+[ insert linked node diagram ]
+
 **Change from a Linked-Node Structure to a Grid-Node Structure**
 
 The GameBoard.java class was implemented as GameField.java. The rules and board architecture of Six-Men's Morris in GameBoard.java was abstracted to an N-Men's Morris rule and board architecture in GameField.java. The new architecture relies on a grid based system of Nodes. Each Node is a container containing three labels;
@@ -874,14 +884,8 @@ The DIRECTION enum class was abrogated during the implementation of the Model in
 - GameTest.java
 - PlayerTest.java
 
-Further testing was done natively within vital class files in separate test clients until code reliability was secured. 
+Further testing was done natively within vital class files in separate test clients until code reliability was secured.
 
-
-
-#Design Decisions
-The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
-
-[ insert linked node diagram ]
 
 
 #Test Report
