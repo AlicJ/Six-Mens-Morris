@@ -848,8 +848,11 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 
 
 #Internal Review
+
 **Change from a Linked-Node Structure to a Grid-Node Structure**
-- The GameBoard.java class was implemented as GameField.java. The rules and board architecture of Six-Men's Morris in GameBoard.java was abstracted to an N-Men's Morris rule and board architecture in GameField.java. The new architecture relies on a grid based system of Nodes. Each Node is a container containing three labels;
+
+The GameBoard.java class was implemented as GameField.java. The rules and board architecture of Six-Men's Morris in GameBoard.java was abstracted to an N-Men's Morris rule and board architecture in GameField.java. The new architecture relies on a grid based system of Nodes. Each Node is a container containing three labels;
+
 1. Row (integer)
 2. Column (integer)
 3. Radius from origin.
@@ -857,12 +860,16 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 Due to the nature of Morris board, there are always three Nodes in one row and three Nodes in one column. With the exception of the centre column, which always contains four Nodes for an N-Men's Morris rule set, the worst case search for a Node is at most 9 comparisons. The benefit of this architecture is that the implementation can accomodate 45-Men's Morris, or more, and still require just 9 comparisons.
 
 **Removal of DIRECTION.java**
+
 The DIRECTION enum class was abrogated during the implementation of the Model in favour of accomodating N-Men's Morris where N is any valid morris number. A valid morris number N is any integer N such that N >= 6 and N mod 3 = 0. The following classes were affected;
+
 - GameField.java
 - Game.java
 
 **Separation of Error.java**
+
  The Error class was split into three separate classes and packaged separately in a package.test;  
+
 - GameFieldTest.java
 - GameTest.java
 - PlayerTest.java
