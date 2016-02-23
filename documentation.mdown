@@ -918,6 +918,9 @@ Test Cases:
 13. move piece from INF to INE : false : passed
 14. move piece from INE to INF : false : passed
 15. move piece from INF to INF : false : passed
+16. move piece from adjacent to adjacent : true : passed
+17. move piece from adjacent to nonAdjacent : false : passed
+18. move piece from nonadjacent to nonadjacent : false : passed
 
 **Test Cases for Board Logistics.**
 
