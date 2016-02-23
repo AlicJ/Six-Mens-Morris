@@ -121,7 +121,7 @@ public class GameController extends JPanel
 		gridSize = boardSize / 4;
 	}
 	
-	// Recalculates board dimensions and
+	// Calculates coordinates of nodes and pieces
 	private void calcCoordinates()
 	{
 		calcBoard();
