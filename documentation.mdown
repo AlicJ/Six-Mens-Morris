@@ -11,13 +11,13 @@ The application is decomposed into 3 components:
     2. display pieces on the board
 3. Controller: handles user input, and accesses both view and model, e.g.:
     1. listeners are assigned to view to receive mouse click
-    2. buttons with listener to clear the board
+    2. buttons with listeners to clear the board
 
 ##Justifications for MVC
-Model-View-Controler (MVC) is a very popular design pattern used for computer applications implementing user interfaces. The advantages of MVC design paradigm are many:
+Model-View-Controller (MVC) is a very popular design pattern used for computer applications implementing user interfaces. The advantages of MVC design paradigm are many:
 
 1. Separation of Concerns
-    - It providesan isolation of the application's presentation layer that displays the data in the user interface, from the way the data is actually processed. For example, in this project, if there needs to be a change for the underlying logic on the board, only Model part needs to be modified while the Controller and View can be left untouched.
+    - It provides an isolation of the application's presentation layer that displays the data in the user interface, from the way the data is actually processed. For example, in this project, if there needs to be a change for the underlying logic on the board, only Model part needs to be modified while the Controller and View can be left untouched.
 3. Modularity
     - The way in which a system's components can be separated and recombined. Meaning that for a software, different components can be maintained separately without breaking the entire system. This allows separation of concerns to be implemented with little effort.
 4. Expectancy for Change
@@ -27,11 +27,11 @@ Model-View-Controler (MVC) is a very popular design pattern used for computer ap
 The following diagram showed the highest level of uses relationship in this application
 ![uses relationship](https://raw.githubusercontent.com/AlicJ/Six-Mens-Morris/master/usesRelationship.png?token=ADXoAB5_TYHC1VL3BFBd1QfMreYRRGMnks5W1RMBwA%3D%3D "uses relationship")
 
-Due to the group's inexperience in developing a program that strictly follows MVC design patter, view and controller was not entirely separated.
+Due to the group's inexperience in developing a program that strictly follows MVC design pattern, view and controller was not entirely separated.
 
- The main view, or the parent class of `NodeView` and `PieceView`, is integrated with part of the controller, `GameController.java`. The reason is that, the `paintComponent()` method needs to draw all of the `NodeView` and `PieceView` objects, the current player, the currently selected piece and the node being hovered over by the mouse. Meanwhile, the controller also needs access to the `PieceView` and `NodeView` objects as the user clicks in those objects and the user's clicks act directly on those objects, changing their display.
+The main view, or the parent class of `NodeView` and `PieceView`, is integrated with the controller The reason is that, the `paintComponent()` method needs to draw all of the `NodeView` and `PieceView` objects, the current player, the currently selected piece and the node being hovered over by the mouse. Meanwhile, the controller also needs access to the `PieceView` and `NodeView` objects as the user clicks in those objects and the user's clicks act directly on those objects, changing their display.
 
- If given more time to experiement, or more experience developing in Java and follows MVC design pattern, view can be separated entirely from the controller. This will be discussed more in the Internal Review section.
+If given more time to experiment, or more experience developing in Java and follows MVC design pattern, view can be separated entirely from the controller. This will be discussed more in the Internal Review section.
 
 
 #Module
@@ -100,7 +100,7 @@ Represent the right direction.
 
 
 ##Player.java
-The Player class represent one player of the game. It has a bench and a variable to represent the number pieces the player has. The bench is a stack used to store the pieces that has not been placed on the game board. Everytime a piece is placed, it will be first be popped out of the bench stack. When the length of the bench is 0, it indicates the end of Phase I. The variable that represents the number of pieces the player has will help to check the winning state.
+The Player class represent one player of the game. It has a bench and a variable to represent the number pieces the player has. The bench is a stack used to store the pieces that has not been placed on the game board. Every time a piece is placed, it will be first be popped out of the bench stack. When the length of the bench is 0, it indicates the end of Phase I. The variable that represents the number of pieces the player has will help to check the winning state.
 
 ###*Uses*
 - **Piece.java**
@@ -135,8 +135,8 @@ None
 
 ###*Interface (MIS)*
 - **Piece(player: Player): Piece**
-  Construct a new Piece object, and sets its onwer
-- **getOnwer(): Player**
+  Construct a new Piece object, and sets its owner
+- **getOwner(): Player**
   Returns a Player object, the owner of the piece.
 
 ###*Implementation (MID)*
@@ -146,8 +146,8 @@ None
 
 ####*Access Programs*
 - **Piece(player: Player): Piece**  
-  Construct a new Piece object, and sets its onwer
-- **getOnwer(): Player**  
+  Construct a new Piece object, and sets its owner
+- **getOwner(): Player**  
   Returns the value of `belongsTo`, a Player object, the owner of the piece.
 
 
@@ -179,7 +179,7 @@ This class contains information about the game board. It contains information ab
 
 ####*Access Programs*
 - **GameBoard(): GameBoard**  
-  Creates a new `GameBoard` object, and creates all the nodes on it. It will use two nested for loops to create the nodes on the outter square, and another one to create the inner square. It will also uses `Node`'s methode, `setNeighbours` to build up the relationships between the nodes.
+  Creates a new `GameBoard` object, and creates all the nodes on it. It will use two nested for loops to create the nodes on the outter square, and another one to create the inner square. It will also uses `Node`'s methods, `setNeighbours` to build up the relationships between the nodes.
 - **setPiece(piece: Piece,node: Node)**  
   Sets a Piece object on a given Node object. Use Node's method `setPiece` to achieve this.
 - **movePiece(origin: Node,dest: Node)**  
@@ -189,15 +189,15 @@ This class contains information about the game board. It contains information ab
 - **checkLegalMove(): int**  
   Check if the game board contained any illegal move. Returns an `Error` object. Loop through all the nodes of the game board, it will check if the user is attempting to put one piece above another piece, or trying to click on an empty node without picking up a node.
 - **checkWin(): void**  
-  Check if one player had won. Loop though all nodes on the game board, and chall `checkV()` and `checkH()` on each node.
+  Check if one player had won. Loop though all nodes on the game board, and call `checkV()` and `checkH()` on each node.
 - **checkV(node: Node): boolean**  
-  Check the vertical connections of `node`. Use `Node`'s methode, `getNeighbor`, to check the `UP` and `DOWN` directions of the node recursively, i.e. check the `UP` and `DOWN` directions of it's neighbor's, and neighboor's neighbor, if it had any. Return true if all nodes on the vertical direction of the `node` is occupied with the same player's piece.
+  Check the vertical connections of `node`. Use `Node`'s method, `getNeighbor`, to check the `UP` and `DOWN` directions of the node recursively, i.e. check the `UP` and `DOWN` directions of it's neighbour's, and neighbour's neighbor, if it had any. Return true if all nodes on the vertical direction of the `node` is occupied with the same player's piece.
 - **checkH(node: Node): boolean**  
-  Check the horizontal connections of `node`. Use `Node`'s methode, `getNeighbor`, to check the `LEFT` and `RIGHT` directions of the node recursively, i.e. check the `LEFT` and `RIGHT ` directions of it's neighbor's, and neighboor's neighbor, if it had any. Return true if all nodes on the vertical direction of the `node` is occupied with the same player's piece.
+  Check the horizontal connections of `node`. Use `Node`'s methode, `getNeighbor`, to check the `LEFT` and `RIGHT` directions of the node recursively, i.e. check the `LEFT` and `RIGHT ` directions of it's neighbor's, and neighbour's neighbor, if it had any. Return true if all nodes on the vertical direction of the `node` is occupied with the same player's piece.
 
 
 ##Node.java
-This class represent each nodes on the game board. It contains information about the piece that may be placed on it. The nodes will be connected by each other. The neighers of the cell are being represented by an EnumMap of DIRECTION and Node. Node is being implemented in such way, instead of having a 2D array, is that, the game board of Six Men's Morris has different number of nodes on each row. It would be hard to use a 2D array to store the nodes, as there would be fake nodes created to take up spaces, and detecting 3 pieces in a row would be hard, too.
+This class represent each nodes on the game board. It contains information about the piece that may be placed on it. The nodes will be connected by each other. The neighbours of the cell are being represented by an EnumMap of DIRECTION and Node. Node is being implemented in such way, instead of having a 2D array, is that, the game board of Six Men's Morris has different number of nodes on each row. It would be hard to use a 2D array to store the nodes, as there would be fake nodes created to take up spaces, and detecting 3 pieces in a row would be hard, too.
 
 ###*Interface (MIS)*
 - **Node(): Node**  
@@ -218,7 +218,7 @@ This class represent each nodes on the game board. It contains information about
 - piece: Piece  
   Contains the piece that's being placed on the node. It's `null` if there's no piece.
 - neighbors: EnumMap<DIRECTION, Node>  
-  Contains the information about it's neighbors on all four directions.
+  Contains the information about its neighbors on all four directions.
 
 ####*Access Programs*
 - **Node(): Node**  
@@ -260,7 +260,7 @@ None
 
 
 #View
-The view is implemented using `Swing`. The nodes and pieces are `Ellipse2D.Double`'s. We decided to use Swing to implement the GUI because it is time-efficient to cerate, and is effortless to maintain or upgrade. The main view, or the parent class of `NodeView` and `PieceView`, however, are not strictly in the View module. It is integrated with part of the controller, `GameController.java`. The reason is that, the `paintComponent()` method needs to draw all of the `NodeView` and `PieceView` objects, the current player, the currently selected piece and the node being hovered over by the mouse. Moreover, the controller also needs access to the `PieceView` and `NodeView` objects as the user clicks in those objects and the user's clicks act directly on those objects, changing their display.
+The view is implemented using `Swing`. The nodes and pieces are `Ellipse2D.Double`'s. We decided to use Swing to implement the GUI because it is time-efficient to create, and is effortless to maintain or upgrade. The main view, or the parent class of `NodeView` and `PieceView`, however, are not strictly in the View module. It is integrated with the controller. The reason is that, the `paintComponent()` method needs to draw all of the `NodeView` and `PieceView` objects, the current player, the currently selected piece and the node being hovered over by the mouse. Moreover, the controller also needs access to the `PieceView` and `NodeView` objects as the user clicks in those objects and the user's clicks act directly on those objects, changing their display.
 
 ##NodeView.java
 This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defined by a framing rectangle. It will display a filled ellipse with defined radius on the game board to represent a node.
@@ -269,7 +269,7 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 - **NodeView(x: int, y: int, node: Node): NodeView**  
   It will create a new `NodeView` object centered at given coordinates, `x` and `y`. It will set the node object from Model to one of its field to identify itself.
 - **moveTo(x: int, y: int): void**  
-  It will modifties the `NodeView`'s coordinates, and make it center at `x`, `y`.
+  It will modifies the `NodeView`'s coordinates, and make it center at `x`, `y`.
 - **contains(Point click): boolean**  
   It overrides the default contains function inherit from `Ellipse2D.Double`. It takes a point on the screen and tells if the point is inside the shape `NodeView`.
 - **getNode(): Node**  
@@ -286,9 +286,9 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 
 ####*Access Programs*
 - **NodeView(x: int, y: int, node: Node): NodeView**  
-  First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding cooordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `NodeView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
+  First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding coordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `NodeView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
 - **moveTo(x: int, y: int): void**  
-  It will modifties the `NodeView`'s coordinates to `x - RADIUS` and `y - RADIUS`. As explained above, the coordinates of the object represent the top left corner of the object, so we need to subtract `RADIUS` from it to make the `NodeView`  centered at the given coordinates `x` and `y`.
+  It will modifies the `NodeView`'s coordinates to `x - RADIUS` and `y - RADIUS`. As explained above, the coordinates of the object represent the top left corner of the object, so we need to subtract `RADIUS` from it to make the `NodeView`  centered at the given coordinates `x` and `y`.
 - **contains(Point click): boolean**  
   It overrides the default contains function inherit from `Ellipse2D.Double`. It will take the x and y coordinates of the clicked point on screen, and make sure that x is within the range between `this.getCenterX() - CLICKRADIUS` and `getCenterX() + CLICKRADIUS`, and that y is within the range between `getCenterY() - CLICKRADIUS` and `getCenterY() + CLICKRADIUS`.
 - **getNode(): NodeView**  
@@ -302,7 +302,7 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 - **PieceView(x: int, y: int, i: intd): PieceView**  
   It will create a new `PieceView` object centered at given coordinates, `x` and `y`. It will also have the id indicated by the parameter `id`.
 - **moveTo(x: int, y: int): void**  
-  It will modifties the `NodeView`'s coordinates, and make it center at `x`, `y`.
+  It will modifies the `NodeView`'s coordinates, and make it center at `x`, `y`.
 - **moveToNode(node: NodeView)" void**  
   It will move the current `PieceView` to the position of the given `NodeView`, `node`.
 - **contains(Point click): boolean**  
@@ -323,9 +323,9 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 
 ####*Access Programs*
 - **PieceView(x: int, y: int, i: intd): PieceView**  
-  First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding cooordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `PieceView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
+  First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding coordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `PieceView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
 - **moveTo(x: int, y: int): void**  
-  It will modifties the `PieceView`'s coordinates to `x - RADIUS` and `y - RADIUS`. As explained above, the coordinates of the object represent the top left corner of the object, so we need to subtract `RADIUS` from it to make the `PieceView`  centered at the given coordinates `x` and `y`.
+  It will modifies the `PieceView`'s coordinates to `x - RADIUS` and `y - RADIUS`. As explained above, the coordinates of the object represent the top left corner of the object, so we need to subtract `RADIUS` from it to make the `PieceView`  centered at the given coordinates `x` and `y`.
 - **moveToNode(node: NodeView)" void**  
   It will modifies the `x` and `y` values of `PieceView` to `node.getCenterX() - RADIUS` and `node.getCenterY() - RADIUS` respectively. The reason for subtracting `RADIUS` is discussed previously.
 - **contains(Point click): boolean**  
@@ -339,32 +339,35 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 #Controller
 
 ##MainController.java
-[description][blank]
+This is the class that creates the overall user interface, and hooks up listeners to clickable items in the window.
 
 ###*Uses*###
-- 
+- **GameController.java**
 
 ###*Interface (MIS)*
 - **MainController(): MainController**  
-  [blank]
-  
+  Calls `initUI` method.
+- **main(args: String[]): void**  
+  Display the game window to the user.
+
 ###*Implementation (MID)*
 ####*Variables*
-- **model:MainModel**  
-  
+- **GameController: board**  
+  Stores the GameController object.
+- **controls: JPanel**
+  A `JPanel` that contains the `JButtons`
+- **newGameButton: JButton**
+  Has a listener that reset the game
+- **gameModeButton: JButton**
+  Has a listener to change the game mode, either the user can place any color piece on the board, or the user has to place different color piece each turn.
 
 ####*Access Programs*
 - **MainController(): MainController**  
-  [blank]
-- **setNode(node:int): void**  
-  
-- **onNewGame(): void**  
-  
-- **getModel(): MainModel**  
-  
-- **checkLegalMove(): int**  
-  
-- **checkWin(): void**  
+  Calls `initUI` method.
+- **initUI(): void**  
+  Creates the `JButton`s and put them on the `JPanel`. Assigns listeners to the `JButton`s
+- **main(args: String[]): void**  
+  Creates a new JFrame window, and displays it to the user.
 
 
 ##GameController.java
@@ -454,7 +457,7 @@ Were this project given another iteration of development, it is noted that the v
 
 
 #Design Decisions
-The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
+The Model was built to accommodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
 
 ![linked node diagram](https://raw.githubusercontent.com/AlicJ/Six-Mens-Morris/master/linked_node_diagram.png?token=ADXoALLR5mwB6t51GhyMlrElN7wy2x6Kks5W1RIDwA%3D%3D "linked node diagram")
 
@@ -466,11 +469,11 @@ The GameBoard.java class was implemented as GameField.java. The rules and board 
 2. Column (integer)
 3. Radius from origin.
 
-Due to the nature of Morris board, there are always three Nodes in one row and three Nodes in one column. With the exception of the centre column, which always contains four Nodes for an N-Men's Morris rule set, the worst case search for a Node is at most 9 comparisons. The benefit of this architecture is that the implementation can accomodate 45-Men's Morris, or more, and still require just 9 comparisons.
+Due to the nature of Morris board, there are always three Nodes in one row and three Nodes in one column. With the exception of the centre column, which always contains four Nodes for an N-Men's Morris rule set, the worst case search for a Node is at most 9 comparisons. The benefit of this architecture is that the implementation can accommodate 45-Men's Morris, or more, and still require just 9 comparisons.
 
 **Removal of DIRECTION.java**
 
-The DIRECTION enum class was abrogated during the implementation of the Model in favour of accomodating N-Men's Morris where N is any valid morris number. A valid morris number N is any integer N such that N >= 6 and N mod 3 = 0. The following classes were affected;
+The DIRECTION enum class was abrogated during the implementation of the Model in favour of accommodating N-Men's Morris where N is any valid morris number. A valid morris number N is any integer N such that N >= 6 and N mod 3 = 0. The following classes were affected;
 
 - GameField.java
 - Game.java
