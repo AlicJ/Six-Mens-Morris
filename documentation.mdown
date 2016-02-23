@@ -853,7 +853,7 @@ The final product was well recieved due to investing time in the designing stage
 
 During the implementation, if a consideration for deviating from the original design occured, arguments made for the deviation were analyzed and discussed with all members of the group and implemented only on undivided agreement. This ensured that all group members were aware of changes and bottlenecks did not appear in the development.
 
-Were this project given another iteration of development, it is noted that the view implementation would then instead use picture elements instead of the g library to appeal to a broader user baser for the Morris game.
+Were this project given another iteration of development, it is noted that the view implementation would then instead use picture elements instead of the g library to appeal to a broader user base for the Morris game.
 
 
 #Design Decisions
