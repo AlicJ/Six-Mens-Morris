@@ -382,14 +382,14 @@ The Model was built to accomodate any future changes in board architecture and b
 
 Test Cases:
 
-Symbol Definition:
+**Symbol Definition**
 - N = Valid Node
 - FN = Full Valid Node 
 - EN = Empty Valid Node (i.e. the node is not assigned a player piece)
 - IEN = Inalid Empty Node (i.e. the node exists and is not assigned a player piece)
 - IFN = Invalid Full Node (i.e. will not exists) 
 
-**Test Cases for Morris Number 6.**
+**Test Cases Rule Implementation for Morris Number 6.**
 
 1. set piece to NE : true : passed
 2. set piece to NF : true : passed
@@ -407,3 +407,12 @@ Symbol Definition:
 14. move piece from INE to INF : false : passed
 15. move piece from INF to INF : false : passed
 
+**Test Cases for Board Logistics.**
+
+1. remove piece from full player stack : returns Piece : passed
+1. remove piece from stack with 1 Piece: returns Piece : passed
+1. remove piece from empty stack : returns null : passed
+
+**View Functionality**
+
+The user-view interaction was tested informally through various trails.
