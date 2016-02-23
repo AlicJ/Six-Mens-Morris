@@ -270,8 +270,6 @@ This is the view for the game board, as well as the main view of the application
 ####*Variables*
 All the variables are `private`, `static`, and `final`, unless specified.
 
-- **controller: MainController**  
-
 - **serialVersionUID: long**
   
 - **N_NODES: int**
@@ -388,6 +386,9 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 ##MainController.java
 [description][blank]
 
+###*Uses*###
+- 
+
 ###*Interface (MIS)*
 - **MainController(): MainController**  
   [blank]
@@ -411,7 +412,27 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 - **checkWin(): void**  
 
 
- 
+##GameController.java
+[description][blank]
+
+###*Uses*###
+- 
+
+###*Interface (MIS)*
+- **GameController(): GameController**  
+  [blank]
+  
+###*Implementation (MID)*
+####*Variables*
+- **model:MainModel**  
+  
+
+####*Assess programes*
+- **GameController(): GameController**  
+  [blank]
+
+
+
 #Traceback
 *[blank]
 
