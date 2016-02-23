@@ -111,7 +111,7 @@ This is a stack used to store the pieces that have not been placed on the board.
 - **numOfPieces:int**  
 This is a variable that represent 
 
-####*Assess programes*
+####*Access Programs*
 - **Player(ID: int): Player**  
 It will create sixes pieces
 - **getPiece(): Piece**
@@ -136,7 +136,7 @@ None
 - belongsTo: Player  
   It represent the owner of the Piece. It is set by the constructer.
 
-####*Assess programes*
+####*Access Programs*
 - **Piece(player: Player): Piece**  
   Construct a new Piece object, and sets its onwer
 - **getOnwer(): Player**  
@@ -169,7 +169,7 @@ This class contains information about the game board. It contains information ab
 - **nodes: Node[]**
   An array of Node objects that contains all the nodes on the game board.
 
-####*Assess programes*
+####*Access Programs*
 - **GameBoard(): GameBoard**  
   Creates a new `GameBoard` object, and creates all the nodes on it. It will use two nested for loops to create the nodes on the outter square, and another one to create the inner square. It will also uses `Node`'s methode, `setNeighbours` to build up the relationships between the nodes.
 - **setPiece(piece: Piece,node: Node)**  
@@ -212,7 +212,7 @@ This class represent each nodes on the game board. It contains information about
 - neighbors: EnumMap<DIRECTION, Node>  
   Contains the information about it's neighbors on all four directions.
 
-####*Assess programes*
+####*Access Programs*
 - **Node(): Node**  
   [blank]
 - **getPiece(): Piece**  
@@ -244,7 +244,7 @@ None
 - **messages: string[]**  
   Contains all the error messages that may appear in the game.
   
-####*Assess programes*
+####*Access Programs*
 - **Error(): Error**  
   Return a new `Error` object.
 - **getMsg(ID: int): string**  
@@ -299,7 +299,7 @@ All the variables are `private`, `static`, and `final`, unless specified.
 - **nodes: NodeView[]**
   This variable only has the `private` attribute.
 
-####*Assess programes*
+####*Access Programs*
 - **MainView(): MainView**  
   [blank]
 - getNode(x: int,y: int):int  
@@ -329,7 +329,7 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 - **CLICKRADIUS: int**  
   Determines the clickable radius of one node. It is `static` and `final`.
 
-####*Assess programes*
+####*Access Programs*
 - **NodeView(x: int, y: int, node: Node): NodeView**  
   First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding cooordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `NodeView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
 - **moveTo(x: int, y: int): void**  
@@ -366,7 +366,7 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 - **CLICKRADIUS: int**  
   Determines the clickable radius of one piece. It is `static` and `final`.
 
-####*Assess programes*
+####*Access Programs*
 - **PieceView(x: int, y: int, i: intd): PieceView**  
   First it will call `super(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);` to create an ellipse with the corresponding cooordinates and size. The first two parameters represent the coordinates of the top left corner of the object, so we need to subtract `RADIUS` from it to make the `PieceView`  centered at the given coordinates, `x`  and `y`. The later two arguments define the total size of the object being two times the `RADIUS`.
 - **moveTo(x: int, y: int): void**  
@@ -398,7 +398,7 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 - **model:MainModel**  
   
 
-####*Assess programes*
+####*Access Programs*
 - **MainController(): MainController**  
   [blank]
 - **setNode(node:int): void**  
@@ -427,7 +427,7 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 - **model:MainModel**  
   
 
-####*Assess programes*
+####*Access Programs*
 - **GameController(): GameController**  
   [blank]
 
