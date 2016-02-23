@@ -2,17 +2,36 @@ package game.sixmensmorris.model;
 
 import java.util.ArrayList;
 
+/**
+ * Compilation: 	javac GameField.java
+ * Execution:		java GameField
+ * Dependencies:	none.
+ * Data files:		none.
+ * 
+ * The GameField class handles all of the Token allocation, Token movement
+ * logic and Token win/loose condition checks.
+ *  
+ * @author Danish
+ *
+ */
 public class GameField {
 
+	// Warning Labels
 	private static final String NODE_NOT_FOUND = "Warning: node not found.";
 	private static final String INVALID_MOVE = "Warning: move not registered.";
 	
+	// Enable to monitor console details of significant events.
 	private static final boolean DEBUG_MODE = false;
 	
-	private int n; // MORRIS service number for this board.
+	// MORRIS service number for this board.
+	private int n; 
 	
 	private ArrayList<Node> field;
 
+	/**
+	 * Instantiates a new GameField.
+	 * @param n - the MORRIS number from which the board and rules are created.
+	 */
 	public GameField(int n) {
 	// Instantiates a new field for any given n. Note: win condition behave
 	// unpredictably when n is not a valid MORRIS service number. In such cases,
@@ -22,6 +41,17 @@ public class GameField {
 		print(this.toString());
 	}
 	
+	/**
+	 * Moves a Piece from one Node N1 in GameField to another Piece N2. A warning
+	 * label is raised if a move() results in a Piece being moved to N2 on which
+	 * a Piece is already placed or one that is too far. Likewise, a warning will be
+	 * raised if a move() is called but a Piece is not present to be moved in N1
+	 * @param c1 - column number of N1.
+	 * @param r1 - row number of N1.
+	 * @param c2 - column number of N2.
+	 * @param r2 - row number of N2.
+	 * @return true if move was successful. False otherwise.
+	 */
 	public boolean move(char c1, char r1, char c2, char r2) {
 	// Checks validity of move and performs it if valid, prints error if invalid
 		
@@ -55,6 +85,13 @@ public class GameField {
 		return false;
 	}
 	
+	/**
+	 * Assigns a Piece to a Node in GameField class.
+	 * @param column - column number of the Node to assign the Piece to.
+	 * @param row - row number of the Node to assign the Piece to.
+	 * @param piece - the piece to be assigned.
+	 * @return true if move was successful. False otherwise.
+	 */
 	public boolean assign(char column, char row, Piece piece) {
 	// The following method assigns a token to a particular node given a column 
 	// and row and returns true if the assignment was successful.
@@ -74,6 +111,12 @@ public class GameField {
 		return false;
 	}
 	
+	/**
+	 * Assigns a Piece to a Node in GameField class.
+	 * @param node - the Node to assign the Piece to.
+	 * @param player - the Player from which to take the Piece from.
+	 * @return true if move was successful. False otherwise.
+	 */
 	public boolean assign(Node node, Piece piece) {
 	// The following method assigns a token to a given node
 	//  and returns true if the assignment was successful.
@@ -87,6 +130,14 @@ public class GameField {
 		return false;
 	}
 	
+	/**
+	 * Returns a Node with the specified row and column number. Raises a 
+	 * warning if the Node if the specified row and column do not result in a
+	 * a Node being found in this GameField.
+	 * @param column
+	 * @param row
+	 * @return
+	 */
 	public Node node(char column, char row) {
 		for (Node n : field) {
 			if (n.getColumn() == column && n.getRow() == row) {
@@ -97,6 +148,12 @@ public class GameField {
 		return null;
 	}
 	
+	/**
+	 * Returns an array based on a any number N. If the N is not a valid MORRIS
+	 * number, an incomplete field will be returned.
+	 * @param n - the MORRIS number with which to label the array.
+	 * @return ArrayList<Node> with appropriate labels too accommodate N-M.M.
+	 */
 	public ArrayList<Node> field(int n) {
 	// The following method will create and generate a board for any valid 
 	// service MORRIS number. A MORRIS number is valid if n >= 6 and n % 3 = 0. 
@@ -171,6 +228,11 @@ public class GameField {
 		return nodes; // return generated field based on MORRIS number n
 	}
 	
+	/**
+	 * Returns the current state of this GameField in the form of an array of
+	 * Nodes.
+	 * @return Node array representing the current state of this GameField.
+	 */
 	public ArrayList<Node> nodes() {
 	// Returns the current state of this abstract data through a list of all
 	// nodes within this GameField object. Future Note: a sting array copy sent 
@@ -178,11 +240,20 @@ public class GameField {
 		return this.field;
 	}
 	
+	/**
+	 * Returns the node at a specific position in the array of nodes
+	 * @param i - index at which to take node from
+	 * @return Node array representing the current state of this GameField.
+	 */
 	public Node getNode(int i) {
 	// Returns node at i index in ArrayList
 		return this.field.get(i);
 	}
 	
+	/**
+	 * Returns the string representation of this GameField.
+	 * @return the string representation of this GameField.
+	 */
 	public String toString() {
 	// Returns a string representation of the GameField Abstract Data Type.
 		String board = "\n"+field.get(0).toString();
@@ -197,13 +268,14 @@ public class GameField {
 		return board + "\n";
 	}
 	
-	private void promptNodeNotFound(char column, char row, String caller) {
 	// Called when a particular location call results in a Node not being found.
+	private void promptNodeNotFound(char column, char row, String caller) {
 		print(NODE_NOT_FOUND + "\n");
 		print("   >> called by: "  + caller + "\n");
 		print("   >> searched for: " + (char)column + (int)row + "\n");
 	}
-	
+
+	// Called when the move() function was used illegally.
 	private void promptMove(char c1, char r1, char c2, char r2, boolean valid) {
 		if (valid) print("Moved: " + c1 + (int) r1 + " to " + c2 + (int) r2 + "\n");
 		else {
@@ -211,18 +283,18 @@ public class GameField {
 			print("   >> tried: " +c1 + (int)r1 + " to " + c2 + (int)r2 + "\n");
 		}
 	}
-	
-	private void validateGameBoard(int n) {
+
 	// Warns user if an invalid MORRIS number board was generated. Fields
 	// generated with an Invalid MORRIS number will lead to unpredictable
 	// win condition behaviour or may result in an incomplete board.
+	private void validateGameBoard(int n) {
 		if (n < 6 || n % 3 != 0) 
 			print("Warning: unconventional morris number...");
 		print("Creating " + n + " men's morris field...\n");
 	}
-	
+
+	// Aesthetic and coding optimization function. Does not affect program.
 	private static void print(String s) {
-	// Esthetic and coding optimization function. Does not affect program.
 		System.out.print(s);
 	}
 }

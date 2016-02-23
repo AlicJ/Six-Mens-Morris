@@ -360,24 +360,67 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 
 
 ##GameController.java
-[description][blank]
-
+This class extends JPanel and holds all the View objects, using them to process user input through its own MouseAdapter. Validates and performs changes to the current Game object according to input, and displays corresponding changes on board.
+  
 ###*Uses*###
-- 
+- **Game.java**
+- **Node.java**
+- **Player.java**
+- **NodeView.java**
+- **PieceView.java**
 
 ###*Interface (MIS)*
 - **GameController(): GameController**  
-  [blank]
+  Creates a new 'GameController' object which starts a new game and instantiates mouse listeners to process user input.
+- **newGame(): void**
+  Starts a new game with new objects.
+- **switchMode(): int**
+  Switches between turn-based game and setting up board state, and returns current mode.
   
 ###*Implementation (MID)*
 ####*Variables*
-- **model:MainModel**  
-  
+- **currentGame: Game**
+  Model of current game, contains pieces and nodes, and performs actions on them.
+- **nodes: NodeView[]**
+  Array of NodeView objects for display corresponding to Nodes in Game model.
+- **redPieces: PieceView
+  Array of red PieceView objects for display corresponding to red Player's pieces.
+- **bluePieces: PieceView
+  Array of blue PieceView objects for display corresponding to blue Player's pieces.
+- **selectedPiece: PieceView**
+  Holds currently selected PieceView by user to be moved.
+- **hoveredNode: NodeView**
+  Last NodeView hovered over by mouse, highlighted for aesthetic purposes.
+- **currentPlayer: int**
+  Holds ID of current player, or -1 if game is in Set Board State mode
+- **boardStartX: int**
+  X coordinate for left edge of board.
+- **boardStartY: int**
+  Y coordinate for top edge of board.
+- **boardCenterX: int**
+  X coordinate for center of board.
+- **boardCenterY: int**
+  Y coordinate for center of board.
+- **boardEndX: int**
+  X coordinate for right edge of board.
+- **boardEndY: int**
+  Y coordinate for bottom edge of board.
+- **redBenchX: int**
+  X coordinate for red player's bench pieces on left of board.
+- **blueBenchX: int**
+  X coordinate for blue player's bench pieces on right of board.
+- **boardSize: int**
+  Board side length, distance from one edge to the other.
+- **gridSize: int**
+  Distance from one row or column to the next, one fourth of grid size.
 
 ####*Access Programs*
 - **GameController(): GameController**  
-  [blank]
-
+  Calls newGame() method to initialize new objects. Adds embedded Mouse Listener subclasses for processing user input.
+- **newGame(): void**
+  Starts a new game with new objects.
+- **switchMode(): int**
+  Switches between turn-based game and setting up board state, and returns current mode.
 
 
 #Traceback
