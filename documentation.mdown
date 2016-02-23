@@ -383,27 +383,27 @@ The Model was built to accomodate any future changes in board architecture and b
 Test Cases:
 
 Symbol Definition:
-N = Valid Node
-FN = Full Valid Node 
-EN = Empty Valid Node (i.e. the node is not assigned a player piece)
-IEN = Inalid Empty Node (i.e. the node exists and is not assigned a player piece)
-IFN = 
+- N = Valid Node
+- FN = Full Valid Node 
+- EN = Empty Valid Node (i.e. the node is not assigned a player piece)
+- IEN = Inalid Empty Node (i.e. the node exists and is not assigned a player piece)
+- IFN = Invalid Full Node (i.e. will not exists) 
 
 **Test Cases for Morris Number 6.**
 
-set piece to NE : true : passed
-set piece to NF : true : passed
-set piece to INE : false : passed
-set piece to INF : false : passed
-move piece from NF to NE : true : passed
-move piece from NE to NF : false : passed
-move piece from NF to NF : false : passed
-move piece from NF to INE : false : passed
-move piece from NF to INE : false : passed
-move piece from NE to INF : false : passed
-move piece from NF to INF : false : passed
-move piece from INF to NE : false : passed
-move piece from INF to INE : false : passed
-move piece from INE to INF : false : passed
-move piece from INF to INF : false : passed
+1. set piece to NE : true : passed
+2. set piece to NF : true : passed
+3. set piece to INE : false : passed
+4. set piece to INF : false : passed
+5. move piece from NF to NE : true : passed
+6. move piece from NE to NF : false : passed
+7. move piece from NF to NF : false : passed
+8. move piece from NF to INE : false : passed
+9. move piece from NF to INE : false : passed
+10. move piece from NE to INF : false : passed
+11. move piece from NF to INF : false : passed
+12. move piece from INF to NE : false : passed
+13. move piece from INF to INE : false : passed
+14. move piece from INE to INF : false : passed
+15. move piece from INF to INF : false : passed
 
