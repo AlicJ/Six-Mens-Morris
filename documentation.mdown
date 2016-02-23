@@ -368,12 +368,11 @@ None
 The DIRECTION enum class was abrogated during the implementation of the Model in favour of accomodating N-Men's Morris where N is any valid morris number. A valid morris number N is any integer N such that N >= 6 and N mod 3 = 0. The following classes were affected;
 - GameField.java
 - Game.java
-The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.  The new board architecture implements the structure shown in Figure 1 below:
-
-[ insert linked node diagram ]
 
 #Design Decisions
 The Model was built to accomodate any future changes in board architecture and board rules. The current implementation supports rules for N-Men's Morris for any valid integer N. The linked Node board architecture was abandoned in favour of increasing the implementation's responsiveness to change in the future.
+
+[ insert linked node diagram ]
 
 
 #Test Report
