@@ -447,7 +447,7 @@ This class extends JPanel and holds all the View objects, using them to process 
   Display board changes.
 - **finalizeMove(node: NodeView)
   Perform move.
-- **selectPiece(piece: PieceView, pieceID: int)
+- **selectPiece(piece: PieceView, pieceID: int)**
   Select a piece.
 
 
