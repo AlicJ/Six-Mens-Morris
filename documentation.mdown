@@ -1,6 +1,4 @@
 Search for `[blank]` for parts that are not finished.
-
-
 #Design Overview
 
 ##Modules
@@ -16,8 +14,6 @@ The application is decomposed into 3 components:
     1. listeners are assigned to view to receive mouse click
     2. buttons with listener to clear the board
 
-Highest level of Uses Relationship:
-
 ##Justifications for MVC
 Model-View-Controler (MVC) is a very popular design pattern used for computer applications implementing user interfaces. The advantages of MVC design paradigm are many:
 
@@ -27,6 +23,9 @@ Model-View-Controler (MVC) is a very popular design pattern used for computer ap
     - The way in which a system's components can be separated and recombined. Meaning that for a software, different components can be maintained separately without breaking the entire system. This allows separation of concerns to be implemented with little effort.
 4. Expectancy for Change
     - This suggests that software should be able to support upgrades or changes on a small part without causing the entire system to break. Modules should communicate with each other on a very abstract level. They only deal with each other's inputs and outputs. With the MVC ideology, View will be updated by Model, and Model will be maintained by Controller. The internal logic within any of the modules can be changed without breaking other modules.
+
+##Highest level of Uses Relationship:
+The following diagram showed the highest level of uses relationship in our application
 
 #Model
 Under Model module, there are several classes we created to fully represent the data structures and logics.
@@ -252,7 +251,7 @@ None
 
 
 #View
-The view is implemented using `Swing`. The main view of the application is a `JPanel`, and the nodes and pieces are `Ellipse2D.Double`'s. We decided to use Swing to implement the GUI because it is time-efficient to cerate, and is effortless to maintain or upgrade.
+The view is implemented using `Swing`. The nodes and pieces are `Ellipse2D.Double`'s. We decided to use Swing to implement the GUI because it is time-efficient to cerate, and is effortless to maintain or upgrade. The main view, or the parent class of `NodeView` and `PieceView`, however, are not strictly in the View module. It is integrated with part of the controller, `GameController.java`. The reason is that, the paintComponent() method needs to draw all of the NodeView and PieceView objects, the current player, the currently selected piece and the node being hovered over by the mouse. Moreover, the controller also needs access to the PieceView and NodeView objects as the user clicks in those objects and the user's clicks act directly on those objects, changing their display.
 
 ##NodeView.java
 This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defined by a framing rectangle. It will display a filled ellipse with defined radius on the game board to represent a node.
@@ -330,33 +329,40 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 
 #Controller
 
+
 ##MainController.java
-[description][blank]
+
 
 ###*Uses*###
-- 
+- **GameController.java**
 
 ###*Interface (MIS)*
 - **MainController(): MainController**  
-  [blank]
+  
+- **main(args: String[]): void**  
   
 ###*Implementation (MID)*
 ####*Variables*
-- **model:MainModel**  
+- **serialVersionUID: long**
+  
+- **board: GameController**  
+  
+- **controls: JPanel**  
+  
+- **newGameButton: JButton**  
+  
+
+- **gameModeButton: JButton**  
   
 
 ####*Access Programs*
 - **MainController(): MainController**  
-  [blank]
-- **setNode(node:int): void**  
+  Call the `initUI` method to initialize the view for the user.
+- **initUI(): void**  
   
-- **onNewGame(): void**  
-  
-- **getModel(): MainModel**  
-  
-- **checkLegalMove(): int**  
-  
-- **checkWin(): void**  
+- **main(args: String[]): void**  
+  Create a `JFrame` that contains the GUI, and display it to the user.
+
 
 
 ##GameController.java
