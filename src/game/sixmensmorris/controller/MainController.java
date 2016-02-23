@@ -36,7 +36,7 @@ public class MainController extends JFrame
 		// Initialize button controls
 		controls = new JPanel(new FlowLayout());
 		newGameButton = new JButton("New Game");
-		gameModeButton = new JButton("Set Board State");
+		gameModeButton = new JButton("Turn-Based Mode");
 		
 		// Function for New Game button
 		newGameButton.addActionListener(new ActionListener()

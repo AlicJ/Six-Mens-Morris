@@ -58,9 +58,9 @@ public class GameController extends JPanel
 	
 	public void newGame()
 	{
-		// Starts new game and sets current player randomly
+		// Starts new game and goes to set board state mode
 		currentGame = new Game(N_PIECES);
-		currentPlayer = (int)(Math.random() * 2);
+		currentPlayer = -1;
 
 		// Initialize Node View and Piece View objects
 		initNodes();
