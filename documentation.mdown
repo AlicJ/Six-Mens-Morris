@@ -849,9 +849,9 @@ This class is a subclass of `Ellipse2D.Double`, which describes an ellipse defin
 
 #Internal Review
 
-The final product was well recieved due to a thorough design process. During the implementation, when deviation from original design erupted, arguments made for the deviation were analyzed and discussed with all members of the group and implemented only on agreement. This ensured that all group members were aware of changes and bottlenecks did not appear in the development.
+The final product was well recieved due to a thorough design process. During the implementation, if the consideration for deviating from the original design occured, arguments made for the deviation were analyzed and discussed with all members of the group and implemented only on undivided agreement. This ensured that all group members were aware of changes and bottlenecks did not appear in the development.
 
-Were it the case that this project was given another iteration of development, it is noted that the view implementation would then instead use picture elements instead of the g library to appeal to a broader user baser for the Morris game.
+Were this project given another iteration of development, it is noted that the view implementation would then instead use picture elements instead of the g library to appeal to a broader user baser for the Morris game.
 
 
 #Design Decisions
