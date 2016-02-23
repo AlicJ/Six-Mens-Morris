@@ -445,9 +445,9 @@ This class extends JPanel and holds all the View objects, using them to process 
   Calculate NodeView and PieceView coordinates.
 - **paintComponent(): void**
   Display board changes.
-- **finalizeMove(node: NodeView)
+- **finalizeMove(node: NodeView): void**
   Perform move.
-- **selectPiece(piece: PieceView, pieceID: int)**
+- **selectPiece(piece: PieceView, pieceID: int): void**
   Select a piece.
 
 
