@@ -1,7 +1,5 @@
 package game.sixmensmorris.model;
 
-import java.util.ArrayList;
-
 public class Game {
 	
 	private final int PLAYER_PIECES = 6;
@@ -14,10 +12,6 @@ public class Game {
 		field = new GameField(n);
 		redPlayer = new Player(PLAYER_PIECES, 0);
 		bluePlayer = new Player(PLAYER_PIECES, 1);
-	}
-	
-	public boolean movePiece(char c1, char r1, char c2, char r2) {
-		return field.move(c1, r1, c2, r2);
 	}
 	
 	// Added movePiece() method that takes Nodes instead of coordinates
@@ -45,7 +39,7 @@ public class Game {
 		return field.assign(column, row, null);
 	}
 	
-	public Player player(int id)	{
+	public Player player(int id) {
 		if (id == 0)
 			return this.redPlayer;
 		else
@@ -59,10 +53,10 @@ public class Game {
 		return field.node(column, row).getPiece().id();
 	}
 	
-	// Use this to draw all nodes.
-	public ArrayList<Node> state() {
-		return field.nodes();
-	}
+//	// Use this to draw all nodes.
+//	public ArrayList<Node> state() {
+//		return field.nodes();
+//	}
 	
 	// Returns node at index i
 	public Node getNode(int i)
