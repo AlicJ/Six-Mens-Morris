@@ -154,7 +154,6 @@ public class GameController extends JPanel
 			nodes[i].moveTo(x, y);
 		}
 
-		
 		// For each red and blue piece
 		for (int i = 0; i < N_PIECES; i++)
 		{

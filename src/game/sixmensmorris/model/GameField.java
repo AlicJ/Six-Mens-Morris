@@ -228,17 +228,17 @@ public class GameField {
 		return nodes; // return generated field based on MORRIS number n
 	}
 	
-	/**
-	 * Returns the current state of this GameField in the form of an array of
-	 * Nodes.
-	 * @return Node array representing the current state of this GameField.
-	 */
-	public ArrayList<Node> nodes() {
-	// Returns the current state of this abstract data through a list of all
-	// nodes within this GameField object. Future Note: a sting array copy sent 
-	// instead of this is highly recommended.
-		return this.field;
-	}
+//	/**
+//	 * Returns the current state of this GameField in the form of an array of
+//	 * Nodes.
+//	 * @return Node array representing the current state of this GameField.
+//	 */
+//	public ArrayList<Node> nodes() {
+//	// Returns the current state of this abstract data through a list of all
+//	// nodes within this GameField object. Future Note: a sting array copy sent 
+//	// instead of this is highly recommended.
+//		return this.field;
+//	}
 	
 	/**
 	 * Returns the node at a specific position in the array of nodes
