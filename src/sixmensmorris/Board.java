@@ -79,4 +79,46 @@ public class Board {
 		return this.pieces[number];
 	}
 	
+	public int[] millExists(int i){
+		int[] mill = new int[3];
+		int currentState = this.pieces[i];
+		if(i % 2 == 0){ //Check even position
+			if( (pieces[(i+1)%8 + ((i > 7)?8:0)] == currentState) && ((i%8 == 0)?(pieces[7 + ((i > 7)?8:0)] == currentState):(pieces[(i-1)%8 + ((i > 7)?8:0)] == currentState)) ){
+				mill[0] = i;
+				mill[1] = i+1;
+				mill[2] = (i%8 == 0)?(7+ ((i > 7)?8:0) ):(i-1);
+			} else{ //No mills exist
+				mill[0] = -1;
+				mill[1] = -1;
+				mill[2] = -1;
+			}
+		} else{ //Odd position
+			if(pieces[(i+1)%8 + ((i > 7)?8:0)] == currentState && pieces[(i+2)%8 + ((i > 7)?8:0)] == currentState){
+				mill[0] = i;
+				mill[1] = i+1;
+				mill[2] = i+2;
+			} else if((pieces[(i-1)%8 + ((i > 7)?8:0)] == currentState) && ((i%8 == 1)?(pieces[7 + ((i > 7)?8:0)] == currentState):(pieces[(i-2)%8 + ((i > 7)?8:0)] == currentState))){
+				mill[0] = i;
+				mill[1] = i-1;
+				mill[2] = (i%8 == 1)? (7+ ((i > 7)?8:0)):(i-2);
+			} else{ //No mill found
+				mill[0] = -1;
+				mill[1] = -1;
+				mill[2] = -1;
+			}
+		}
+		return mill;
+	}
+	
+	public boolean onlyMillsLeft(int colour){
+		boolean onlyMillsLeft = true;
+		for(int i = 0; i < pieces.length; i++){
+			if(pieces[i] == colour){
+				int[] mill = millExists(i);
+				onlyMillsLeft = onlyMillsLeft && mill[0] == -1;
+			}
+		}
+		return onlyMillsLeft;
+	}
+	
 }

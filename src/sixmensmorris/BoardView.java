@@ -267,6 +267,11 @@ public class BoardView extends Screen{
 		this.repaint();
 	}
 	
+	public void millExists(int i){
+		int[] mill = board.millExists(i);
+		System.out.println(mill[0] == -1);
+	}
+	
 	@Override
 	/**
 	 * Draw sections of the board only when they need to be.

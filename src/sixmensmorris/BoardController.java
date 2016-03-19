@@ -315,15 +315,16 @@ public class BoardController extends JFrame {
 						if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
 							boardView.setBoardState(i, 0);
 							selectedPiece = i; 
-							selectedColour = 1;							
+							selectedColour = 1;					
 						} else if(turn%2 == 1 && boardView.getBoardState(i) == 2 && selectedColour == 0){ //Select red piece
 							boardView.setBoardState(i, 0);
 							selectedPiece = i;
 							selectedColour = 2;
 						} else if(selectedColour != 0 && boardView.getBoardState(i) == 0){ //Move the piece
-							if(i%8 == selectedPiece%8 || (i+1)%8 == selectedPiece%8 || (i-1)%8 == selectedPiece%8){
+							if(i == selectedPiece || i == selectedPiece + 1 || i == selectedPiece - 1 || i == selectedPiece + 8 || i == selectedPiece - 8 || (i ==7 && selectedPiece == 0) || (i==8 && selectedPiece ==15)){
 								if(i != selectedPiece){ //If the piece is not placed back on the same square
 									boardView.setBoardState(i, selectedColour);
+									boardView.millExists(i);
 									selectedColour = 0;
 									if(turn%2 == 0){
 										turn++;
@@ -337,7 +338,7 @@ public class BoardController extends JFrame {
 									selectedColour = 0;
 								}
 							} else{
-								ErrorDialog error = new ErrorDialog(jFrame, "Invalid move", "Please select a valid move");
+								new ErrorDialog(jFrame, "Invalid move", "Please select a valid move");
 							}
 						}
 					}
