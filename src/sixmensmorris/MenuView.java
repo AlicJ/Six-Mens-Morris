@@ -135,10 +135,11 @@ public class MenuView extends Screen{
 			FileReader fr = new FileReader("./savedGame.txt");
 			BufferedReader br = new BufferedReader(fr);
 			ArrayList<Integer> boardState = new ArrayList<Integer>();
-			if(br.readLine() != null){
-				gameState = Integer.parseInt(br.readLine());
+			String stringRead = br.readLine();
+			if(stringRead != null){
+				gameState = Integer.parseInt(stringRead);
 				turn = Integer.parseInt(br.readLine());
-				String stringRead = br.readLine();
+				stringRead = br.readLine();
 				while(stringRead != null){
 					boardState.add(Integer.parseInt(stringRead));
 					stringRead = br.readLine();
@@ -148,6 +149,7 @@ public class MenuView extends Screen{
 				this.boardState = new int[boardState.size()];
 				for(int i = 0; i < boardState.size(); i++){
 					this.boardState[i] = boardState.get(i);
+					System.out.println(this.boardState[i]);
 				}
 				BoardController boardController = new BoardController(N, this.boardState, this.turn, this.gameState);
 				boardController.setVisible(true);

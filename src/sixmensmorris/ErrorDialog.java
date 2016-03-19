@@ -29,7 +29,7 @@ public class ErrorDialog extends JDialog implements ActionListener{
 		this.setResizable(false);
 		Font font = new Font(Font.MONOSPACED, Font.PLAIN, 25);//this.getWidth() * FONT_SIZE / this.DEFAULT_SCREEN_WIDTH);
 		
-		JLabel error = new JLabel("<html><b>An error has occured!</b></html>"); // error message that will occur
+		JLabel error = new JLabel("<html><b>Important Message!</b></html>"); // error message that will occur
 		error.setFont(font); // set the font to predetermined font above.
 		getContentPane().add(error, BorderLayout.NORTH); 
 		JButton okButton = new JButton("OK"); // User will click this button after placing all desired pieces 

@@ -3,12 +3,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 /**
  * This is a controller for the board class. 
@@ -38,6 +45,8 @@ public class BoardController extends JFrame {
 	private int selectedColour = 0;	//Used to facilitate movement of pieces
 	private int selectedPiece = -1; //Used to facilitate movement of pieces
 	private JLabel blueLabel, blueCount, redLabel, redCount, title; // some labels to properly update the view
+	
+	private JButton saveGame;
 	
 	/**
 	 * Constructs the screen needed to play the game, and adds all EventListeners needed to obtain input from the user.
@@ -103,6 +112,16 @@ public class BoardController extends JFrame {
 		
 		outerBox.add(box);
 		
+		saveGame = new JButton("Save Game");
+		saveGame.setFont(font);
+		saveGame.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				saveGameMouseClicked(e);
+			}
+		});
+		
+		outerBox.add(saveGame);
+		
 		jFrame.add(outerBox); // add the original box (everything) to the window
 		jFrame.setVisible(true); // allows the window to display everything
 
@@ -156,6 +175,7 @@ public class BoardController extends JFrame {
 		redLabel.setFont(font);
 		redCount.setFont(font);
 		title.setFont(font);
+		saveGame.setFont(font);
 	}
 	
 	/**
@@ -304,4 +324,28 @@ public class BoardController extends JFrame {
 
 	}
 
+	private void saveGameMouseClicked(MouseEvent e){
+		
+		
+		try {
+			FileWriter fw = new FileWriter("./savedGame.txt", false);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(String.valueOf(this.state));
+			bw.newLine();
+			bw.write(String.valueOf(this.turn));
+			int[] board = this.boardView.getBoardStates();
+			for(int i = 0; i < board.length; i++){
+				bw.newLine();
+				bw.write(String.valueOf(board[i]));
+			}
+			bw.close();
+			new ErrorDialog(jFrame, "Saved.", "Your game has been saved.");
+		} catch (IOException e1) {
+			new ErrorDialog(jFrame, "Save Error.", "An error occured and your game was not saved.");
+		}
+		
+		
+	}
+	
+	
 }
