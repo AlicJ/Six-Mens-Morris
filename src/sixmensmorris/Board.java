@@ -122,11 +122,9 @@ public class Board {
 	}
 	
 	public int checkWinner(){
-		System.out.println("TRUE");
 		int winner = 0;
 		int blueCount = 0, redCount = 0;
 		for(int i = 0; i < pieces.length; i++){
-			System.out.println(pieces[i]);
 			 if(pieces[i] == 1){
 				 blueCount++;
 			 } else if(pieces[i] == 2){
@@ -139,7 +137,6 @@ public class Board {
 		} else if(redCount == 2){
 			winner = 1;
 		} 
-		System.out.println(winner);
 		return winner;
 	}
 	

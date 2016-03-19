@@ -118,97 +118,28 @@ public class BoardController extends JFrame {
 
 	}
 	
+	public BoardController(int N, int[] boardState, int turn, int state){
+		this(N, boardState);
+		this.turn = turn;
+		this.state = state;
+		updateTitleColour();
+		updateTitleText();
+		
+	}
+	
 	/**
 	 * Construct the screen needed to play the game given a certain state, and adds all EventListers needed to obtain input from the user.
 	 * @author Kelvin Lin , Jeremy Klotz
 	 * @param N is the number of squares 
 	 * @param boardState this allows us to construct / update the board based on current state
 	 */
-	public BoardController(int N, int[] boardState) { 
-		Random random = new Random();
-		turn = random.nextInt(2);
+	public BoardController(int N, int[] boardState) { 	
+		this(N);
 
-		
-		int bluePieces = 0, redPieces = 0;
-		//this chunk of code adds up all of the pieces for each player
-		//is applicable for any version of 6 Men's Morris, only the length of the board state should change
-		for(int i = 0; i < boardState.length; i++){
-			if(boardState[i] == BLUE_STATE){
-				bluePieces++;
-			} else if(boardState[i] == RED_STATE){
-				redPieces++;
-			}
-		}
-		
-		// Instantiate Models
-		blue = new Player(BLUE_STATE, NUMBER_OF_PIECES);
-		red = new Player(RED_STATE, NUMBER_OF_PIECES);
-
-		// Instantiate Views
-		jFrame = new JFrame("Six Men's Morris");
-		jFrame.setSize(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT); // (500,500)
-		jFrame.setLocationRelativeTo(null);
-		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		Box outerBox = Box.createVerticalBox();
-		
-		Font font = new Font(Font.MONOSPACED, Font.PLAIN,
-				this.jFrame.getWidth() * FONT_SIZE / this.DEFAULT_SCREEN_WIDTH); // scale the font based on window size 
-																				 // in case it is stretched/compressed
-		
-		//Create title JLabel and add it to the top of the screen
-		title = new JLabel(stateStrings[state]);
-		title.setFont(font);
-		updateTitleColour();
-		outerBox.add(title);
-		
-		//Create horizontal components
-		Box box = Box.createHorizontalBox(); // original box to contain all of the view's information
-		Box blueVerticalBox = Box.createVerticalBox();
-		Box redVerticalBox = Box.createVerticalBox();
-		
-		
-		blueLabel = new JLabel("Blue:"); // use scalable font for all labels relevant to the blue player										 
-		blueLabel.setFont(font);
-		blueCount = new JLabel(String.valueOf(blue.getNumberOfUnplayedPieces())); // the label accesses the number of pieces left
-																				  // and returns the integer value as a string for the label
-		blueCount.setFont(font);		// use scalable font
-		//create a sub box to be place in the window
-		//add previously define labels to the sub box, and add this sub box to the original box
-		blueVerticalBox.add(blueLabel);	
-		blueVerticalBox.add(blueCount);
-		box.add(blueVerticalBox);
-
-		boardView = new BoardView(N); // call BoardView to display graphics
-		box.add(boardView);		      // add graphics to the original box
-		
-		// creating the same labels needed for player blue, but this time for player red
-		redLabel = new JLabel("Red:");
-		redLabel.setFont(font);
-		redCount = new JLabel(String.valueOf(red.getNumberOfUnplayedPieces()));
-		redCount.setFont(font);
-		
-		redVerticalBox.add(redLabel);
-		redVerticalBox.add(redCount);
-		box.add(redVerticalBox);
-		
-		outerBox.add(box);
-		
-		jFrame.add(outerBox); // add the original box (everything) to the window
-		jFrame.setVisible(true); // allows the window to display everything
-
-		boardView.addComponentListener(new ComponentAdapter() {
-			public void componentResized(ComponentEvent e) {
-				updateView();
-				resizeText();
-			}
-		});
-		
 		for(int i = 0; i < boardState.length; i++){
 			boardView.setBoardState(i, boardState[i]);
 		}
 
-		boardView.addMouseListener(new MouseClickEventHandler());	
 		boardView.checkWinner();
 	}
 

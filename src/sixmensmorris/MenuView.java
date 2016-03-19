@@ -5,6 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -26,10 +31,16 @@ public class MenuView extends Screen{
 	// Either debugging state, then go to play state, OR go straight to the play state.
 	private JButton playGame;
 	private JButton debug;
+	private JButton loadGame;
 	private int state;
 	private int defaultFontSize = 36;
 	private int defaultScreenWidth = 500;
 	private int N; //Total number of pieces on the board
+	
+	//Used to store data about the game
+	private int[] boardState;
+	private int turn;
+	private int gameState;
 	
 	/**
 	 * Method to construct the output that the controller will handle everything inside of it.
@@ -61,6 +72,13 @@ public class MenuView extends Screen{
 			}
 		});	 	
 		
+		loadGame = new JButton("Load Game");
+		loadGame.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				loadGameMouseClicked(e);
+			}
+		});
+		
 		/* The next chunk of code Formats the menu screen to look like
 		 *   		Six Men's Morris title
 		 *   
@@ -78,6 +96,9 @@ public class MenuView extends Screen{
 		box.add(new JLabel(" "));
 		box.add(new JLabel(" "));
 		box.add(debug);
+		box.add(new JLabel(" "));
+		box.add(new JLabel(" "));
+		box.add(loadGame);
 		this.add(box);
 	}
 	
@@ -109,6 +130,41 @@ public class MenuView extends Screen{
 		SwingUtilities.getWindowAncestor(this).dispose();
 	}
 	
+	private void loadGameMouseClicked(MouseEvent e){
+		try {
+			FileReader fr = new FileReader("./savedGame.txt");
+			BufferedReader br = new BufferedReader(fr);
+			ArrayList<Integer> boardState = new ArrayList<Integer>();
+			if(br.readLine() != null){
+				gameState = Integer.parseInt(br.readLine());
+				turn = Integer.parseInt(br.readLine());
+				String stringRead = br.readLine();
+				while(stringRead != null){
+					boardState.add(Integer.parseInt(stringRead));
+					stringRead = br.readLine();
+				}
+				br.close();
+				
+				this.boardState = new int[boardState.size()];
+				for(int i = 0; i < boardState.size(); i++){
+					this.boardState[i] = boardState.get(i);
+				}
+				BoardController boardController = new BoardController(N, this.boardState, this.turn, this.gameState);
+				boardController.setVisible(true);
+				SwingUtilities.getWindowAncestor(this).dispose();
+			} else{
+				BoardController boardController = new BoardController(N);
+				boardController.setVisible(true);
+				SwingUtilities.getWindowAncestor(this).dispose();
+			}
+		} catch (NumberFormatException | IOException e1) {
+			new ErrorDialog(new JFrame(), "Corrupt save file.", "An error occured. Please go save the game again.");
+			BoardController boardController = new BoardController(N);
+			boardController.setVisible(true);
+			SwingUtilities.getWindowAncestor(this).dispose();
+		}
+	}
+	
 	/**
 	 * This method formats all of the required components to the menu screen.
 	 * @param g The Graphics object 
@@ -120,10 +176,12 @@ public class MenuView extends Screen{
 		
 		playGame.setFont(font);
 		debug.setFont(font);
+		loadGame.setFont(font);
 		//align components to center of the screen
 		title.setAlignmentX(JLabel.CENTER_ALIGNMENT); 
 		playGame.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		debug.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		loadGame.setAlignmentX(JButton.CENTER_ALIGNMENT);
 	}
 	
 	/**

@@ -269,7 +269,6 @@ public class BoardView extends Screen{
 	
 	public void millExists(int i){
 		int[] mill = board.millExists(i);
-		System.out.println(mill[0] == -1);
 	}
 	
 	public void checkWinner(){
