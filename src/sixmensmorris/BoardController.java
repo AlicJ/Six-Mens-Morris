@@ -29,8 +29,8 @@ public class BoardController extends JFrame {
 	private int turn; // 0 = blue, 1 = red
 	private Player blue, red;
 
-	private int state = 0; // 0 = place pieces, 1 = play game
-	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Game Drawn", "Red Wins", "Blue Wins"};
+	private int state = 0; // 0 = place pieces, 1 = play game, 2 = blue wins, 3 = red wins, 4 = draw
+	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Blue Wins", "Red Wins", "Game Drawn"};
 	
 	
 	private final int NUMBER_OF_PIECES = 6;	// this can change to 9 if we are going to do 9 Men's Morris instead
@@ -45,6 +45,8 @@ public class BoardController extends JFrame {
 	private int selectedColour = 0;	//Used to facilitate movement of pieces
 	private int selectedPiece = -1; //Used to facilitate movement of pieces
 	private JLabel blueLabel, blueCount, redLabel, redCount, title; // some labels to properly update the view
+	
+	private boolean removePiece = false; //Whether a piece can be removed from the board
 	
 	private JButton saveGame;
 	
@@ -162,6 +164,13 @@ public class BoardController extends JFrame {
 		boardView.checkWinner();
 	}
 
+	private void update(){
+		this.updateState();
+		this.updateLabels();
+		this.updateTitleColour();
+		this.updateTitleText();
+		this.updateView();
+	}
 	
 	/**
 	 * It is used to simply resize the text based on the dimensions of the window
@@ -205,8 +214,11 @@ public class BoardController extends JFrame {
 	}
 	
 	private void updateState(){
-		if(red.getNumberOfUnplayedPieces() == 0 && blue.getNumberOfUnplayedPieces() == 0){
+		if(state == 0 && red.getNumberOfUnplayedPieces() == 0 && blue.getNumberOfUnplayedPieces() == 0){
 			 this.state=1;
+		} else if(state == 1 && boardView.checkWinner() != 1){
+			System.out.println("STATE: " + boardView.checkWinner());
+			this.state = boardView.checkWinner()==2?2:3;
 		}
 	}
 	
@@ -237,9 +249,7 @@ public class BoardController extends JFrame {
 			break;
 		}
 		
-		updateState();
-		updateLabels();
-		updateView();
+		update();
 	}
 	
 	/**
@@ -267,7 +277,23 @@ public class BoardController extends JFrame {
 					} else if(state == 1){
 						
 						//Move piece if legal
-						if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
+						if(removePiece){
+							if(boardView.millExists(i) && !boardView.existsOnlyMills(turn%2)){
+								new ErrorDialog(jFrame, "Invalid Move", "Please choose a piece not in a mill.");
+							} else if(boardView.getBoardState(i) == 0){
+								new ErrorDialog(jFrame, "Invalid Move", "Please choose an opponent's piece to remove");
+							} else{
+								boardView.setBoardState(i, 0);
+								removePiece = false;
+								selectedColour = 0;
+								if(turn%2 == 0){
+									turn++;
+								} else{
+									turn--;
+								}
+								selectedPiece = -1;
+							}
+						} else if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
 							boardView.setBoardState(i, 0);
 							selectedPiece = i; 
 							selectedColour = 1;					
@@ -280,14 +306,17 @@ public class BoardController extends JFrame {
 									|| (i ==7 && selectedPiece == 0) || (i==8 && selectedPiece ==15) || (i ==0 && selectedPiece == 7) || (i==15 && selectedPiece ==8)){
 								if(i != selectedPiece){ //If the piece is not placed back on the same square
 									boardView.setBoardState(i, selectedColour);
-									boardView.millExists(i);
-									selectedColour = 0;
-									if(turn%2 == 0){
-										turn++;
+									if(boardView.millExists(i)){
+										removePiece = true;
 									} else{
-										turn--;
+										selectedColour = 0;
+										if(turn%2 == 0){
+											turn++;
+										} else{
+											turn--;
+										}
+										selectedPiece = -1;
 									}
-									selectedPiece = -1;
 								} else{
 									boardView.setBoardState(i, selectedColour);
 									selectedPiece = -1;
@@ -299,9 +328,7 @@ public class BoardController extends JFrame {
 						}
 					}
 				}
-				updateState();
-				updateLabels();
-				updateView();	
+				update();	
 			}
 		}
 		// other methods that could be used if we decide to use different mouse events.

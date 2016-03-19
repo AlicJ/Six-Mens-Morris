@@ -267,17 +267,17 @@ public class BoardView extends Screen{
 		this.repaint();
 	}
 	
-	public void millExists(int i){
+	public boolean millExists(int i){
 		int[] mill = board.millExists(i);
+		return mill[0] != -1;
 	}
 	
-	public void checkWinner(){
-		int winner = board.checkWinner();
-		if(winner == 1){
-			System.out.println("BLUE WINS");
-		} else if(winner == 2){
-			System.out.println("RED WINS");
-		}
+	public boolean existsOnlyMills(int colour){
+		return board.onlyMillsLeft(colour);
+	}
+	
+	public int checkWinner(){
+		return board.checkWinner()+1; //+2 accounts for different state repersentation in BoardController class
 	}
 	
 	@Override

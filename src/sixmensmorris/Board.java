@@ -132,9 +132,9 @@ public class Board {
 			 }
 		}
 		
-		if(blueCount == 2){
+		if(blueCount == 2){ //Red wins
 			winner = 2;
-		} else if(redCount == 2){
+		} else if(redCount == 2){ //Blue wins
 			winner = 1;
 		} 
 		return winner;
