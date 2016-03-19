@@ -1,4 +1,5 @@
 package sixmensmorris;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -22,7 +23,9 @@ public class BoardController extends JFrame {
 	private Player blue, red;
 
 	private int state = 0; // 0 = place pieces, 1 = play game
-
+	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Game Drawn", "Red Wins", "Blue Wins"};
+	
+	
 	private final int NUMBER_OF_PIECES = 6;	// this can change to 9 if we are going to do 9 Men's Morris instead
 	private final int BLUE_STATE = 1;
 	private final int RED_STATE = 2;
@@ -32,7 +35,9 @@ public class BoardController extends JFrame {
 	private final int DEFAULT_SCREEN_WIDTH = 500; // default width and height of screen (will scale if stretch/compress window)
 	private final int DEFAULT_SCREEN_HEIGHT = 500;
 
-	private JLabel blueLabel, blueCount, redLabel, redCount, cLabel, cCount; // some labels to properly update the view
+	private int selectedColour = 0;	//Used to facilitate movement of pieces
+	private int selectedPiece = -1; //Used to facilitate movement of pieces
+	private JLabel blueLabel, blueCount, redLabel, redCount, title; // some labels to properly update the view
 	
 	/**
 	 * Constructs the screen needed to play the game, and adds all EventListeners needed to obtain input from the user.
@@ -54,12 +59,23 @@ public class BoardController extends JFrame {
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		Box outerBox = Box.createVerticalBox();
+		
+		Font font = new Font(Font.MONOSPACED, Font.PLAIN,
+				this.jFrame.getWidth() * FONT_SIZE / this.DEFAULT_SCREEN_WIDTH); // scale the font based on window size 
+																				 // in case it is stretched/compressed
+		
+		//Create title JLabel and add it to the top of the screen
+		title = new JLabel(stateStrings[state]);
+		title.setFont(font);
+		updateTitleColour();
+		outerBox.add(title);
+		
+		//Create horizontal components
 		Box box = Box.createHorizontalBox(); // original box to contain all of the view's information
 		Box blueVerticalBox = Box.createVerticalBox();
 		Box redVerticalBox = Box.createVerticalBox();
-		Font font = new Font(Font.MONOSPACED, Font.PLAIN,
-				this.jFrame.getWidth() * FONT_SIZE / this.DEFAULT_SCREEN_WIDTH); // scale the font based on window size 
-																				 // incase it is streched/compressed
+		
 		
 		blueLabel = new JLabel("Blue:"); // use scalable font for all labels relevant to the blue player										 
 		blueLabel.setFont(font);
@@ -84,8 +100,10 @@ public class BoardController extends JFrame {
 		redVerticalBox.add(redLabel);
 		redVerticalBox.add(redCount);
 		box.add(redVerticalBox);
-
-		jFrame.add(box); // add the original box (everything) to the window
+		
+		outerBox.add(box);
+		
+		jFrame.add(outerBox); // add the original box (everything) to the window
 		jFrame.setVisible(true); // allows the window to display everything
 
 		boardView.addComponentListener(new ComponentAdapter() {
@@ -105,6 +123,7 @@ public class BoardController extends JFrame {
 	 * @author Kelvin Lin , Jeremy Klotz
 	 * @param N is the number of squares 
 	 * @param boardState this allows us to construct / update the board based on current state
+	 * @deprecated	The debug state is no longer in use
 	 */
 	public BoardController(int N, int[] boardState) { 
 		Random random = new Random();
@@ -122,59 +141,73 @@ public class BoardController extends JFrame {
 			}
 		}
 		
-		// Instantiate Models by creating players with a state and number of pieces
-		blue = new Player(BLUE_STATE, NUMBER_OF_PIECES-bluePieces);
-		red = new Player(RED_STATE, NUMBER_OF_PIECES-redPieces);
+		// Instantiate Models
+		blue = new Player(BLUE_STATE, NUMBER_OF_PIECES);
+		red = new Player(RED_STATE, NUMBER_OF_PIECES);
 
-		// Instantiate View by creating the gameplay window
+		// Instantiate Views
 		jFrame = new JFrame("Six Men's Morris");
-		jFrame.setSize(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
+		jFrame.setSize(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT); // (500,500)
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// every time a piece is added to the board, the window is updated, recalling the constructor
+
+		Box outerBox = Box.createVerticalBox();
 		
-		// repeated code
-		Box box = Box.createHorizontalBox();
-
 		Font font = new Font(Font.MONOSPACED, Font.PLAIN,
-				this.jFrame.getWidth() * FONT_SIZE / this.DEFAULT_SCREEN_WIDTH);
-
-		blueLabel = new JLabel("Blue:");
-		blueLabel.setFont(font);
-		blueCount = new JLabel(String.valueOf(blue.getNumberOfUnplayedPieces()));
-		blueCount.setFont(font);
+				this.jFrame.getWidth() * FONT_SIZE / this.DEFAULT_SCREEN_WIDTH); // scale the font based on window size 
+																				 // in case it is stretched/compressed
+		
+		//Create title JLabel and add it to the top of the screen
+		title = new JLabel(stateStrings[state]);
+		title.setFont(font);
+		updateTitleColour();
+		outerBox.add(title);
+		
+		//Create horizontal components
+		Box box = Box.createHorizontalBox(); // original box to contain all of the view's information
 		Box blueVerticalBox = Box.createVerticalBox();
-		blueVerticalBox.add(blueLabel);
+		Box redVerticalBox = Box.createVerticalBox();
+		
+		
+		blueLabel = new JLabel("Blue:"); // use scalable font for all labels relevant to the blue player										 
+		blueLabel.setFont(font);
+		blueCount = new JLabel(String.valueOf(blue.getNumberOfUnplayedPieces())); // the label accesses the number of pieces left
+																				  // and returns the integer value as a string for the label
+		blueCount.setFont(font);		// use scalable font
+		//create a sub box to be place in the window
+		//add previously define labels to the sub box, and add this sub box to the original box
+		blueVerticalBox.add(blueLabel);	
 		blueVerticalBox.add(blueCount);
 		box.add(blueVerticalBox);
 
-		boardView = new BoardView(N);
-		box.add(boardView);
-
+		boardView = new BoardView(N); // call BoardView to display graphics
+		box.add(boardView);		      // add graphics to the original box
+		
+		// creating the same labels needed for player blue, but this time for player red
 		redLabel = new JLabel("Red:");
 		redLabel.setFont(font);
 		redCount = new JLabel(String.valueOf(red.getNumberOfUnplayedPieces()));
 		redCount.setFont(font);
-		Box redVerticalBox = Box.createVerticalBox();
+		
 		redVerticalBox.add(redLabel);
 		redVerticalBox.add(redCount);
 		box.add(redVerticalBox);
+		
+		outerBox.add(box);
+		
+		jFrame.add(outerBox); // add the original box (everything) to the window
+		jFrame.setVisible(true); // allows the window to display everything
 
-		jFrame.add(box);
-		jFrame.setVisible(true);
-	
-		boardView.addComponentListener(new ComponentAdapter() { // add a component listener to the view 
-			public void componentResized(ComponentEvent e) {	// so that it can continuously update and resize the text 
+		boardView.addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e) {
 				updateView();
 				resizeText();
 			}
 		});
 
-		boardView.addMouseListener(new MouseClickEventHandler()); // add a mouselistener to the view
-		for(int i = 0; i < boardState.length; i++){				  // so that when a click occurs, the board changes from one state to another
-			boardView.setBoardState(i, boardState[i]);
-		}
+		boardView.addMouseListener(new MouseClickEventHandler());	
 	}
+
 	
 	/**
 	 * It is used to simply resize the text based on the dimensions of the window
@@ -187,6 +220,7 @@ public class BoardController extends JFrame {
 		blueCount.setFont(font);
 		redLabel.setFont(font);
 		redCount.setFont(font);
+		title.setFont(font);
 	}
 	
 	/**
@@ -195,6 +229,8 @@ public class BoardController extends JFrame {
 	private void updateLabels() {
 		blueCount.setText(String.valueOf(blue.getNumberOfUnplayedPieces()));
 		redCount.setText(String.valueOf(red.getNumberOfUnplayedPieces()));
+		updateTitleColour();
+		updateTitleText();
 	}
 	
 	/**
@@ -203,6 +239,52 @@ public class BoardController extends JFrame {
 	private void updateView() {
 		boardView.invalidate(); // invalidates the board
 		boardView.repaint(); 	// repaints the visual component of the view.
+	}
+	
+	private void updateTitleColour(){
+		if(this.turn == 0){
+			title.setForeground(Color.BLUE);
+		} else{
+			title.setForeground(Color.RED);
+		}
+	}
+	
+	private void updateState(){
+		if(red.getNumberOfUnplayedPieces() == 0 && blue.getNumberOfUnplayedPieces() == 0){
+			 this.state=1;
+		}
+	}
+	
+	private void updateTitleText(){
+		title.setText(this.stateStrings[this.state]);
+	}
+	
+	private void placePieceState(int i){
+		switch(turn%2){
+		case 0:
+			if(boardView.pieceNotTaken(i)){
+				if(blue.getNumberOfUnplayedPieces() > 0){
+					boardView.setBoardState(i, 1);
+					blue.placePiece();
+				}
+				turn++; //Incrementing and decrementing turn at every subsequent turn ensures that there will never be overflow.
+				
+			}
+			break;
+		case 1:
+			if(boardView.pieceNotTaken(i)){
+				if(red.getNumberOfUnplayedPieces() > 0){
+					boardView.setBoardState(i, 2);
+					red.placePiece();
+				}
+				turn--;
+			}
+			break;
+		}
+		
+		updateState();
+		updateLabels();
+		updateView();
 	}
 	
 	/**
@@ -226,36 +308,43 @@ public class BoardController extends JFrame {
 			for(int i = 0; i < circles.length; i++){   
 				if(circles[i].isMouseOver(point)){
 					if(state == 0){
-						switch(turn%2){
-						case 0:
-							if(boardView.pieceNotTaken(i)){
-								if(blue.getNumberOfUnplayedPieces() > 0){
-									boardView.setBoardState(i, 1);
-									blue.placePiece();
-								}
-								turn++; //Incrementing and decrementing turn at every subsequent turn ensures that there will never be overflow.
-							}
-							break;
-						case 1:
-							if(boardView.pieceNotTaken(i)){
-								if(red.getNumberOfUnplayedPieces() > 0){
-									boardView.setBoardState(i, 2);
-									red.placePiece();
-								}
-								turn--;
-							}
-							break;
-						}
-						updateLabels();
-						updateView();
-						if(red.getNumberOfUnplayedPieces() == 0 && blue.getNumberOfUnplayedPieces() == 0){
-							state = 1;
-						}
+						placePieceState(i);
 					} else if(state == 1){
-						//Play Game Logic Here
+						
+						//Move piece if legal
+						if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
+							boardView.setBoardState(i, 0);
+							selectedPiece = i; 
+							selectedColour = 1;							
+						} else if(turn%2 == 1 && boardView.getBoardState(i) == 2 && selectedColour == 0){ //Select red piece
+							boardView.setBoardState(i, 0);
+							selectedPiece = i;
+							selectedColour = 2;
+						} else if(selectedColour != 0 && boardView.getBoardState(i) == 0){ //Move the piece
+							if(i%8 == selectedPiece%8 || (i+1)%8 == selectedPiece%8 || (i-1)%8 == selectedPiece%8){
+								if(i != selectedPiece){ //If the piece is not placed back on the same square
+									boardView.setBoardState(i, selectedColour);
+									selectedColour = 0;
+									if(turn%2 == 0){
+										turn++;
+									} else{
+										turn--;
+									}
+									selectedPiece = -1;
+								} else{
+									boardView.setBoardState(i, selectedColour);
+									selectedPiece = -1;
+									selectedColour = 0;
+								}
+							} else{
+								ErrorDialog error = new ErrorDialog(jFrame, "Invalid move", "Please select a valid move");
+							}
+						}
 					}
 				}
-					
+				updateState();
+				updateLabels();
+				updateView();	
 			}
 		}
 		// other methods that could be used if we decide to use different mouse events.
