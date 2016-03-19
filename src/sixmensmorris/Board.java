@@ -121,4 +121,26 @@ public class Board {
 		return onlyMillsLeft;
 	}
 	
+	public int checkWinner(){
+		System.out.println("TRUE");
+		int winner = 0;
+		int blueCount = 0, redCount = 0;
+		for(int i = 0; i < pieces.length; i++){
+			System.out.println(pieces[i]);
+			 if(pieces[i] == 1){
+				 blueCount++;
+			 } else if(pieces[i] == 2){
+				 redCount++;
+			 }
+		}
+		
+		if(blueCount == 2){
+			winner = 2;
+		} else if(redCount == 2){
+			winner = 1;
+		} 
+		System.out.println(winner);
+		return winner;
+	}
+	
 }

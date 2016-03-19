@@ -272,6 +272,15 @@ public class BoardView extends Screen{
 		System.out.println(mill[0] == -1);
 	}
 	
+	public void checkWinner(){
+		int winner = board.checkWinner();
+		if(winner == 1){
+			System.out.println("BLUE WINS");
+		} else if(winner == 2){
+			System.out.println("RED WINS");
+		}
+	}
+	
 	@Override
 	/**
 	 * Draw sections of the board only when they need to be.

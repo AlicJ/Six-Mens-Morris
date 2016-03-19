@@ -123,7 +123,6 @@ public class BoardController extends JFrame {
 	 * @author Kelvin Lin , Jeremy Klotz
 	 * @param N is the number of squares 
 	 * @param boardState this allows us to construct / update the board based on current state
-	 * @deprecated	The debug state is no longer in use
 	 */
 	public BoardController(int N, int[] boardState) { 
 		Random random = new Random();
@@ -204,8 +203,13 @@ public class BoardController extends JFrame {
 				resizeText();
 			}
 		});
+		
+		for(int i = 0; i < boardState.length; i++){
+			boardView.setBoardState(i, boardState[i]);
+		}
 
 		boardView.addMouseListener(new MouseClickEventHandler());	
+		boardView.checkWinner();
 	}
 
 	
@@ -321,7 +325,8 @@ public class BoardController extends JFrame {
 							selectedPiece = i;
 							selectedColour = 2;
 						} else if(selectedColour != 0 && boardView.getBoardState(i) == 0){ //Move the piece
-							if(i == selectedPiece || i == selectedPiece + 1 || i == selectedPiece - 1 || i == selectedPiece + 8 || i == selectedPiece - 8 || (i ==7 && selectedPiece == 0) || (i==8 && selectedPiece ==15)){
+							if(i == selectedPiece || i == selectedPiece + 1 || i == selectedPiece - 1 || i == selectedPiece + 8 || i == selectedPiece - 8 
+									|| (i ==7 && selectedPiece == 0) || (i==8 && selectedPiece ==15) || (i ==0 && selectedPiece == 7) || (i==15 && selectedPiece ==8)){
 								if(i != selectedPiece){ //If the piece is not placed back on the same square
 									boardView.setBoardState(i, selectedColour);
 									boardView.millExists(i);
