@@ -50,7 +50,7 @@ public class BoardController extends JFrame {
 	
 	private JButton saveGame;
 	
-	private int maxNumberOfRepeats = 3;
+	private int maxNumberOfRepeats = 6;
 	
 	/**
 	 * Constructs the screen needed to play the game, and adds all EventListeners needed to obtain input from the user.
