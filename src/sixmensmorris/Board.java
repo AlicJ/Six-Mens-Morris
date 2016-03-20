@@ -1,4 +1,7 @@
 package sixmensmorris;
+
+import java.util.Arrays;
+
 /**
  * This is an abstract representation of the game board. 
  * It keeps the state of each piece in a 1 dimensional array in order to reduce run time and space.
@@ -15,6 +18,8 @@ public class Board {
 	private int N;								//Total number of pieces on the board
 	private final int NUM_PIECES_PER_LAYER = 8;
 	private int[] pieces;
+	private int[][] piecesHistory;
+	private int counter, repeats;
 	
 	/**	 
 	 * Constructs an array representation of the board.
@@ -22,6 +27,9 @@ public class Board {
 	 * @param N determines if 6, 9, 12 Men's Morris is being played, and allows for easy change.
 	 */
 	public Board(int N){
+		this.counter = 0;
+		this.repeats = 0;
+		this.piecesHistory = new int[8][];
 		this.N = N;
 		pieces = new int[N * NUM_PIECES_PER_LAYER];
 	}
@@ -33,6 +41,9 @@ public class Board {
 	 */
 	public Board(int N, int[] pieces){
 		this.N = N;
+		this.counter = 0;
+		this.repeats = 0;
+		this.piecesHistory = new int[8][];
 		this.pieces = pieces;
 	}
 	
@@ -53,6 +64,10 @@ public class Board {
 		return this.N;
 	}
 	
+	public int getRepeats(){
+		return this.repeats;
+	}
+	
 	/**
 	 * Set the state of a piece on the board
 	 * @param number will help us declare what state the board is in (0 = not started, 1 = play mode , 2 = debug mode)
@@ -60,6 +75,38 @@ public class Board {
 	 */
 	public void setPieceState(int number, int state){
 		this.pieces[number] = state;
+		this.piecesHistory[counter%8] = this.pieces;
+		if(counter%8 == 7){
+			if(historyIsEqual(Arrays.copyOfRange(this.piecesHistory, 0, 4), Arrays.copyOfRange(this.piecesHistory, 4, 8))){
+				this.repeats++;
+			}
+		}
+		counter++;
+	}
+	
+	private boolean historyIsEqual(int[][] history1, int[][] history2){
+		if(history1.length != history2.length){
+			return false;
+		}
+		for(int i = 0; i < history1.length; i++){
+			if(!boardIsEqual(history1[i], history2[i])){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean boardIsEqual(int[] board1, int[] board2){
+		if(board1.length != board2.length){
+			return false;
+		} else{
+			for(int i = 0; i < board1.length; i++){
+				if(board1[i] != board2[i]){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**

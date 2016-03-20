@@ -149,7 +149,6 @@ public class MenuView extends Screen{
 				this.boardState = new int[boardState.size()];
 				for(int i = 0; i < boardState.size(); i++){
 					this.boardState[i] = boardState.get(i);
-					System.out.println(this.boardState[i]);
 				}
 				BoardController boardController = new BoardController(N, this.boardState, this.turn, this.gameState);
 				boardController.setVisible(true);

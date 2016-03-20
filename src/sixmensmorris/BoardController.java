@@ -50,6 +50,8 @@ public class BoardController extends JFrame {
 	
 	private JButton saveGame;
 	
+	private int maxNumberOfRepeats = 3;
+	
 	/**
 	 * Constructs the screen needed to play the game, and adds all EventListeners needed to obtain input from the user.
 	 * @param N is the number of squares
@@ -218,8 +220,9 @@ public class BoardController extends JFrame {
 	private void updateState(){
 		if(state == 0 && red.getNumberOfUnplayedPieces() == 0 && blue.getNumberOfUnplayedPieces() == 0){
 			 this.state=1;
+		} else if(state == 1 && boardView.getRepeats() > maxNumberOfRepeats){
+			this.state = 4;
 		} else if(state == 1 && boardView.checkWinner() != 1){
-			System.out.println("STATE: " + boardView.checkWinner());
 			this.state = boardView.checkWinner()==2?2:3;
 		}
 	}
@@ -232,13 +235,11 @@ public class BoardController extends JFrame {
 		switch(turn%2){
 		case 0:
 				if(removePiece){
-					System.out.println("TRIGGERED");
 					removePiece(i);
 				} else if(boardView.pieceNotTaken(i) && blue.getNumberOfUnplayedPieces() > 0){
 					boardView.setBoardState(i, 1);
 					blue.placePiece();
 					if(boardView.millExists(i)){
-						System.out.println("TRIGGERED2");
 						removePiece = true;
 					} else{
 						turn++; //Incrementing and decrementing turn at every subsequent turn ensures that there will never be overflow.
@@ -285,7 +286,6 @@ public class BoardController extends JFrame {
 			for(int i = 0; i < circles.length; i++){   
 				if(circles[i].isMouseOver(point)){
 					if(state == 0){
-						System.out.println("CLICKED");
 						placePieceState(i);
 					} else if(state == 1){
 						
@@ -327,7 +327,7 @@ public class BoardController extends JFrame {
 						}
 					}
 				}
-				update(false);	
+				update(boardView.getRepeats() > maxNumberOfRepeats);	
 			}
 		}
 		// other methods that could be used if we decide to use different mouse events.
@@ -351,7 +351,6 @@ public class BoardController extends JFrame {
 	
 	private void removePiece(int i){
 		if(boardView.millExists(i) && !boardView.existsOnlyMills((turn+1)%2 +1)){
-			System.out.println((turn+1)%2 + 1);
 			new ErrorDialog(jFrame, "Invalid Move", "Please choose a piece not in a mill.");
 		} else if(boardView.getBoardState(i) == 0){
 			new ErrorDialog(jFrame, "Invalid Move", "Please choose an opponent's piece to remove");

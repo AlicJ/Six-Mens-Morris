@@ -277,7 +277,11 @@ public class BoardView extends Screen{
 	}
 	
 	public int checkWinner(){
-		return board.checkWinner()+1; //+2 accounts for different state repersentation in BoardController class
+		return board.checkWinner()+1; //+1 accounts for different state repersentation in BoardController class
+	}
+	
+	public int getRepeats(){
+		return board.getRepeats();
 	}
 	
 	@Override
