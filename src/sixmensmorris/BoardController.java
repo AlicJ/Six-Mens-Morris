@@ -164,8 +164,10 @@ public class BoardController extends JFrame {
 		boardView.checkWinner();
 	}
 
-	private void update(){
-		this.updateState();
+	private void update(boolean updateState){
+		if(updateState){
+			this.updateState();
+		}
 		this.updateLabels();
 		this.updateTitleColour();
 		this.updateTitleText();
@@ -229,27 +231,37 @@ public class BoardController extends JFrame {
 	private void placePieceState(int i){
 		switch(turn%2){
 		case 0:
-			if(boardView.pieceNotTaken(i)){
-				if(blue.getNumberOfUnplayedPieces() > 0){
+				if(removePiece){
+					System.out.println("TRIGGERED");
+					removePiece(i);
+				} else if(boardView.pieceNotTaken(i) && blue.getNumberOfUnplayedPieces() > 0){
 					boardView.setBoardState(i, 1);
 					blue.placePiece();
+					if(boardView.millExists(i)){
+						System.out.println("TRIGGERED2");
+						removePiece = true;
+					} else{
+						turn++; //Incrementing and decrementing turn at every subsequent turn ensures that there will never be overflow.
+					}
 				}
-				turn++; //Incrementing and decrementing turn at every subsequent turn ensures that there will never be overflow.
-				
-			}
 			break;
 		case 1:
-			if(boardView.pieceNotTaken(i)){
+			if(removePiece){
+				removePiece(i);
+			} else if(boardView.pieceNotTaken(i) && boardView.pieceNotTaken(i)){
 				if(red.getNumberOfUnplayedPieces() > 0){
 					boardView.setBoardState(i, 2);
 					red.placePiece();
+					if(boardView.millExists(i)){
+						removePiece = true;
+					} else{
+						turn--;
+					}
 				}
-				turn--;
 			}
 			break;
 		}
-		
-		update();
+		update(true);
 	}
 	
 	/**
@@ -273,26 +285,13 @@ public class BoardController extends JFrame {
 			for(int i = 0; i < circles.length; i++){   
 				if(circles[i].isMouseOver(point)){
 					if(state == 0){
+						System.out.println("CLICKED");
 						placePieceState(i);
 					} else if(state == 1){
 						
 						//Move piece if legal
 						if(removePiece){
-							if(boardView.millExists(i) && !boardView.existsOnlyMills(turn%2)){
-								new ErrorDialog(jFrame, "Invalid Move", "Please choose a piece not in a mill.");
-							} else if(boardView.getBoardState(i) == 0){
-								new ErrorDialog(jFrame, "Invalid Move", "Please choose an opponent's piece to remove");
-							} else{
-								boardView.setBoardState(i, 0);
-								removePiece = false;
-								selectedColour = 0;
-								if(turn%2 == 0){
-									turn++;
-								} else{
-									turn--;
-								}
-								selectedPiece = -1;
-							}
+							removePiece(i);
 						} else if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
 							boardView.setBoardState(i, 0);
 							selectedPiece = i; 
@@ -328,7 +327,7 @@ public class BoardController extends JFrame {
 						}
 					}
 				}
-				update();	
+				update(false);	
 			}
 		}
 		// other methods that could be used if we decide to use different mouse events.
@@ -348,12 +347,29 @@ public class BoardController extends JFrame {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 		}
-
+	}
+	
+	private void removePiece(int i){
+		if(boardView.millExists(i) && !boardView.existsOnlyMills((turn+1)%2 +1)){
+			System.out.println((turn+1)%2 + 1);
+			new ErrorDialog(jFrame, "Invalid Move", "Please choose a piece not in a mill.");
+		} else if(boardView.getBoardState(i) == 0){
+			new ErrorDialog(jFrame, "Invalid Move", "Please choose an opponent's piece to remove");
+		} else{
+			boardView.setBoardState(i, 0);
+			removePiece = false;
+			selectedColour = 0;
+			update(true);
+			if(turn%2 == 0){
+				turn++;
+			} else{
+				turn--;
+			}
+			selectedPiece = -1;
+		}
 	}
 
 	private void saveGameMouseClicked(MouseEvent e){
-		
-		
 		try {
 			FileWriter fw = new FileWriter("./savedGame.txt", false);
 			BufferedWriter bw = new BufferedWriter(fw);
@@ -370,8 +386,6 @@ public class BoardController extends JFrame {
 		} catch (IOException e1) {
 			new ErrorDialog(jFrame, "Save Error.", "An error occured and your game was not saved.");
 		}
-		
-		
 	}
 	
 	

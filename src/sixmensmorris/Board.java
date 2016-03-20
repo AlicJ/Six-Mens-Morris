@@ -115,7 +115,7 @@ public class Board {
 		for(int i = 0; i < pieces.length; i++){
 			if(pieces[i] == colour){
 				int[] mill = millExists(i);
-				onlyMillsLeft = onlyMillsLeft && mill[0] == -1;
+				onlyMillsLeft = onlyMillsLeft && (mill[0] != -1);
 			}
 		}
 		return onlyMillsLeft;
