@@ -13,8 +13,8 @@ public class Circle {
 	
 	/**
 	 * Constructor method required to create object of type Circle with a radius and center point.
-	 * @param center
-	 * @param radius
+	 * @param center	The center of the circle
+	 * @param radius	The radius of the circle
 	 */
 	public Circle(Point center, double radius){  
 		this.center = center;

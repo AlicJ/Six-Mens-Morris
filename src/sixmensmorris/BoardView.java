@@ -38,8 +38,8 @@ public class BoardView extends Screen{
 	
 	/**
 	 * Construct the board from the model using a current state.
-	 * @param N
-	 * @param boardState
+	 * @param N				The number of pieces
+	 * @param boardState	The state of the board
 	 */
 	public BoardView(int N, int[] boardState) {
 		this.N = N;
@@ -50,7 +50,7 @@ public class BoardView extends Screen{
 	
 	/**
 	 * This method will allow us to make sure the user can only place one piece per node on the board.
-	 * @param number
+	 * @param number	The location of the piece
 	 * @return a boolean value that determines if a piece is already placed in a location FALSE, a piece is already there.
 	 */
 	public boolean pieceNotTaken(int number){
@@ -69,7 +69,6 @@ public class BoardView extends Screen{
 	 * Set the state of the board.
 	 * @param number is the specific index of the array of states
 	 * @param state will be the previous state of the board and will be updated
-	 * @see setPieceState
 	 */
 	public void setBoardState(int number, int state){
 		this.board.setPieceState(number, state);
@@ -80,7 +79,6 @@ public class BoardView extends Screen{
 	 * Returns the current state of the board from accessing getPieceState. Number is the number used to index the array of states.
 	 * @param number is the number used to index the array of states.
 	 * @return The current state of the board from accessing getPieceState.
-	 * @see getPieceState
 	 */
 	public int getBoardState(int number){
 		return this.board.getPieceState(number);
@@ -267,19 +265,37 @@ public class BoardView extends Screen{
 		this.repaint();
 	}
 	
+	/**
+	 * Return whether a mill exists on the Board model at index i
+	 * @param i		The index i
+	 * @return		Whether a mill exists at index i
+	 */
 	public boolean millExists(int i){
 		int[] mill = board.millExists(i);
 		return mill[0] != -1;
 	}
 	
+	/**
+	 * Returns whether there are only mills left for a given colour
+	 * @param colour	The colour to check
+	 * @return			Whether there are only mills left for the given colour
+	 */
 	public boolean existsOnlyMills(int colour){
 		return board.onlyMillsLeft(colour);
 	}
 	
+	/**
+	 * Returns the winner of the board
+	 * @return	1 if blue is the winner, 2 if red is the winner, 0 otherwise
+	 */
 	public int checkWinner(){
 		return board.checkWinner()+1; //+1 accounts for different state repersentation in BoardController class
 	}
 	
+	/**
+	 * Returns the number of repeated moves from the board model
+	 * @return		The number of repeated moves
+	 */
 	public int getRepeats(){
 		return board.getRepeats();
 	}

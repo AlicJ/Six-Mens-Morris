@@ -64,6 +64,10 @@ public class Board {
 		return this.N;
 	}
 	
+	/**
+	 * Returns the number of repeats
+	 * @return	The number of repeats
+	 */
 	public int getRepeats(){
 		return this.repeats;
 	}
@@ -84,6 +88,12 @@ public class Board {
 		counter++;
 	}
 	
+	/**
+	 * Checks 2 history arrays to see if they are equal
+	 * @param history1	The first history array
+	 * @param history2	The second history array
+	 * @return			Whether both arrays are equal
+	 */
 	private boolean historyIsEqual(int[][] history1, int[][] history2){
 		if(history1.length != history2.length){
 			return false;
@@ -96,6 +106,12 @@ public class Board {
 		return true;
 	}
 	
+	/**
+	 * Checks 2 boards to see if they are equal
+	 * @param board1	The first board
+	 * @param board2	The second board
+	 * @return			Whether the boards are equal
+	 */
 	private boolean boardIsEqual(int[] board1, int[] board2){
 		if(board1.length != board2.length){
 			return false;
@@ -126,6 +142,11 @@ public class Board {
 		return this.pieces[number];
 	}
 	
+	/**
+	 * This method checks to see if a mill exists at a given index i
+	 * @param i	The index to search
+	 * @return	An integer array representing the location of the mill if it exists. Returns {-1, -1, -1} otherwise.
+	 */
 	public int[] millExists(int i){
 		int[] mill = new int[3];
 		int currentState = this.pieces[i];
@@ -157,6 +178,11 @@ public class Board {
 		return mill;
 	}
 	
+	/**
+	 * This method checks to see if there are only mills left for a given colour.
+	 * @param colour	The colour to check
+	 * @return			Whether there are only mills left
+	 */
 	public boolean onlyMillsLeft(int colour){
 		boolean onlyMillsLeft = true;
 		for(int i = 0; i < pieces.length; i++){
@@ -168,6 +194,10 @@ public class Board {
 		return onlyMillsLeft;
 	}
 	
+	/**
+	 * This method checks to see if there is a winner
+	 * @return	1 if blue is the winner, 2 if red is the winner, 0 otherwise
+	 */
 	public int checkWinner(){
 		int winner = 0;
 		int blueCount = 0, redCount = 0;

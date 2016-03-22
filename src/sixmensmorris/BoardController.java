@@ -48,14 +48,13 @@ public class BoardController extends JFrame {
 	
 	private boolean removePiece = false; //Whether a piece can be removed from the board
 	
-	private JButton saveGame;
+	private JButton saveGame; //Save game button
 	
-	private int maxNumberOfRepeats = 6;
+	private int maxNumberOfRepeats = 6; //Maximum number of repetitions
 	
 	/**
 	 * Constructs the screen needed to play the game, and adds all EventListeners needed to obtain input from the user.
 	 * @param N is the number of squares
-	 * @return framework for the game, manipulates the model to know how to update the view
 	 */
 	public BoardController(int N) {
 		//Instantiate Random Turns
@@ -141,6 +140,16 @@ public class BoardController extends JFrame {
 
 	}
 	
+	/**
+	 * BoardController constructor used for loading games.
+	 * 
+	 * It takes a boardState, a turn, and a state in addition to the number of layers available so that it can recreate the 
+	 * previous state of the board.
+	 * @param N				The number of pieces
+	 * @param boardState	The state of the board
+	 * @param turn			Which player's turn
+	 * @param state			The game state
+	 */
 	public BoardController(int N, int[] boardState, int turn, int state){
 		this(N, boardState);
 		this.turn = turn;
@@ -209,6 +218,9 @@ public class BoardController extends JFrame {
 		boardView.repaint(); 	// repaints the visual component of the view.
 	}
 	
+	/**
+	 * This method updates the title JLabel's colour
+	 */
 	private void updateTitleColour(){
 		if(this.turn == 0){
 			title.setForeground(Color.BLUE);
@@ -217,6 +229,9 @@ public class BoardController extends JFrame {
 		}
 	}
 	
+	/**
+	 * This method updates the game state
+	 */
 	private void updateState(){
 		if(state == 0 && red.getNumberOfUnplayedPieces() == 0 && blue.getNumberOfUnplayedPieces() == 0){
 			 this.state=1;
@@ -227,10 +242,24 @@ public class BoardController extends JFrame {
 		}
 	}
 	
+	/**
+	 * This method updates the title state according to the class.
+	 * Also, if the state is not place pieces (state = 0), then it hides the blue and red piece counter labels.
+	 */
 	private void updateTitleText(){
+		if(state != 0){
+			this.blueCount.setVisible(false);
+			this.blueLabel.setVisible(false);
+			this.redLabel.setVisible(false);
+			this.redCount.setVisible(false);
+		}
 		title.setText(this.stateStrings[this.state]);
 	}
 	
+	/**
+	 * This method encapsulates the place piece (state = 0) state.
+	 * @param i		Where to place the piece
+	 */
 	private void placePieceState(int i){
 		switch(turn%2){
 		case 0:
@@ -266,6 +295,49 @@ public class BoardController extends JFrame {
 	}
 	
 	/**
+	 * This method encapsulates the play game (state = 1) state.
+	 * @param i		Where to move the piece
+	 */
+	private void movePiece(int i){
+		//Move piece if legal
+		if(removePiece){
+			removePiece(i);
+		} else if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
+			boardView.setBoardState(i, 0);
+			selectedPiece = i; 
+			selectedColour = 1;					
+		} else if(turn%2 == 1 && boardView.getBoardState(i) == 2 && selectedColour == 0){ //Select red piece
+			boardView.setBoardState(i, 0);
+			selectedPiece = i;
+			selectedColour = 2;
+		} else if(selectedColour != 0 && boardView.getBoardState(i) == 0){ //Move the piece
+			if(i == selectedPiece || i == selectedPiece + 1 || i == selectedPiece - 1 || i == selectedPiece + 8 || i == selectedPiece - 8 
+					|| (i ==7 && selectedPiece == 0) || (i==8 && selectedPiece ==15) || (i ==0 && selectedPiece == 7) || (i==15 && selectedPiece ==8)){
+				if(i != selectedPiece){ //If the piece is not placed back on the same square
+					boardView.setBoardState(i, selectedColour);
+					if(boardView.millExists(i)){
+						removePiece = true;
+					} else{
+						selectedColour = 0;
+						if(turn%2 == 0){
+							turn++;
+						} else{
+							turn--;
+						}
+						selectedPiece = -1;
+					}
+				} else{
+					boardView.setBoardState(i, selectedColour);
+					selectedPiece = -1;
+					selectedColour = 0;
+				}
+			} else{
+				new ErrorDialog(jFrame, "Invalid move", "Please select a valid move");
+			}
+		}
+	}
+	
+	/**
 	 * @author Kelvin Lin
 	 * @version 1:
 	 * Controls what happens when a piece is clicked on the screen
@@ -288,43 +360,7 @@ public class BoardController extends JFrame {
 					if(state == 0){
 						placePieceState(i);
 					} else if(state == 1){
-						
-						//Move piece if legal
-						if(removePiece){
-							removePiece(i);
-						} else if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
-							boardView.setBoardState(i, 0);
-							selectedPiece = i; 
-							selectedColour = 1;					
-						} else if(turn%2 == 1 && boardView.getBoardState(i) == 2 && selectedColour == 0){ //Select red piece
-							boardView.setBoardState(i, 0);
-							selectedPiece = i;
-							selectedColour = 2;
-						} else if(selectedColour != 0 && boardView.getBoardState(i) == 0){ //Move the piece
-							if(i == selectedPiece || i == selectedPiece + 1 || i == selectedPiece - 1 || i == selectedPiece + 8 || i == selectedPiece - 8 
-									|| (i ==7 && selectedPiece == 0) || (i==8 && selectedPiece ==15) || (i ==0 && selectedPiece == 7) || (i==15 && selectedPiece ==8)){
-								if(i != selectedPiece){ //If the piece is not placed back on the same square
-									boardView.setBoardState(i, selectedColour);
-									if(boardView.millExists(i)){
-										removePiece = true;
-									} else{
-										selectedColour = 0;
-										if(turn%2 == 0){
-											turn++;
-										} else{
-											turn--;
-										}
-										selectedPiece = -1;
-									}
-								} else{
-									boardView.setBoardState(i, selectedColour);
-									selectedPiece = -1;
-									selectedColour = 0;
-								}
-							} else{
-								new ErrorDialog(jFrame, "Invalid move", "Please select a valid move");
-							}
-						}
+						movePiece(i);
 					}
 				}
 				update(boardView.getRepeats() > maxNumberOfRepeats);	
@@ -349,6 +385,10 @@ public class BoardController extends JFrame {
 		}
 	}
 	
+	/**
+	 * This method allows the caller to remove a piece from the board
+	 * @param i		Which piece to remove
+	 */
 	private void removePiece(int i){
 		if(boardView.millExists(i) && !boardView.existsOnlyMills((turn+1)%2 +1)){
 			new ErrorDialog(jFrame, "Invalid Move", "Please choose a piece not in a mill.");
@@ -368,6 +408,13 @@ public class BoardController extends JFrame {
 		}
 	}
 
+	/**
+	 * This method processes the save game event.
+	 * 
+	 * It saves the state and turn into a text file called ./savedGame.txt. It then records the state of the board into the 
+	 * text file
+	 * @param e	The MouseEvent
+	 */
 	private void saveGameMouseClicked(MouseEvent e){
 		try {
 			FileWriter fw = new FileWriter("./savedGame.txt", false);
