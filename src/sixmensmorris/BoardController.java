@@ -300,12 +300,37 @@ public class BoardController extends JFrame {
 	}
 	
 	/**
+	 * This method checks all the pieces of a certain colour on the board, and returns <code>true</code> if there are no possible
+	 * moves to be played by the specified colour.
+	 * @param colour	The colour to check
+	 * @return			<code>true</code> if there are no possible moves, <code>false</code> otherwise.
+	 */
+	private boolean noPossibleMoves(int colour){
+		for(int i = 0; i < boardView.getBoardStates().length; i++){
+			if(boardView.getBoardState(i) == colour){
+				for(int j = 0; j < boardView.getBoardStates().length; j++){
+					if(j == i + 1 || j == i - 1 || j == i + 8 || j == i - 8 
+					|| (j ==7 && i == 0) || (j==8 && i ==15) || (j ==0 && i == 7) || (j==15 && i ==8)){
+						if(boardView.getBoardState(j) == 0){
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * This method encapsulates the play game (state = 1) state.
 	 * @param i		Where to move the piece
 	 */
 	private void movePiece(int i){
+		
 		//Move piece if legal
-		if(removePiece){
+		if(noPossibleMoves(turn%2 + 1)){
+			this.state = turn%2 == 0 ? 3 : 2;
+		} else if(removePiece){
 			removePiece(i);
 		} else if(turn%2 == 0 && boardView.getBoardState(i) == 1 && selectedColour == 0){ //Select blue piece
 			boardView.setBoardState(i, 0);
