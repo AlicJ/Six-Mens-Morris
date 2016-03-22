@@ -150,13 +150,12 @@ public class BoardController extends JFrame {
 	 * @param turn			Which player's turn
 	 * @param state			The game state
 	 */
-	public BoardController(int N, int[] boardState, int turn, int state){
+	public BoardController(int N, int[] boardState, int turn, int state, boolean removePiece){
 		this(N, boardState);
 		this.turn = turn;
 		this.state = state;
-		updateTitleColour();
-		updateTitleText();
-		
+		this.removePiece = removePiece;
+		update(true);
 	}
 	
 	/**
@@ -170,6 +169,12 @@ public class BoardController extends JFrame {
 
 		for(int i = 0; i < boardState.length; i++){
 			boardView.setBoardState(i, boardState[i]);
+			if(boardState[i] == 1){
+				blue.placePiece();
+			} else if(boardState[i] == 2){
+				red.placePiece();
+			}
+			
 		}
 
 		boardView.checkWinner();
@@ -422,6 +427,8 @@ public class BoardController extends JFrame {
 			bw.write(String.valueOf(this.state));
 			bw.newLine();
 			bw.write(String.valueOf(this.turn));
+			bw.newLine();
+			bw.write(String.valueOf(this.removePiece));
 			int[] board = this.boardView.getBoardStates();
 			for(int i = 0; i < board.length; i++){
 				bw.newLine();

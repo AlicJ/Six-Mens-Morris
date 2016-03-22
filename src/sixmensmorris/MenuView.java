@@ -41,6 +41,7 @@ public class MenuView extends Screen{
 	private int[] boardState;
 	private int turn;
 	private int gameState;
+	private boolean removePiece;
 	
 	/**
 	 * Method to construct the output that the controller will handle everything inside of it.
@@ -139,6 +140,7 @@ public class MenuView extends Screen{
 			if(stringRead != null){
 				gameState = Integer.parseInt(stringRead);
 				turn = Integer.parseInt(br.readLine());
+				removePiece = Boolean.parseBoolean(br.readLine());
 				stringRead = br.readLine();
 				while(stringRead != null){
 					boardState.add(Integer.parseInt(stringRead));
@@ -150,7 +152,7 @@ public class MenuView extends Screen{
 				for(int i = 0; i < boardState.size(); i++){
 					this.boardState[i] = boardState.get(i);
 				}
-				BoardController boardController = new BoardController(N, this.boardState, this.turn, this.gameState);
+				BoardController boardController = new BoardController(N, this.boardState, this.turn, this.gameState, this.removePiece);
 				boardController.setVisible(true);
 				SwingUtilities.getWindowAncestor(this).dispose();
 			} else{
