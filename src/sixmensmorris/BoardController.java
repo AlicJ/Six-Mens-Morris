@@ -81,6 +81,7 @@ public class BoardController extends JFrame {
 		title = new JLabel(stateStrings[state]);
 		title.setFont(font);
 		updateTitleColour();
+		updateTitleText();
 		outerBox.add(title);
 		
 		//Create horizontal components
@@ -258,7 +259,7 @@ public class BoardController extends JFrame {
 			this.redLabel.setVisible(false);
 			this.redCount.setVisible(false);
 		}
-		title.setText(this.stateStrings[this.state]);
+		title.setText(this.stateStrings[this.state] + ((state <= 1)?(this.turn%2==0)?" (Blue Move)":" (Red Move)":""));
 	}
 	
 	/**
@@ -372,14 +373,14 @@ public class BoardController extends JFrame {
 	 * @version 1:
 	 * Controls what happens when a piece is clicked on the screen
 	 */
-	private class MouseClickEventHandler implements MouseListener {
+	private class MouseClickEventHandler extends MouseAdapter {
 		
 		@Override
 		/**
 		 * This method allows for alternate colour pieces to be placed on the board after each click.
 		 * @param e is the mouse being click
 		 */
-		public void mouseClicked(MouseEvent e) { 
+		public void mousePressed(MouseEvent e) { 
 			Point point = new Point(e.getPoint().getX(), e.getPoint().getY()); // get the coordinates of the click
 			Circle[] circles = boardView.getCircles(); // create an array that holds all circles from the board
 			// iterate through the circle array
@@ -396,23 +397,7 @@ public class BoardController extends JFrame {
 				update(boardView.getRepeats() > maxNumberOfRepeats);	
 			}
 		}
-		// other methods that could be used if we decide to use different mouse events.
-		// currently they are empty.
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
+		
 	}
 	
 	/**

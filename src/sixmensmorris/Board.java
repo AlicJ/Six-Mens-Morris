@@ -83,6 +83,8 @@ public class Board {
 		if(counter%8 == 7){
 			if(historyIsEqual(Arrays.copyOfRange(this.piecesHistory, 0, 4), Arrays.copyOfRange(this.piecesHistory, 4, 8))){
 				this.repeats++;
+			} else{
+				this.repeats = 0;
 			}
 		}
 		counter++;
