@@ -29,14 +29,14 @@ public class MenuView extends Screen{
 	
 	// User will click one of these two buttons to choose a state to enter.
 	// Either debugging state, then go to play state, OR go straight to the play state.
-	private JButton playGame;
+	private JButton playGame, playGameAI;
 	private JButton debug;
 	private JButton loadGame;
 	private int state;
 	private int defaultFontSize = 36;
 	private int defaultScreenWidth = 500;
 	private int N; //Total number of pieces on the board
-	
+		
 	//Used to store data about the game
 	private int[] boardState;
 	private int turn;
@@ -59,9 +59,22 @@ public class MenuView extends Screen{
 			 * Determine if the playGame button was pressed.
 			 */
 			public void mouseClicked(MouseEvent e){
-				playGameMouseClicked(e);
+				playGameMouseClicked(e, false);
 			}
-		});	 		
+		});
+		
+		// Alic's new code
+		playGameAI = new JButton("Play Game with Computer");
+		playGameAI.addMouseListener(new MouseAdapter(){
+			/**
+			 * Determine if the playGame button was pressed.
+			 */
+			public void mouseClicked(MouseEvent e){
+				playGameMouseClicked(e, true);
+			}
+		});
+		// end of Alic's code
+		
 		debug = new JButton("Debug");
 		
 		/**
@@ -85,6 +98,8 @@ public class MenuView extends Screen{
 		 *   
 		 *   		Play Game button 
 		 *   
+		 *   		Play Game with AI button
+		 *   
 		 *   		Debug button 
 		 *   */
 		Box box = Box.createVerticalBox();
@@ -94,6 +109,9 @@ public class MenuView extends Screen{
 		box.add(new JLabel(" "));
 		box.add(new JLabel(" "));
 		box.add(playGame);
+		box.add(new JLabel(" "));
+		box.add(new JLabel(" "));
+		box.add(playGameAI);
 		box.add(new JLabel(" "));
 		box.add(new JLabel(" "));
 		box.add(debug);
@@ -115,8 +133,9 @@ public class MenuView extends Screen{
 	 * If the mouse was clicked on the play game button, call the board controller and display the regular game on screen.
 	 * @param e The MouseEvent
 	 */
-	private void playGameMouseClicked(MouseEvent e){
+	private void playGameMouseClicked(MouseEvent e, boolean AI){
 		BoardController boardController = new BoardController(N);
+		boardController.enableAI(); // new code
 		boardController.setVisible(true);
 		SwingUtilities.getWindowAncestor(this).dispose();
 	}

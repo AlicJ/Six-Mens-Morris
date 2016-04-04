@@ -80,6 +80,8 @@ public class Board {
 	public void setPieceState(int number, int state){
 		this.pieces[number] = state;
 		this.piecesHistory[counter%8] = this.pieces;
+		
+		// check repeat
 		if(counter%8 == 7){
 			if(historyIsEqual(Arrays.copyOfRange(this.piecesHistory, 0, 4), Arrays.copyOfRange(this.piecesHistory, 4, 8))){
 				this.repeats++;

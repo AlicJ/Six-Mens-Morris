@@ -28,6 +28,7 @@ public class BoardController extends JFrame {
 	private BoardView boardView;
 	private int turn; // 0 = blue, 1 = red
 	private Player blue, red;
+	private boolean AIPlayer;
 
 	private int state = 0; // 0 = place pieces, 1 = play game, 2 = blue wins, 3 = red wins, 4 = draw
 	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Blue Wins", "Red Wins", "Game Drawn"};
@@ -35,7 +36,7 @@ public class BoardController extends JFrame {
 	
 	private final int NUMBER_OF_PIECES = 6;	// this can change to 9 if we are going to do 9 Men's Morris instead
 	private final int BLUE_STATE = 1;
-	private final int RED_STATE = 2;
+	private final int RED_STATE = 2; // this is always the AI
 
 	private final int FONT_SIZE = 25; // declaring a size for the font used in the application
 
@@ -449,6 +450,10 @@ public class BoardController extends JFrame {
 		} catch (IOException e1) {
 			new ErrorDialog(jFrame, "Save Error.", "An error occured and your game was not saved.");
 		}
+	}
+	
+	public void enableAI() {
+		this.AIPlayer = true;
 	}
 	
 	
