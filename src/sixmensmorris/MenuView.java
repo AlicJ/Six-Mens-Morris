@@ -34,7 +34,7 @@ public class MenuView extends Screen{
 	private JButton loadGame;
 	private int state;
 	private int defaultFontSize = 36;
-	private int defaultScreenWidth = 500;
+	private int defaultScreenWidth = 600;
 	private int N; //Total number of pieces on the board
 		
 	//Used to store data about the game
@@ -194,14 +194,16 @@ public class MenuView extends Screen{
 	private void draw(Graphics g) {
 		// declare the font and pass it through to each component
 		Font font = new Font(Font.MONOSPACED, Font.PLAIN, this.getWidth()*defaultFontSize/defaultScreenWidth);
-		title.setFont(font);
 		
+		title.setFont(font);
 		playGame.setFont(font);
+		playGameAI.setFont(font);
 		debug.setFont(font);
 		loadGame.setFont(font);
 		//align components to center of the screen
 		title.setAlignmentX(JLabel.CENTER_ALIGNMENT); 
 		playGame.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		playGameAI.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		debug.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		loadGame.setAlignmentX(JButton.CENTER_ALIGNMENT);
 	}
