@@ -65,7 +65,6 @@ public class MenuView extends Screen{
 			}
 		});
 		
-		// Alic's new code
 		playGameAI = new JButton("Play Game with Computer");
 		playGameAI.addMouseListener(new MouseAdapter(){
 			/**
@@ -75,7 +74,6 @@ public class MenuView extends Screen{
 				playGameAIMouseClicked(e);
 			}
 		});
-		// end of Alic's new code
 		
 		debug = new JButton("Debug");
 		

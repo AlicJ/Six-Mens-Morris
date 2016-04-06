@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * This is the AI class for games with a computer
+ * This is the AI class for games with a computer/
+ * The AI is implemented in a very basic way.
+ * First, for placing stage, the AI will try to place pieces 
+ * on the center parts of each line to be advantageous
+ * Second, for the moving stage, the AI will move the first piece
+ * available at a random available direction
+ * Third, for removing pieces, the AI will remove the first available pieces
  *
  * @author Alic
  * @version 1
@@ -16,25 +22,34 @@ public class Skynet {
 	private int PLAYER_COLOR;
 	private int AI_COLOR;
 	
+	/** Construct the AI class.
+	 * 
+	 * @param board boardView received from BoardController
+	 * @ai colour of ai's piece
+	 * @player colour of player's piece
+	 * 
+	 */
 	public Skynet(BoardView board, int ai, int player) {
 		this.boardView = board;
 		PLAYER_COLOR = player;
 		AI_COLOR = ai;
 	}
 	
+	/**
+	 * gives AI the most up-to-date board view
+	 * 
+	 * @param boardView board view class received from BoardController
+	 */
 	public void updateBoardView(BoardView boardView) {
 		this.boardView = boardView;
 	}
 	
-	public BoardView getBoard() {
-		return boardView;
-	}
-	
-	public int calcMove() {
-		System.out.println("Make move");
-		return 0;
-	}
-	
+	/**
+	 * Try to find the next available position to place a piece.
+	 * Will try the middle points first, then the corner ones.
+	 * 
+	 * @return the position on the board to place the piece
+	 */
 	public int nextPlace() {
 		int[] board = boardView.getBoardStates();
 		
@@ -53,6 +68,13 @@ public class Skynet {
 		return -1;
 	}
 	
+	/**
+	 * Find the next available piece from the player to remove.
+	 * If only mill exist, remove a piece from the mill.
+	 * Otherwise remove first piece encountered.
+	 * 
+	 * @return the position of the piece to remove
+	 */
 	public int nextRemove() {
 		int[] board = this.boardView.getBoardStates();
 
@@ -75,6 +97,12 @@ public class Skynet {
 		return -1;
 	}
 	
+	/**
+	 * Try to find a piece available to move, and calculate where to move it.
+	 * Will go through each piece and move the first available one at a random direction.
+	 * 
+	 * @return [a,b] - a: which piece to move; b: where to put it
+	 */
 	public int[] nextMove() {
 		int[] board = this.boardView.getBoardStates();
 		int prev, next; // prev and next are the ones on the same line/layer

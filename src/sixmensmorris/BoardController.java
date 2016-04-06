@@ -42,8 +42,8 @@ public class BoardController extends JFrame {
 	private final int RED_STATE = 2;
 	
 	private int AI_TURN;
-	private int AI_COLOR;
-	private int PLAYER_COLOR;
+	private int AI_COLOUR;
+	private int PLAYER_COLOUR;
 
 	private final int FONT_SIZE = 25; // declaring a size for the font used in the application
 
@@ -57,7 +57,7 @@ public class BoardController extends JFrame {
 	private boolean removePiece = false; //Whether a piece can be removed from the board
 	
 	private JButton saveGame; //Save game button
-	private JButton makeAIMove;
+	private JButton makeAIMove; // make AI move button
 	
 	private int maxNumberOfRepeats = 12; //Maximum number of repetitions
 	
@@ -204,9 +204,9 @@ public class BoardController extends JFrame {
 	}
 	
 	/** 
-	 * Construct the screen needed to play the game and initialize the AI
+	 * Initialize AI on new game
 	 * @param N is the number of squares 
-	 * @param ExistsAI is the 
+	 * @param ExistsAI is the boolean value to determine whether to enable AI
 	 */
 	
 	public BoardController(int N, boolean ExistsAI){
@@ -216,33 +216,45 @@ public class BoardController extends JFrame {
 		}
 	}
 	
-	public void initAI(int AI_color) {
+	/**
+	 * Initialize AI with given colour.
+	 * If no colour given, randomly determin AI's colour.
+	 * Also changes the text in makeAIMove button to tell user what colour the AI is.
+	 * @param AI_colour predefined AI's colour, 1 for blue and 2 for red. -1 if undefined
+	 */
+	public void initAI(int AI_colour) {
 //		System.out.println("enable AI");
 		this.ExistsAI = true;
 
-		// assign AI a color, and the corresponding turn
-		if (AI_color < 0) {
+		// assign AI a colour, and the corresponding turn
+		if (AI_colour < 0) {
 			Random random = new Random();
 			AI_TURN = random.nextInt(2);
-			AI_COLOR = AI_TURN + 1;
-			PLAYER_COLOR = (AI_COLOR == 1) ? 2 : 1;
+			AI_COLOUR = AI_TURN + 1;
+			PLAYER_COLOUR = (AI_COLOUR == 1) ? 2 : 1;
 		}else {
-			AI_TURN = AI_color - 1;
-			AI_COLOR = AI_color;
-			PLAYER_COLOR = (AI_COLOR == 1) ? 2 : 1;
+			AI_TURN = AI_colour - 1;
+			AI_COLOUR = AI_colour;
+			PLAYER_COLOUR = (AI_COLOUR == 1) ? 2 : 1;
 		}
-		this.skynet = new Skynet(this.boardView, AI_COLOR, PLAYER_COLOR);
+		this.skynet = new Skynet(this.boardView, AI_COLOUR, PLAYER_COLOUR);
 		
-//		System.out.println("AI color:" + AI_COLOR);
+//		System.out.println("AI colour:" + AI_COLOUR);
 //		System.out.println("AI_TURN: " + AI_TURN);
-//		System.out.println("Human color:" + PLAYER_COLOR);
+//		System.out.println("Human colour:" + PLAYER_COLOUR);
 		
-		makeAIMove.setText("Make AI (" + (AI_COLOR==1 ? "Blue" : "Red") + ") Move");
-		makeAIMove.setForeground(AI_COLOR==1 ? Color.BLUE : Color.RED);
+		makeAIMove.setText("Make AI (" + (AI_COLOUR==1 ? "Blue" : "Red") + ") Move");
+		makeAIMove.setForeground(AI_COLOUR==1 ? Color.BLUE : Color.RED);
 		makeAIMove.setVisible(true);
 		this.updateAIButton();
 	}
-
+	
+	
+	/**
+	 * Updates the display.
+	 * 
+	 * @param updateState will update the game state if true
+	 */
 	private void update(boolean updateState){
 		if(updateState){
 			this.updateState();
@@ -305,6 +317,7 @@ public class BoardController extends JFrame {
 	
 	/**
 	 * This method updates the game state
+	 * 
 	 */
 	private void updateState(){
 		if(state == 0 && red.getNumberOfUnplayedPieces() == 0 && blue.getNumberOfUnplayedPieces() == 0){
@@ -330,6 +343,11 @@ public class BoardController extends JFrame {
 		title.setText(this.stateStrings[this.state] + ((state <= 1)?(this.turn%2==0)?" (Blue Move)":" (Red Move)":""));		
 	}
 	
+	/**
+	 * Disable the makeAIMove button if on players turn.
+	 * Enable the button if on AI's turn.
+	 * 
+	 */
 	private void updateAIButton() {
 		if (ExistsAI && turn == AI_TURN) {
 			makeAIMove.setEnabled(true);
@@ -338,6 +356,9 @@ public class BoardController extends JFrame {
 		}
 	}
 	
+	/**
+	 * Updates AI's board view.
+	 */
 	private void updateAI(){
 		this.skynet.updateBoardView(this.boardView);
 	}
@@ -535,7 +556,7 @@ public class BoardController extends JFrame {
 			bw.newLine();
 			bw.write(String.valueOf(this.ExistsAI));
 			bw.newLine();
-			bw.write(String.valueOf(this.ExistsAI ? this.AI_COLOR : -1));
+			bw.write(String.valueOf(this.ExistsAI ? this.AI_COLOUR : -1));
 			int[] board = this.boardView.getBoardStates();
 			for(int i = 0; i < board.length; i++){
 				bw.newLine();
@@ -547,6 +568,13 @@ public class BoardController extends JFrame {
 			new ErrorDialog(jFrame, "Save Error.", "An error occured and your game was not saved.");
 		}
 	}
+	
+	/** This method process the AI move event.
+	 * It will call different APIs from AI for different game state, 
+	 * and use the returned values (positions) to place a piece, 
+	 * move a piece, or remove a piece.
+	 * @param e The MouseEvent
+	 */
 	
 	private void makeAIMoveMouseClicked(MouseEvent e) {
 		if (ExistsAI && turn == AI_TURN) {
@@ -593,13 +621,5 @@ public class BoardController extends JFrame {
 			update(boardView.getRepeats() > maxNumberOfRepeats);	
 		}
 	}
-	
-
-	
-	
-	public void enableAI() {
-		this.ExistsAI = true;
-	}
-	
 	
 }
