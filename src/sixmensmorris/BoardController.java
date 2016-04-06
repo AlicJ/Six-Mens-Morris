@@ -9,6 +9,8 @@ import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -28,7 +30,8 @@ public class BoardController extends JFrame {
 	private BoardView boardView;
 	private int turn; // 0 = blue, 1 = red
 	private Player blue, red;
-	private boolean AIPlayer;
+	private boolean ExistsAI;
+//	private Skynet skynet;
 
 	private int state = 0; // 0 = place pieces, 1 = play game, 2 = blue wins, 3 = red wins, 4 = draw
 	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Blue Wins", "Red Wins", "Game Drawn"};
@@ -36,7 +39,11 @@ public class BoardController extends JFrame {
 	
 	private final int NUMBER_OF_PIECES = 6;	// this can change to 9 if we are going to do 9 Men's Morris instead
 	private final int BLUE_STATE = 1;
-	private final int RED_STATE = 2; // this is always the AI
+	private final int RED_STATE = 2;
+	
+	private int AI_TURN;
+	private int AI_COLOR;
+	private int PLAYER_COLOR;
 
 	private final int FONT_SIZE = 25; // declaring a size for the font used in the application
 
@@ -50,8 +57,9 @@ public class BoardController extends JFrame {
 	private boolean removePiece = false; //Whether a piece can be removed from the board
 	
 	private JButton saveGame; //Save game button
+	private JButton makeAIMove;
 	
-	private int maxNumberOfRepeats = 6; //Maximum number of repetitions
+	private int maxNumberOfRepeats = 12; //Maximum number of repetitions
 	
 	/**
 	 * Constructs the screen needed to play the game, and adds all EventListeners needed to obtain input from the user.
@@ -61,6 +69,7 @@ public class BoardController extends JFrame {
 		//Instantiate Random Turns
 		Random random = new Random();
 		turn = random.nextInt(2);
+		turn = 1;
 
 		// Instantiate Models
 		blue = new Player(BLUE_STATE, NUMBER_OF_PIECES);
@@ -84,6 +93,19 @@ public class BoardController extends JFrame {
 		updateTitleColour();
 		updateTitleText();
 		outerBox.add(title);
+		
+		makeAIMove = new JButton("Make AI Move");
+		makeAIMove.setFont(font);
+		makeAIMove.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				makeAIMoveMouseClicked(e);
+			}
+		});
+		makeAIMove.setVisible(false);
+		
+		updateAIButton();
+		
+		outerBox.add(makeAIMove);
 		
 		//Create horizontal components
 		Box box = Box.createHorizontalBox(); // original box to contain all of the view's information
@@ -139,7 +161,6 @@ public class BoardController extends JFrame {
 
 		boardView.addMouseListener(new MouseClickEventHandler());
 		
-
 	}
 	
 	/**
@@ -181,6 +202,45 @@ public class BoardController extends JFrame {
 
 		boardView.checkWinner();
 	}
+	
+	/** 
+	 * Construct the screen needed to play the game and initialize the AI
+	 * @param N is the number of squares 
+	 * @param ExistsAI is the 
+	 */
+	
+	public BoardController(int N, boolean ExistsAI){
+		this(N);
+		if (ExistsAI) {
+			this.initAI(-1);
+		}
+	}
+	
+	public void initAI(int AI_color) {
+//		System.out.println("enable AI");
+		this.ExistsAI = true;
+//		this.skynet = new Skynet(this);
+		// assign AI a color, and the corresponding turn
+		if (AI_color < 0) {
+			Random random = new Random();
+			AI_TURN = random.nextInt(2);
+			AI_COLOR = AI_TURN + 1;
+			PLAYER_COLOR = (AI_COLOR == 1) ? 2 : 1;
+		}else {
+			AI_TURN = AI_color - 1;
+			AI_COLOR = AI_color;
+			PLAYER_COLOR = (AI_COLOR == 1) ? 2 : 1;
+		}
+		
+//		System.out.println("AI color:" + AI_COLOR);
+//		System.out.println("AI_TURN: " + AI_TURN);
+//		System.out.println("Human color:" + PLAYER_COLOR);
+		
+		makeAIMove.setText("Make AI (" + (AI_COLOR==1 ? "Blue" : "Red") + ") Move");
+		makeAIMove.setForeground(AI_COLOR==1 ? Color.BLUE : Color.RED);
+		makeAIMove.setVisible(true);
+		this.updateAIButton();
+	}
 
 	private void update(boolean updateState){
 		if(updateState){
@@ -189,6 +249,7 @@ public class BoardController extends JFrame {
 		this.updateLabels();
 		this.updateTitleColour();
 		this.updateTitleText();
+		this.updateAIButton();
 		this.updateView();
 	}
 	
@@ -215,6 +276,7 @@ public class BoardController extends JFrame {
 		redCount.setText(String.valueOf(red.getNumberOfUnplayedPieces()));
 		updateTitleColour();
 		updateTitleText();
+		this.updateAIButton();
 	}
 	
 	/**
@@ -260,7 +322,15 @@ public class BoardController extends JFrame {
 			this.redLabel.setVisible(false);
 			this.redCount.setVisible(false);
 		}
-		title.setText(this.stateStrings[this.state] + ((state <= 1)?(this.turn%2==0)?" (Blue Move)":" (Red Move)":""));
+		title.setText(this.stateStrings[this.state] + ((state <= 1)?(this.turn%2==0)?" (Blue Move)":" (Red Move)":""));		
+	}
+	
+	private void updateAIButton() {
+		if (ExistsAI && turn == AI_TURN) {
+			makeAIMove.setEnabled(true);
+		}else{
+			makeAIMove.setEnabled(false);
+		}
 	}
 	
 	/**
@@ -268,6 +338,7 @@ public class BoardController extends JFrame {
 	 * @param i		Where to place the piece
 	 */
 	private void placePieceState(int i){
+		
 		switch(turn%2){
 		case 0:
 				if(removePiece){
@@ -301,6 +372,7 @@ public class BoardController extends JFrame {
 		update(true);
 	}
 	
+
 	/**
 	 * This method checks all the pieces of a certain colour on the board, and returns <code>true</code> if there are no possible
 	 * moves to be played by the specified colour.
@@ -323,12 +395,14 @@ public class BoardController extends JFrame {
 		return true;
 	}
 	
+
+	
 	/**
 	 * This method encapsulates the play game (state = 1) state.
 	 * @param i		Where to move the piece
 	 */
 	private void movePiece(int i){
-		
+
 		//Move piece if legal
 		if(noPossibleMoves(turn%2 + 1)){
 			this.state = turn%2 == 0 ? 3 : 2;
@@ -357,6 +431,8 @@ public class BoardController extends JFrame {
 							turn--;
 						}
 						selectedPiece = -1;
+						
+						// the turn ends
 					}
 				} else{
 					boardView.setBoardState(i, selectedColour);
@@ -367,38 +443,6 @@ public class BoardController extends JFrame {
 				new ErrorDialog(jFrame, "Invalid move", "Please select a valid move");
 			}
 		}
-	}
-	
-	/**
-	 * @author Kelvin Lin
-	 * @version 1:
-	 * Controls what happens when a piece is clicked on the screen
-	 */
-	private class MouseClickEventHandler extends MouseAdapter {
-		
-		@Override
-		/**
-		 * This method allows for alternate colour pieces to be placed on the board after each click.
-		 * @param e is the mouse being click
-		 */
-		public void mousePressed(MouseEvent e) { 
-			Point point = new Point(e.getPoint().getX(), e.getPoint().getY()); // get the coordinates of the click
-			Circle[] circles = boardView.getCircles(); // create an array that holds all circles from the board
-			// iterate through the circle array
-			// if the mouse is clicked on a point and is not occupied by another coloured circle
-			// place a coloured circle based on the current state
-			for(int i = 0; i < circles.length; i++){   
-				if(circles[i].isMouseOver(point)){
-					if(state == 0){
-						placePieceState(i);
-					} else if(state == 1){
-						movePiece(i);
-					}
-				}
-				update(boardView.getRepeats() > maxNumberOfRepeats);	
-			}
-		}
-		
 	}
 	
 	/**
@@ -421,8 +465,47 @@ public class BoardController extends JFrame {
 				turn--;
 			}
 			selectedPiece = -1;
+			
+			// end of turn
+//			System.out.println("end of removePiece");
 		}
 	}
+	
+	/**
+	 * @author Kelvin Lin
+	 * @version 1:
+	 * Controls what happens when a piece is clicked on the screen
+	 */
+	private class MouseClickEventHandler extends MouseAdapter {
+		
+		@Override
+		/**
+		 * This method allows for alternate colour pieces to be placed on the board after each click.
+		 * @param e is the mouse being click
+		 */
+		public void mousePressed(MouseEvent e) {
+//			System.out.println(!(ExistsAI && turn == AI_TURN));
+			if (!(ExistsAI && turn == AI_TURN)) {
+				Point point = new Point(e.getPoint().getX(), e.getPoint().getY()); // get the coordinates of the click
+				Circle[] circles = boardView.getCircles(); // create an array that holds all circles from the board
+				// iterate through the circle array
+				// if the mouse is clicked on a point and is not occupied by another coloured circle
+				// place a coloured circle based on the current state
+				for(int i = 0; i < circles.length; i++){   
+					if(circles[i].isMouseOver(point)){
+						if(state == 0){
+							placePieceState(i);
+						} else if(state == 1){
+							movePiece(i);
+						}
+					}
+					update(boardView.getRepeats() > maxNumberOfRepeats);	
+				}
+			}
+		}
+		
+	}
+
 
 	/**
 	 * This method processes the save game event.
@@ -440,6 +523,10 @@ public class BoardController extends JFrame {
 			bw.write(String.valueOf(this.turn));
 			bw.newLine();
 			bw.write(String.valueOf(this.removePiece));
+			bw.newLine();
+			bw.write(String.valueOf(this.ExistsAI));
+			bw.newLine();
+			bw.write(String.valueOf(this.ExistsAI ? this.AI_COLOR : -1));
 			int[] board = this.boardView.getBoardStates();
 			for(int i = 0; i < board.length; i++){
 				bw.newLine();
@@ -452,8 +539,191 @@ public class BoardController extends JFrame {
 		}
 	}
 	
+	private void makeAIMoveMouseClicked(MouseEvent e) {
+		if (ExistsAI && turn == AI_TURN) {
+			switch(state){
+			case 0:
+				// if need to remove piece during placing stage
+				if (removePiece) {
+					int move = nextRemove();
+//					System.out.println("removing: "+ move);
+					if (move > -1)
+						this.removePiece(move);
+						update(true);
+				} // if at the end of placing stage, red needs to move first
+				else if (state == 1) {
+					int[] move = nextMove();
+					if (move[0] > -1 && move[1] > -1) {
+						movePiece(move[0]);
+						movePiece(move[1]);
+					}
+				} // otherwise just place a piece
+				else {
+					int move = nextPlace();
+					if (move > -1)
+						this.placePieceState(move);
+				}
+				break;
+			case 1:
+				if (ExistsAI && turn == AI_TURN) {
+					int[] move = nextMove();
+					if (move[0] > -1 && move[1] > -1) {
+						movePiece(move[0]);
+						movePiece(move[1]);
+						if (boardView.millExists(move[1])) {
+							removePiece(nextRemove());
+						}
+					}
+					// if AI achieves a mill, let it remove a piece
+					
+				}
+				break;
+			default:
+//				System.out.println("Something went wrong...");
+			}
+			update(boardView.getRepeats() > maxNumberOfRepeats);	
+		}
+	}
+	
+	private int nextPlace() {
+		int[] board = this.boardView.getBoardStates();
+		
+		for (int i=0; i<board.length; i+=2) {
+			if (board[i] == 0) {
+				return i;
+			}
+		}
+		
+		for (int i=1; i<board.length; i+=2) {
+			if (board[i] == 0) {
+				return i;
+			}
+		}
+		
+//		for (int i=0; i<board.length; i++) {
+//			if (board[i] == 0) {
+//				System.out.println("placing: "+ i);
+//				return i;
+//			}
+//		}
+		return -1;
+	}
+	
+	private int nextRemove() {
+		int[] board = this.boardView.getBoardStates();
+
+		if (this.boardView.existsOnlyMills(1)) {
+			for (int i=0; i<board.length; i++) {
+				if (board[i] == PLAYER_COLOR) {
+//					System.out.println("moving: "+ i);
+					return i;
+				}
+			}
+		}else {
+			for (int i=0; i<board.length; i++) {
+				if (board[i] == PLAYER_COLOR && !this.boardView.millExists(i)) {
+//					System.out.println("moving: "+ i);
+					return i;
+				}
+			}
+		}
+
+		return -1;
+	}
+	
+	private int[] nextMove() {
+		int[] board = this.boardView.getBoardStates();
+		int prev, next; // prev and next are the ones on the same line/layer
+		int out, in;	// up and down are the ones on the outter/lower layer
+		int[] result = new int[] {-1,-1};
+		
+		for (int i=0; i<board.length; i++) {
+			// get the position for the neighbor pieces for RED pieces
+			if (board[i] == AI_COLOR) {
+				// if it's even, need to check three directions
+				if (i%2 == 0) {
+					// if it's the top center one, need special case for left position
+					if (i%8 == 0) { 
+						prev = i+7;
+						next = i+1;
+					}else {
+						prev = i-1;
+						next = i+1;
+					}
+					
+					out = i - 8 >= 0 ? i-8 : -1;
+					in = i + 8 < board.length ? i + 8 : -1;
+					
+					int[] pos = new int[] {prev, next, out, in};
+					ArrayList<Integer> validPos = new ArrayList<Integer>();
+					
+					for (int j=0; j<pos.length; j++){
+						if (pos[j] > -1) { // if the position is valid, check if position is empty
+							if (board[pos[j]] == 0) {
+								validPos.add(pos[j]);
+							}
+						}
+					}
+					
+					if (validPos.isEmpty()) {
+						continue;
+					}
+					
+					Random random = new Random();
+					int target = random.nextInt(validPos.size());
+					result[0] = i;
+					result[1] = validPos.get(target);
+					return result;					
+					
+				}else { // odd number, check two directions
+					// if it's the top left one, need specia case for right position
+					if ((i+1)%8 == 0) { 
+						prev = i-1;
+						next = i-7;
+					}else {
+						prev = i-1;
+						next = i+1;
+					}
+//					System.out.println(prev + " ===== " + i + " ==== " + next);
+					
+					// if neither neighbour is empty, skip to the next piece
+					if (board[prev]!=0 && board[next]!=0) {
+						continue;
+					}
+
+					// if either of the neighbour ones is empty, place at the empty one
+					else if (board[prev]!=0 ^ board[next]!=0) { 
+						int place = board[prev] == 0 ? prev : next;
+						result[0] = i;
+						result[1] = place;
+//						System.out.println("moving: "+ result[0] + "to: " + result[1]);
+						return result;
+					}
+
+					// if both of the neighbours are empty, place at random
+					else {
+						Random random = new Random();
+						int place = random.nextInt(2) == 1 ? prev : next;
+						result[0] = i;
+						result[1] = place;
+//						System.out.println("moving: "+ result[0] + "to: " + result[1]);
+						return result;
+					}
+				}
+				
+				
+				
+				
+			}	
+
+		}
+		
+		return result;
+	}
+	
+	
 	public void enableAI() {
-		this.AIPlayer = true;
+		this.ExistsAI = true;
 	}
 	
 	

@@ -42,6 +42,8 @@ public class MenuView extends Screen{
 	private int turn;
 	private int gameState;
 	private boolean removePiece;
+	private boolean ExistsAI;
+	private int AI_COLOR;
 	
 	/**
 	 * Method to construct the output that the controller will handle everything inside of it.
@@ -59,7 +61,7 @@ public class MenuView extends Screen{
 			 * Determine if the playGame button was pressed.
 			 */
 			public void mouseClicked(MouseEvent e){
-				playGameMouseClicked(e, false);
+				playGameMouseClicked(e);
 			}
 		});
 		
@@ -70,10 +72,10 @@ public class MenuView extends Screen{
 			 * Determine if the playGame button was pressed.
 			 */
 			public void mouseClicked(MouseEvent e){
-				playGameMouseClicked(e, true);
+				playGameAIMouseClicked(e);
 			}
 		});
-		// end of Alic's code
+		// end of Alic's new code
 		
 		debug = new JButton("Debug");
 		
@@ -133,12 +135,21 @@ public class MenuView extends Screen{
 	 * If the mouse was clicked on the play game button, call the board controller and display the regular game on screen.
 	 * @param e The MouseEvent
 	 */
-	private void playGameMouseClicked(MouseEvent e, boolean AI){
+	private void playGameMouseClicked(MouseEvent e){
 		BoardController boardController = new BoardController(N);
-		boardController.enableAI(); // new code
 		boardController.setVisible(true);
 		SwingUtilities.getWindowAncestor(this).dispose();
 	}
+	
+	/**
+	 * If the mouse was clicked on the play game with computer button, call the board controller and display the regular game on screen with AI enabled.
+	 * @param e The MouseEvent
+	 */
+	private void playGameAIMouseClicked(MouseEvent e){
+		BoardController boardController = new BoardController(N, true);
+		boardController.setVisible(true);
+		SwingUtilities.getWindowAncestor(this).dispose();
+	}	
 	
 	/**
 	 * If the mouse was click on the debug button, call the debug controller and display the debugging section on the screen.
@@ -160,6 +171,8 @@ public class MenuView extends Screen{
 				gameState = Integer.parseInt(stringRead);
 				turn = Integer.parseInt(br.readLine());
 				removePiece = Boolean.parseBoolean(br.readLine());
+				ExistsAI = Boolean.parseBoolean(br.readLine());
+				AI_COLOR = Integer.parseInt(br.readLine());
 				stringRead = br.readLine();
 				while(stringRead != null){
 					boardState.add(Integer.parseInt(stringRead));
@@ -172,6 +185,9 @@ public class MenuView extends Screen{
 					this.boardState[i] = boardState.get(i);
 				}
 				BoardController boardController = new BoardController(N, this.boardState, this.turn, this.gameState, this.removePiece);
+				if (ExistsAI) {
+					boardController.initAI(AI_COLOR);
+				}
 				boardController.setVisible(true);
 				SwingUtilities.getWindowAncestor(this).dispose();
 			} else{
