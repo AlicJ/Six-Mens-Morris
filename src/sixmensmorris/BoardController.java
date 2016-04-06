@@ -31,7 +31,7 @@ public class BoardController extends JFrame {
 	private int turn; // 0 = blue, 1 = red
 	private Player blue, red;
 	private boolean ExistsAI;
-//	private Skynet skynet;
+	private Skynet skynet;
 
 	private int state = 0; // 0 = place pieces, 1 = play game, 2 = blue wins, 3 = red wins, 4 = draw
 	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Blue Wins", "Red Wins", "Game Drawn"};
@@ -219,7 +219,7 @@ public class BoardController extends JFrame {
 	public void initAI(int AI_color) {
 //		System.out.println("enable AI");
 		this.ExistsAI = true;
-//		this.skynet = new Skynet(this);
+
 		// assign AI a color, and the corresponding turn
 		if (AI_color < 0) {
 			Random random = new Random();
@@ -231,6 +231,7 @@ public class BoardController extends JFrame {
 			AI_COLOR = AI_color;
 			PLAYER_COLOR = (AI_COLOR == 1) ? 2 : 1;
 		}
+		this.skynet = new Skynet(this.boardView, AI_COLOR, PLAYER_COLOR);
 		
 //		System.out.println("AI color:" + AI_COLOR);
 //		System.out.println("AI_TURN: " + AI_TURN);
@@ -251,6 +252,7 @@ public class BoardController extends JFrame {
 		this.updateTitleText();
 		this.updateAIButton();
 		this.updateView();
+		this.updateAI();
 	}
 	
 	/**
@@ -331,6 +333,10 @@ public class BoardController extends JFrame {
 		}else{
 			makeAIMove.setEnabled(false);
 		}
+	}
+	
+	private void updateAI(){
+		this.skynet.updateBoardView(this.boardView);
 	}
 	
 	/**
@@ -545,33 +551,33 @@ public class BoardController extends JFrame {
 			case 0:
 				// if need to remove piece during placing stage
 				if (removePiece) {
-					int move = nextRemove();
+					int move = skynet.nextRemove();
 //					System.out.println("removing: "+ move);
 					if (move > -1)
 						this.removePiece(move);
 						update(true);
 				} // if at the end of placing stage, red needs to move first
 				else if (state == 1) {
-					int[] move = nextMove();
+					int[] move = skynet.nextMove();
 					if (move[0] > -1 && move[1] > -1) {
 						movePiece(move[0]);
 						movePiece(move[1]);
 					}
 				} // otherwise just place a piece
 				else {
-					int move = nextPlace();
+					int move = skynet.nextPlace();
 					if (move > -1)
 						this.placePieceState(move);
 				}
 				break;
 			case 1:
 				if (ExistsAI && turn == AI_TURN) {
-					int[] move = nextMove();
+					int[] move = skynet.nextMove();
 					if (move[0] > -1 && move[1] > -1) {
 						movePiece(move[0]);
 						movePiece(move[1]);
 						if (boardView.millExists(move[1])) {
-							removePiece(nextRemove());
+							removePiece(skynet.nextRemove());
 						}
 					}
 					// if AI achieves a mill, let it remove a piece
@@ -585,141 +591,7 @@ public class BoardController extends JFrame {
 		}
 	}
 	
-	private int nextPlace() {
-		int[] board = this.boardView.getBoardStates();
-		
-		for (int i=0; i<board.length; i+=2) {
-			if (board[i] == 0) {
-				return i;
-			}
-		}
-		
-		for (int i=1; i<board.length; i+=2) {
-			if (board[i] == 0) {
-				return i;
-			}
-		}
-		
-//		for (int i=0; i<board.length; i++) {
-//			if (board[i] == 0) {
-//				System.out.println("placing: "+ i);
-//				return i;
-//			}
-//		}
-		return -1;
-	}
-	
-	private int nextRemove() {
-		int[] board = this.boardView.getBoardStates();
 
-		if (this.boardView.existsOnlyMills(1)) {
-			for (int i=0; i<board.length; i++) {
-				if (board[i] == PLAYER_COLOR) {
-//					System.out.println("moving: "+ i);
-					return i;
-				}
-			}
-		}else {
-			for (int i=0; i<board.length; i++) {
-				if (board[i] == PLAYER_COLOR && !this.boardView.millExists(i)) {
-//					System.out.println("moving: "+ i);
-					return i;
-				}
-			}
-		}
-
-		return -1;
-	}
-	
-	private int[] nextMove() {
-		int[] board = this.boardView.getBoardStates();
-		int prev, next; // prev and next are the ones on the same line/layer
-		int out, in;	// up and down are the ones on the outter/lower layer
-		int[] result = new int[] {-1,-1};
-		
-		for (int i=0; i<board.length; i++) {
-			// get the position for the neighbor pieces for RED pieces
-			if (board[i] == AI_COLOR) {
-				// if it's even, need to check three directions
-				if (i%2 == 0) {
-					// if it's the top center one, need special case for left position
-					if (i%8 == 0) { 
-						prev = i+7;
-						next = i+1;
-					}else {
-						prev = i-1;
-						next = i+1;
-					}
-					
-					out = i - 8 >= 0 ? i-8 : -1;
-					in = i + 8 < board.length ? i + 8 : -1;
-					
-					int[] pos = new int[] {prev, next, out, in};
-					ArrayList<Integer> validPos = new ArrayList<Integer>();
-					
-					for (int j=0; j<pos.length; j++){
-						if (pos[j] > -1) { // if the position is valid, check if position is empty
-							if (board[pos[j]] == 0) {
-								validPos.add(pos[j]);
-							}
-						}
-					}
-					
-					if (validPos.isEmpty()) {
-						continue;
-					}
-					
-					Random random = new Random();
-					int target = random.nextInt(validPos.size());
-					result[0] = i;
-					result[1] = validPos.get(target);
-					return result;					
-					
-				}else { // odd number, check two directions
-					// if it's the top left one, need specia case for right position
-					if ((i+1)%8 == 0) { 
-						prev = i-1;
-						next = i-7;
-					}else {
-						prev = i-1;
-						next = i+1;
-					}
-//					System.out.println(prev + " ===== " + i + " ==== " + next);
-					
-					// if neither neighbour is empty, skip to the next piece
-					if (board[prev]!=0 && board[next]!=0) {
-						continue;
-					}
-
-					// if either of the neighbour ones is empty, place at the empty one
-					else if (board[prev]!=0 ^ board[next]!=0) { 
-						int place = board[prev] == 0 ? prev : next;
-						result[0] = i;
-						result[1] = place;
-//						System.out.println("moving: "+ result[0] + "to: " + result[1]);
-						return result;
-					}
-
-					// if both of the neighbours are empty, place at random
-					else {
-						Random random = new Random();
-						int place = random.nextInt(2) == 1 ? prev : next;
-						result[0] = i;
-						result[1] = place;
-//						System.out.println("moving: "+ result[0] + "to: " + result[1]);
-						return result;
-					}
-				}
-				
-				
-				
-				
-			}	
-
-		}
-		
-		return result;
-	}
 	
 	
 	public void enableAI() {
