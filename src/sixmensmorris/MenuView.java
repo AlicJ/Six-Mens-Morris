@@ -212,12 +212,15 @@ public class MenuView extends Screen{
 		Font font = new Font(Font.MONOSPACED, Font.PLAIN, this.getWidth()*defaultFontSize/defaultScreenWidth);
 		title.setFont(font);
 		
+		title.setFont(font);
 		playGame.setFont(font);
+		playGameAI.setFont(font);
 		debug.setFont(font);
 		loadGame.setFont(font);
 		//align components to center of the screen
 		title.setAlignmentX(JLabel.CENTER_ALIGNMENT); 
 		playGame.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		playGameAI.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		debug.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		loadGame.setAlignmentX(JButton.CENTER_ALIGNMENT);
 	}
