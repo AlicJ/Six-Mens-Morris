@@ -247,12 +247,15 @@ public class BoardController extends JFrame {
 		if(updateState){
 			this.updateState();
 		}
+		if (ExistsAI) {
+			this.updateAI();
+		}
 		this.updateLabels();
 		this.updateTitleColour();
 		this.updateTitleText();
 		this.updateAIButton();
 		this.updateView();
-		this.updateAI();
+		
 	}
 	
 	/**
