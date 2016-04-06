@@ -35,7 +35,7 @@ public class BoardController extends JFrame {
 
 	private int state = 0; // 0 = place pieces, 1 = play game, 2 = blue wins, 3 = red wins, 4 = draw
 	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Blue Wins", "Red Wins", "Game Drawn"};
-	
+
 	
 	private final int NUMBER_OF_PIECES = 6;	// this can change to 9 if we are going to do 9 Men's Morris instead
 	private final int BLUE_STATE = 1;
@@ -461,7 +461,7 @@ public class BoardController extends JFrame {
 	private void removePiece(int i){
 		if(boardView.millExists(i) && !boardView.existsOnlyMills((turn+1)%2 +1)){
 			new ErrorDialog(jFrame, "Invalid Move", "Please choose a piece not in a mill.");
-		} else if(boardView.getBoardState(i) == 0){
+		} else if(boardView.getBoardState(i) == 0 || boardView.getBoardState(i) == turn+1){
 			new ErrorDialog(jFrame, "Invalid Move", "Please choose an opponent's piece to remove");
 		} else{
 			boardView.setBoardState(i, 0);
