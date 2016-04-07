@@ -31,7 +31,7 @@ public class BoardController extends JFrame {
 	private int turn; // 0 = blue, 1 = red
 	private Player blue, red;
 	private boolean ExistsAI;
-	private Skynet skynet;
+	private AI skynet;
 
 	private int state = 0; // 0 = place pieces, 1 = play game, 2 = blue wins, 3 = red wins, 4 = draw
 	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Blue Wins", "Red Wins", "Game Drawn"};
@@ -237,7 +237,7 @@ public class BoardController extends JFrame {
 			AI_COLOUR = AI_colour;
 			PLAYER_COLOUR = (AI_COLOUR == 1) ? 2 : 1;
 		}
-		this.skynet = new Skynet(this.boardView, AI_COLOUR, PLAYER_COLOUR);
+		this.skynet = new AI(this.boardView, AI_COLOUR, PLAYER_COLOUR);
 		
 //		System.out.println("AI colour:" + AI_COLOUR);
 //		System.out.println("AI_TURN: " + AI_TURN);
