@@ -69,7 +69,6 @@ public class BoardController extends JFrame {
 		//Instantiate Random Turns
 		Random random = new Random();
 		turn = random.nextInt(2);
-		turn = 1;
 
 		// Instantiate Models
 		blue = new Player(BLUE_STATE, NUMBER_OF_PIECES);
