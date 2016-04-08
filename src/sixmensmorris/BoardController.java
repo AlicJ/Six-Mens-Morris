@@ -22,7 +22,7 @@ import javax.swing.SwingUtilities;
 /**
  * This is a controller for the board class. 
  * It acts as an intermediary between the Board model (Board.java), and the Board view (BoardView.java).
- * @author Kelvin Lin , Jeremy Klotz
+ * @author Kelvin Lin , Zichen Jiang, Jeremy Klotz
  * @version 1
  */
 public class BoardController extends JFrame {
