@@ -17,7 +17,7 @@ import java.util.Random;
  */
 
 
-public class Skynet {
+public class AI {
 	private BoardView boardView;
 	private int PLAYER_COLOR;
 	private int AI_COLOR;
@@ -29,7 +29,7 @@ public class Skynet {
 	 * @player colour of player's piece
 	 * 
 	 */
-	public Skynet(BoardView board, int ai, int player) {
+	public AI(BoardView board, int ai, int player) {
 		this.boardView = board;
 		PLAYER_COLOR = player;
 		AI_COLOR = ai;

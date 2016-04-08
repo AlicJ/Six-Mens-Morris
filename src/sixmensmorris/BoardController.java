@@ -31,7 +31,7 @@ public class BoardController extends JFrame {
 	private int turn; // 0 = blue, 1 = red
 	private Player blue, red;
 	private boolean ExistsAI;
-	private Skynet skynet;
+	private AI AI;
 
 	private int state = 0; // 0 = place pieces, 1 = play game, 2 = blue wins, 3 = red wins, 4 = draw
 	private String[] stateStrings = {"Placing Pieces", "Game in Progress", "Blue Wins", "Red Wins", "Game Drawn"};
@@ -236,7 +236,7 @@ public class BoardController extends JFrame {
 			AI_COLOUR = AI_colour;
 			PLAYER_COLOUR = (AI_COLOUR == 1) ? 2 : 1;
 		}
-		this.skynet = new Skynet(this.boardView, AI_COLOUR, PLAYER_COLOUR);
+		this.AI = new AI(this.boardView, AI_COLOUR, PLAYER_COLOUR);
 		
 //		System.out.println("AI colour:" + AI_COLOUR);
 //		System.out.println("AI_TURN: " + AI_TURN);
@@ -359,7 +359,7 @@ public class BoardController extends JFrame {
 	 * Updates AI's board view.
 	 */
 	private void updateAI(){
-		this.skynet.updateBoardView(this.boardView);
+		this.AI.updateBoardView(this.boardView);
 	}
 	
 	/**
@@ -581,33 +581,33 @@ public class BoardController extends JFrame {
 			case 0:
 				// if need to remove piece during placing stage
 				if (removePiece) {
-					int move = skynet.nextRemove();
+					int move = AI.nextRemove();
 //					System.out.println("removing: "+ move);
 					if (move > -1)
 						this.removePiece(move);
 						update(true);
 				} // if at the end of placing stage, red needs to move first
 				else if (state == 1) {
-					int[] move = skynet.nextMove();
+					int[] move = AI.nextMove();
 					if (move[0] > -1 && move[1] > -1) {
 						movePiece(move[0]);
 						movePiece(move[1]);
 					}
 				} // otherwise just place a piece
 				else {
-					int move = skynet.nextPlace();
+					int move = AI.nextPlace();
 					if (move > -1)
 						this.placePieceState(move);
 				}
 				break;
 			case 1:
 				if (ExistsAI && turn == AI_TURN) {
-					int[] move = skynet.nextMove();
+					int[] move = AI.nextMove();
 					if (move[0] > -1 && move[1] > -1) {
 						movePiece(move[0]);
 						movePiece(move[1]);
 						if (boardView.millExists(move[1])) {
-							removePiece(skynet.nextRemove());
+							removePiece(AI.nextRemove());
 						}
 					}
 					// if AI achieves a mill, let it remove a piece
