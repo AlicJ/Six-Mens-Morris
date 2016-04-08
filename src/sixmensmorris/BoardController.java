@@ -206,8 +206,7 @@ public class BoardController extends JFrame {
 	 * Initialize AI on new game
 	 * @param N is the number of squares 
 	 * @param ExistsAI is the boolean value to determine whether to enable AI
-	 */
-	
+	 */	
 	public BoardController(int N, boolean ExistsAI){
 		this(N);
 		if (ExistsAI) {
@@ -574,7 +573,6 @@ public class BoardController extends JFrame {
 	 * move a piece, or remove a piece.
 	 * @param e The MouseEvent
 	 */
-	
 	private void makeAIMoveMouseClicked(MouseEvent e) {
 		if (ExistsAI && turn == AI_TURN) {
 			switch(state){
