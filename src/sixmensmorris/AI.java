@@ -50,6 +50,7 @@ public class AI {
 	 * 
 	 * @return the position on the board to place the piece
 	 */
+	//TODO: Try to place pieces on rows with possible mills (2 pieces of own already on one line)
 	public int nextPlace() {
 		int[] board = boardView.getBoardStates();
 		
@@ -75,20 +76,21 @@ public class AI {
 	 * 
 	 * @return the position of the piece to remove
 	 */
+	// TODO: try to remove center pieces
 	public int nextRemove() {
 		int[] board = this.boardView.getBoardStates();
 
 		if (this.boardView.existsOnlyMills(1)) {
 			for (int i=0; i<board.length; i++) {
 				if (board[i] == PLAYER_COLOR) {
-//					System.out.println("moving: "+ i);
+//					System.out.println("removing: "+ i);
 					return i;
 				}
 			}
 		}else {
 			for (int i=0; i<board.length; i++) {
 				if (board[i] == PLAYER_COLOR && !this.boardView.millExists(i)) {
-//					System.out.println("moving: "+ i);
+//					System.out.println("removing: "+ i);
 					return i;
 				}
 			}
@@ -103,6 +105,7 @@ public class AI {
 	 * 
 	 * @return [a,b] - a: which piece to move; b: where to put it
 	 */
+	// TODO: try to form a piece when moving
 	public int[] nextMove() {
 		int[] board = this.boardView.getBoardStates();
 		int prev, next; // prev and next are the ones on the same line/layer
