@@ -12,7 +12,7 @@ import java.util.Random;
  * available at a random available direction
  * Third, for removing pieces, the AI will remove the first available pieces
  *
- * @author Alic
+ * @author Zichen Jiang
  * @version 1
  */
 

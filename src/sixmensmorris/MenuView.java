@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 /**
  * Defines a view for the menu screen.
  * This is the first GUI that appears that the user can interact with.
- * @author Kelvin Lin, Jeremy Klotz
+ * @author Kelvin Lin, Hasan Siddiqui, Jeremy Klotz
  * @version 1
  */
 public class MenuView extends Screen{	
